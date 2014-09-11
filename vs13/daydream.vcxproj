@@ -1,0 +1,217 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{586CDC19-B32F-4FA0-81D1-B430E28C8FA2}</ProjectGuid>
+    <RootNamespace>daydream</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(SolutionDir)..\include\dd;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(SolutionDir)..\include\dd;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\include\dd\Core\Shaders\AABB.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\BlendMap.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\BlendMap.vert.glsl" />
+    <None Include="..\include\dd\Core\Shaders\FinalForwardPass.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\FinalForwardPass.vert.glsl" />
+    <None Include="..\include\dd\Core\Shaders\FinalPass.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\FinalPass.vert.glsl" />
+    <None Include="..\include\dd\Core\Shaders\ForwardRendering.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\ForwardRendering.vert.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Fragment.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Fragment2-Debug.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Fragment2.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Normals.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Normals.geo.glsl" />
+    <None Include="..\include\dd\Core\Shaders\ShadowMap.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\ShadowMap.vert.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Skybox.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Skybox.vert.glsl" />
+    <None Include="..\include\dd\Core\Shaders\SunPass.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\SunPass.vert.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Vertex.glsl" />
+    <None Include="..\include\dd\Core\Shaders\Vertex2.glsl" />
+    <None Include="..\include\dd\Core\Shaders\VisualizeDepth.frag.glsl" />
+    <None Include="..\include\dd\Core\Shaders\VisualizeDepth.vert.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\dd\Core\Camera.h" />
+    <ClInclude Include="..\include\dd\Core\Color.h" />
+    <ClInclude Include="..\include\dd\Core\Component.h" />
+    <ClInclude Include="..\include\dd\Core\CTemplate.h" />
+    <ClInclude Include="..\include\dd\Core\CTransform.h" />
+    <ClInclude Include="..\include\dd\Core\CubemapTexture.h" />
+    <ClInclude Include="..\include\dd\Core\EGamepadAxis.h" />
+    <ClInclude Include="..\include\dd\Core\EGamepadButton.h" />
+    <ClInclude Include="..\include\dd\Core\EKeyDown.h" />
+    <ClInclude Include="..\include\dd\Core\EKeyUp.h" />
+    <ClInclude Include="..\include\dd\Core\ELockMouse.h" />
+    <ClInclude Include="..\include\dd\Core\EMouseMove.h" />
+    <ClInclude Include="..\include\dd\Core\EMousePress.h" />
+    <ClInclude Include="..\include\dd\Core\EMouseRelease.h" />
+    <ClInclude Include="..\include\dd\Core\Engine.h" />
+    <ClInclude Include="..\include\dd\Core\Entity.h" />
+    <ClInclude Include="..\include\dd\Core\EventBroker.h" />
+    <ClInclude Include="..\include\dd\Core\InputController.h" />
+    <ClInclude Include="..\include\dd\Core\InputManager.h" />
+    <ClInclude Include="..\include\dd\Core\Model.h" />
+    <ClInclude Include="..\include\dd\Core\OBJ.h" />
+    <ClInclude Include="..\include\dd\Core\Renderer.h" />
+    <ClInclude Include="..\include\dd\Core\RenderQueue.h" />
+    <ClInclude Include="..\include\dd\Core\ResourceManager.h" />
+    <ClInclude Include="..\include\dd\Core\ShaderProgram.h" />
+    <ClInclude Include="..\include\dd\Core\Skybox.h" />
+    <ClInclude Include="..\include\dd\Core\System.h" />
+    <ClInclude Include="..\include\dd\Core\Texture.h" />
+    <ClInclude Include="..\include\dd\Core\Util\Factory.h" />
+    <ClInclude Include="..\include\dd\Core\Util\GLError.h" />
+    <ClInclude Include="..\include\dd\Core\Util\Logging.h" />
+    <ClInclude Include="..\include\dd\Core\Util\Rectangle.h" />
+    <ClInclude Include="..\include\dd\Core\Util\UnorderedMapPair.h" />
+    <ClInclude Include="..\include\dd\Core\World.h" />
+    <ClInclude Include="..\include\dd\Input\EBindGamepadAxis.h" />
+    <ClInclude Include="..\include\dd\Input\EBindGamepadButton.h" />
+    <ClInclude Include="..\include\dd\Input\EBindKey.h" />
+    <ClInclude Include="..\include\dd\Input\EBindMouseButton.h" />
+    <ClInclude Include="..\include\dd\Input\EInputCommand.h" />
+    <ClInclude Include="..\include\dd\Input\InputSystem.h" />
+    <ClInclude Include="..\include\dd\Particles\CParticle.h" />
+    <ClInclude Include="..\include\dd\Particles\CParticleEmitter.h" />
+    <ClInclude Include="..\include\dd\Particles\ParticleSystem.h" />
+    <ClInclude Include="..\include\dd\Physics\CBoxShape.h" />
+    <ClInclude Include="..\include\dd\Physics\CHingeConstraint.h" />
+    <ClInclude Include="..\include\dd\Physics\CMeshShape.h" />
+    <ClInclude Include="..\include\dd\Physics\CPhysics.h" />
+    <ClInclude Include="..\include\dd\Physics\CSphereShape.h" />
+    <ClInclude Include="..\include\dd\Physics\CVehicle.h" />
+    <ClInclude Include="..\include\dd\Physics\CWheel.h" />
+    <ClInclude Include="..\include\dd\Physics\CWheelPair.h" />
+    <ClInclude Include="..\include\dd\Physics\EApplyForce.h" />
+    <ClInclude Include="..\include\dd\Physics\EApplyPointImpulse.h" />
+    <ClInclude Include="..\include\dd\Physics\ECollision.h" />
+    <ClInclude Include="..\include\dd\Physics\EDisableCollisions.h" />
+    <ClInclude Include="..\include\dd\Physics\EEnableCollisions.h" />
+    <ClInclude Include="..\include\dd\Physics\ESetVelocity.h" />
+    <ClInclude Include="..\include\dd\Physics\PhysicsSystem.h" />
+    <ClInclude Include="..\include\dd\Physics\VehicleSetup.h" />
+    <ClInclude Include="..\include\dd\Physics\WheelPairSystem.h" />
+    <ClInclude Include="..\include\dd\PrecompiledHeader.h" />
+    <ClInclude Include="..\include\dd\Rendering\CBlendMap.h" />
+    <ClInclude Include="..\include\dd\Rendering\CCamera.h" />
+    <ClInclude Include="..\include\dd\Rendering\CDamageModel.h" />
+    <ClInclude Include="..\include\dd\Rendering\CDirectionalLight.h" />
+    <ClInclude Include="..\include\dd\Rendering\CModel.h" />
+    <ClInclude Include="..\include\dd\Rendering\CPointLight.h" />
+    <ClInclude Include="..\include\dd\Rendering\CSprite.h" />
+    <ClInclude Include="..\include\dd\Rendering\CViewport.h" />
+    <ClInclude Include="..\include\dd\Sound\CListener.h" />
+    <ClInclude Include="..\include\dd\Sound\CSoundEmitter.h" />
+    <ClInclude Include="..\include\dd\Sound\EPlayBGM.h" />
+    <ClInclude Include="..\include\dd\Sound\EPlaySFX.h" />
+    <ClInclude Include="..\include\dd\Sound\EStopSound.h" />
+    <ClInclude Include="..\include\dd\Sound\Sound.h" />
+    <ClInclude Include="..\include\dd\Sound\SoundSystem.h" />
+    <ClInclude Include="..\include\dd\Timer\CFrameTimer.h" />
+    <ClInclude Include="..\include\dd\Timer\CTimer.h" />
+    <ClInclude Include="..\include\dd\Timer\TimerSystem.h" />
+    <ClInclude Include="..\include\dd\Transform\EMove.h" />
+    <ClInclude Include="..\include\dd\Transform\ERotate.h" />
+    <ClInclude Include="..\include\dd\Transform\TransformSystem.h" />
+    <ClInclude Include="..\include\dd\Trigger\CTrigger.h" />
+    <ClInclude Include="..\include\dd\Trigger\CTriggerExplosion.h" />
+    <ClInclude Include="..\include\dd\Trigger\CTriggerMove.h" />
+    <ClInclude Include="..\include\dd\Trigger\CTriggerRotate.h" />
+    <ClInclude Include="..\include\dd\Trigger\EEnterTrigger.h" />
+    <ClInclude Include="..\include\dd\Trigger\ELeaveTrigger.h" />
+    <ClInclude Include="..\include\dd\Trigger\TriggerSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\dd\Core\Camera.cpp" />
+    <ClCompile Include="..\src\dd\Core\CubemapTexture.cpp" />
+    <ClCompile Include="..\src\dd\Core\EventBroker.cpp" />
+    <ClCompile Include="..\src\dd\Core\InputManager.cpp" />
+    <ClCompile Include="..\src\dd\Core\Model.cpp" />
+    <ClCompile Include="..\src\dd\Core\OBJ.cpp" />
+    <ClCompile Include="..\src\dd\Core\Renderer.cpp" />
+    <ClCompile Include="..\src\dd\Core\ResourceManager.cpp" />
+    <ClCompile Include="..\src\dd\Core\ShaderProgram.cpp" />
+    <ClCompile Include="..\src\dd\Core\Skybox.cpp" />
+    <ClCompile Include="..\src\dd\Core\Texture.cpp" />
+    <ClCompile Include="..\src\dd\Core\World.cpp" />
+    <ClCompile Include="..\src\dd\Input\InputSystem.cpp" />
+    <ClCompile Include="..\src\dd\main.cpp" />
+    <ClCompile Include="..\src\dd\Particles\ParticleSystem.cpp" />
+    <ClCompile Include="..\src\dd\Physics\PhysicsSystem.cpp" />
+    <ClCompile Include="..\src\dd\Physics\VehicleSetup.cpp" />
+    <ClCompile Include="..\src\dd\Physics\WheelPairSystem.cpp" />
+    <ClCompile Include="..\src\dd\PrecompiledHeader.cpp" />
+    <ClCompile Include="..\src\dd\Sound\Sound.cpp" />
+    <ClCompile Include="..\src\dd\Sound\SoundSystem.cpp" />
+    <ClCompile Include="..\src\dd\Timer\TimerSystem.cpp" />
+    <ClCompile Include="..\src\dd\Transform\TransformSystem.cpp" />
+    <ClCompile Include="..\src\dd\Trigger\TriggerSystem.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
