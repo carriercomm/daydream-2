@@ -39,14 +39,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\SOIL\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Debug;$(SolutionDir)\..\libs\glew-1.11.0\lib\Debug\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Debug;$(SolutionDir)\..\libs\lpng1612\lib\Debug$(SolutionDir)\..\libs\SOIL\lib\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Debug;$(SolutionDir)\..\libs\glew-1.11.0\lib\Debug\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Debug;$(SolutionDir)\..\libs\lpng1612\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\..\bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\SOIL\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Release;$(SolutionDir)\..\libs\glew-1.11.0\lib\Release\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Release;$(SolutionDir)\..\libs\lpng1612\lib\Release;$(SolutionDir)\..\libs\SOIL\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Release;$(SolutionDir)\..\libs\glew-1.11.0\lib\Release\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Release;$(SolutionDir)\..\libs\lpng1612\lib\Release;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\..\bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\obj\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -65,7 +65,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;assimpd.lib;glew32d.lib;glfw3dll.lib;libpng16.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;assimpd.lib;glew32d.lib;glfw3dll.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions> /ignore:4221</AdditionalOptions>
     </Link>
     <CustomBuildStep />
@@ -89,7 +89,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;assimp.lib;glew32.lib;glfw3dll.lib;libpng16.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;assimp.lib;glew32.lib;glfw3dll.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep />
   </ItemDefinitionGroup>
@@ -99,7 +99,6 @@
     <ClInclude Include="..\include\dd\Core\Component.h" />
     <ClInclude Include="..\include\dd\Core\CTemplate.h" />
     <ClInclude Include="..\include\dd\Core\CTransform.h" />
-    <ClInclude Include="..\include\dd\Core\CubemapTexture.h" />
     <ClInclude Include="..\include\dd\Core\EComponentCreated.h" />
     <ClInclude Include="..\include\dd\Core\EGamepadAxis.h" />
     <ClInclude Include="..\include\dd\Core\EGamepadButton.h" />
@@ -123,7 +122,6 @@
     <ClInclude Include="..\include\dd\Core\ResourceManager.h" />
     <ClInclude Include="..\include\dd\Core\ShaderProgram.h" />
     <ClInclude Include="..\include\dd\Core\Skeleton.h" />
-    <ClInclude Include="..\include\dd\Core\Skybox.h" />
     <ClInclude Include="..\include\dd\Core\System.h" />
     <ClInclude Include="..\include\dd\Core\Texture.h" />
     <ClInclude Include="..\include\dd\Core\Util\Factory.h" />
@@ -168,7 +166,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dd\Core\Camera.cpp" />
-    <ClCompile Include="..\src\dd\Core\CubemapTexture.cpp" />
     <ClCompile Include="..\src\dd\Core\EventBroker.cpp" />
     <ClCompile Include="..\src\dd\Core\InputManager.cpp" />
     <ClCompile Include="..\src\dd\Core\Model.cpp" />
@@ -178,7 +175,6 @@
     <ClCompile Include="..\src\dd\Core\ResourceManager.cpp" />
     <ClCompile Include="..\src\dd\Core\ShaderProgram.cpp" />
     <ClCompile Include="..\src\dd\Core\Skeleton.cpp" />
-    <ClCompile Include="..\src\dd\Core\Skybox.cpp" />
     <ClCompile Include="..\src\dd\Core\Texture.cpp" />
     <ClCompile Include="..\src\dd\Core\World.cpp" />
     <ClCompile Include="..\src\dd\Input\InputSystem.cpp" />

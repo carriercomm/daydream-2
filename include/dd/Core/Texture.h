@@ -3,26 +3,26 @@
 
 #include <string>
 #include <unordered_map>
-
-#include <SOIL.h>
+#include <cstdio>
 
 #include "ResourceManager.h"
+#include "PNG.h"
 
 class Texture : public Resource
 {
-public:
+private:
 	Texture(std::string path);
-	~Texture();
-	static Texture* Create(std::string resourceName) { return new Texture(resourceName); }
 
-	void Load(std::string path);
-	void Bind();
+public:
+	static Texture* Create(std::string resourceName) { return new Texture(resourceName); }
+	~Texture();
+
+	void Bind(GLenum textureUnit = GL_TEXTURE0);
 
 	operator GLuint() const { return m_Texture; }
 
 private:
-	GLuint m_Texture;
-	std::unordered_map<std::string, GLuint> m_TextureCache;
+	GLuint m_Texture = 0;
 };
 
 

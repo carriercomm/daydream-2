@@ -54,9 +54,6 @@
     <ClInclude Include="..\include\dd\Core\CTransform.h">
       <Filter>dd\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\dd\Core\CubemapTexture.h">
-      <Filter>dd\Core</Filter>
-    </ClInclude>
     <ClInclude Include="..\include\dd\Core\EGamepadAxis.h">
       <Filter>dd\Core</Filter>
     </ClInclude>
@@ -112,9 +109,6 @@
       <Filter>dd\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\include\dd\Core\ShaderProgram.h">
-      <Filter>dd\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\include\dd\Core\Skybox.h">
       <Filter>dd\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\include\dd\Core\System.h">
@@ -251,9 +245,6 @@
     <ClCompile Include="..\src\dd\Core\Camera.cpp">
       <Filter>dd\Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\dd\Core\CubemapTexture.cpp">
-      <Filter>dd\Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\dd\Core\EventBroker.cpp">
       <Filter>dd\Core</Filter>
     </ClCompile>
@@ -273,9 +264,6 @@
       <Filter>dd\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dd\Core\ShaderProgram.cpp">
-      <Filter>dd\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\dd\Core\Skybox.cpp">
       <Filter>dd\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\dd\Core\Texture.cpp">
