@@ -39,20 +39,39 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)..\include\dd;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\SOIL\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\glew-1.11.0\lib\Debug\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Debug;$(SolutionDir)\..\libs\SOIL\lib\Debug;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)..\include\dd;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\SOIL\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\glew-1.11.0\lib\Release\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Release;$(SolutionDir)\..\libs\SOIL\lib\Release;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\..\bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\..\obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>_X86_;_WINDOWS;WIN32;_WIN32;_DEBUG;HK_DEBUG;HK_DEBUG_SLOW;_XT_STATICLINK;_CONSOLE;_ALLOW_ITERATOR_DEBUG_LEVEL_MISMATCH;HK_CONFIG_SIMD=1;DEBUG;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>PrecompiledHeader.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <CompileAsManaged>false</CompileAsManaged>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32d.lib;glfw3dll.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions> /ignore:4221</AdditionalOptions>
     </Link>
+    <CustomBuildStep />
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -61,39 +80,19 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_X86_;_CRT_SECURE_NO_WARNINGS;_MBCS;HK_CONFIG_SIMD=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>PrecompiledHeader.h</PrecompiledHeaderFile>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3dll.lib;SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <CustomBuildStep />
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <None Include="..\include\dd\Core\Shaders\AABB.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\BlendMap.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\BlendMap.vert.glsl" />
-    <None Include="..\include\dd\Core\Shaders\FinalForwardPass.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\FinalForwardPass.vert.glsl" />
-    <None Include="..\include\dd\Core\Shaders\FinalPass.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\FinalPass.vert.glsl" />
-    <None Include="..\include\dd\Core\Shaders\ForwardRendering.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\ForwardRendering.vert.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Fragment.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Fragment2-Debug.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Fragment2.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Normals.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Normals.geo.glsl" />
-    <None Include="..\include\dd\Core\Shaders\ShadowMap.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\ShadowMap.vert.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Skybox.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Skybox.vert.glsl" />
-    <None Include="..\include\dd\Core\Shaders\SunPass.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\SunPass.vert.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Vertex.glsl" />
-    <None Include="..\include\dd\Core\Shaders\Vertex2.glsl" />
-    <None Include="..\include\dd\Core\Shaders\VisualizeDepth.frag.glsl" />
-    <None Include="..\include\dd\Core\Shaders\VisualizeDepth.vert.glsl" />
-  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\dd\Core\Camera.h" />
     <ClInclude Include="..\include\dd\Core\Color.h" />
@@ -138,23 +137,6 @@
     <ClInclude Include="..\include\dd\Particles\CParticle.h" />
     <ClInclude Include="..\include\dd\Particles\CParticleEmitter.h" />
     <ClInclude Include="..\include\dd\Particles\ParticleSystem.h" />
-    <ClInclude Include="..\include\dd\Physics\CBoxShape.h" />
-    <ClInclude Include="..\include\dd\Physics\CHingeConstraint.h" />
-    <ClInclude Include="..\include\dd\Physics\CMeshShape.h" />
-    <ClInclude Include="..\include\dd\Physics\CPhysics.h" />
-    <ClInclude Include="..\include\dd\Physics\CSphereShape.h" />
-    <ClInclude Include="..\include\dd\Physics\CVehicle.h" />
-    <ClInclude Include="..\include\dd\Physics\CWheel.h" />
-    <ClInclude Include="..\include\dd\Physics\CWheelPair.h" />
-    <ClInclude Include="..\include\dd\Physics\EApplyForce.h" />
-    <ClInclude Include="..\include\dd\Physics\EApplyPointImpulse.h" />
-    <ClInclude Include="..\include\dd\Physics\ECollision.h" />
-    <ClInclude Include="..\include\dd\Physics\EDisableCollisions.h" />
-    <ClInclude Include="..\include\dd\Physics\EEnableCollisions.h" />
-    <ClInclude Include="..\include\dd\Physics\ESetVelocity.h" />
-    <ClInclude Include="..\include\dd\Physics\PhysicsSystem.h" />
-    <ClInclude Include="..\include\dd\Physics\VehicleSetup.h" />
-    <ClInclude Include="..\include\dd\Physics\WheelPairSystem.h" />
     <ClInclude Include="..\include\dd\PrecompiledHeader.h" />
     <ClInclude Include="..\include\dd\Rendering\CBlendMap.h" />
     <ClInclude Include="..\include\dd\Rendering\CCamera.h" />
@@ -164,19 +146,14 @@
     <ClInclude Include="..\include\dd\Rendering\CPointLight.h" />
     <ClInclude Include="..\include\dd\Rendering\CSprite.h" />
     <ClInclude Include="..\include\dd\Rendering\CViewport.h" />
-    <ClInclude Include="..\include\dd\Sound\CListener.h" />
-    <ClInclude Include="..\include\dd\Sound\CSoundEmitter.h" />
-    <ClInclude Include="..\include\dd\Sound\EPlayBGM.h" />
-    <ClInclude Include="..\include\dd\Sound\EPlaySFX.h" />
-    <ClInclude Include="..\include\dd\Sound\EStopSound.h" />
-    <ClInclude Include="..\include\dd\Sound\Sound.h" />
-    <ClInclude Include="..\include\dd\Sound\SoundSystem.h" />
     <ClInclude Include="..\include\dd\Timer\CFrameTimer.h" />
     <ClInclude Include="..\include\dd\Timer\CTimer.h" />
     <ClInclude Include="..\include\dd\Timer\TimerSystem.h" />
     <ClInclude Include="..\include\dd\Transform\EMove.h" />
     <ClInclude Include="..\include\dd\Transform\ERotate.h" />
     <ClInclude Include="..\include\dd\Transform\TransformSystem.h" />
+    <ClInclude Include="..\include\dd\Trigger\CMove.h" />
+    <ClInclude Include="..\include\dd\Trigger\CRotate.h" />
     <ClInclude Include="..\include\dd\Trigger\CTrigger.h" />
     <ClInclude Include="..\include\dd\Trigger\CTriggerExplosion.h" />
     <ClInclude Include="..\include\dd\Trigger\CTriggerMove.h" />
@@ -201,15 +178,36 @@
     <ClCompile Include="..\src\dd\Input\InputSystem.cpp" />
     <ClCompile Include="..\src\dd\main.cpp" />
     <ClCompile Include="..\src\dd\Particles\ParticleSystem.cpp" />
-    <ClCompile Include="..\src\dd\Physics\PhysicsSystem.cpp" />
-    <ClCompile Include="..\src\dd\Physics\VehicleSetup.cpp" />
-    <ClCompile Include="..\src\dd\Physics\WheelPairSystem.cpp" />
     <ClCompile Include="..\src\dd\PrecompiledHeader.cpp" />
-    <ClCompile Include="..\src\dd\Sound\Sound.cpp" />
-    <ClCompile Include="..\src\dd\Sound\SoundSystem.cpp" />
     <ClCompile Include="..\src\dd\Timer\TimerSystem.cpp" />
     <ClCompile Include="..\src\dd\Transform\TransformSystem.cpp" />
     <ClCompile Include="..\src\dd\Trigger\TriggerSystem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\dd\Core\Shaders\AABB.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\BlendMap.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\BlendMap.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\FinalForwardPass.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\FinalForwardPass.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\FinalPass.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\FinalPass.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\ForwardRendering.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\ForwardRendering.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Fragment.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Fragment2-Debug.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Fragment2.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Normals.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Normals.geo.glsl" />
+    <None Include="..\src\dd\Core\Shaders\ShadowMap.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\ShadowMap.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Skybox.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Skybox.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\SunPass.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\SunPass.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Vertex.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Vertex2.glsl" />
+    <None Include="..\src\dd\Core\Shaders\VisualizeDepth.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\VisualizeDepth.vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
