@@ -301,76 +301,34 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\dd\Core\Shaders\ForwardRendering.frag.glsl">
+    <None Include="..\src\dd\Core\Shaders\Deferred.1.vert.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\ForwardRendering.vert.glsl">
+    <None Include="..\src\dd\Core\Shaders\Deferred.2.frag.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\Fragment.glsl">
+    <None Include="..\src\dd\Core\Shaders\Deferred.2.vert.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\Fragment2.glsl">
+    <None Include="..\src\dd\Core\Shaders\Deferred.3.frag.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\Fragment2-Debug.glsl">
+    <None Include="..\src\dd\Core\Shaders\Deferred.3.vert.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\Normals.frag.glsl">
+    <None Include="..\src\dd\Core\Shaders\Forward.frag.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\Normals.geo.glsl">
+    <None Include="..\src\dd\Core\Shaders\Forward.vert.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\ShadowMap.frag.glsl">
+    <None Include="..\src\dd\Core\Shaders\Screen.frag.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\ShadowMap.vert.glsl">
+    <None Include="..\src\dd\Core\Shaders\Screen.vert.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
-    <None Include="..\src\dd\Core\Shaders\Skybox.frag.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\Skybox.vert.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\SunPass.frag.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\SunPass.vert.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\Vertex.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\Vertex2.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\VisualizeDepth.frag.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\VisualizeDepth.vert.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\AABB.frag.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\BlendMap.frag.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\BlendMap.vert.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\FinalForwardPass.frag.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\FinalForwardPass.vert.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\FinalPass.frag.glsl">
-      <Filter>dd\Core\Shaders</Filter>
-    </None>
-    <None Include="..\src\dd\Core\Shaders\FinalPass.vert.glsl">
+    <None Include="..\src\dd\Core\Shaders\Deferred.1.frag.glsl">
       <Filter>dd\Core\Shaders</Filter>
     </None>
   </ItemGroup>

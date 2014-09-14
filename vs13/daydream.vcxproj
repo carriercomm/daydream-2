@@ -186,30 +186,16 @@
     <ClCompile Include="..\src\dd\Trigger\TriggerSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\src\dd\Core\Shaders\AABB.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\BlendMap.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\BlendMap.vert.glsl" />
-    <None Include="..\src\dd\Core\Shaders\FinalForwardPass.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\FinalForwardPass.vert.glsl" />
-    <None Include="..\src\dd\Core\Shaders\FinalPass.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\FinalPass.vert.glsl" />
-    <None Include="..\src\dd\Core\Shaders\ForwardRendering.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\ForwardRendering.vert.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Fragment.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Fragment2-Debug.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Fragment2.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Normals.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Normals.geo.glsl" />
-    <None Include="..\src\dd\Core\Shaders\ShadowMap.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\ShadowMap.vert.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Skybox.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Skybox.vert.glsl" />
-    <None Include="..\src\dd\Core\Shaders\SunPass.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\SunPass.vert.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Vertex.glsl" />
-    <None Include="..\src\dd\Core\Shaders\Vertex2.glsl" />
-    <None Include="..\src\dd\Core\Shaders\VisualizeDepth.frag.glsl" />
-    <None Include="..\src\dd\Core\Shaders\VisualizeDepth.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Deferred.1.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Deferred.1.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Deferred.2.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Deferred.2.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Deferred.3.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Deferred.3.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Forward.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Forward.vert.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Screen.frag.glsl" />
+    <None Include="..\src\dd\Core\Shaders\Screen.vert.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

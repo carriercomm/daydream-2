@@ -1,11 +1,8 @@
-#version 430
+#version 440
 
 uniform mat4 MVP;
 
 layout (location = 0) in vec3 Position;
-layout (location = 2) in vec2 TextureCoord;
-
-uniform mat4 depthBiasMVP;
 
 out VertexData
 {

@@ -1,6 +1,6 @@
-#version 430
+#version 440
 
-layout(location = 0) in vec3 Position;
+layout (location = 0) in vec3 Position;
 
 out VertexData
 {
