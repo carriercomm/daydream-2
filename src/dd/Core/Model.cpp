@@ -1,201 +1,317 @@
 #include "PrecompiledHeader.h"
 #include "Core/Model.h"
 
-Model::Model(OBJ &obj, bool average)
+Model::Model(std::string fileName)
 {
-	OBJ::MaterialInfo* currentMaterial = nullptr;
-	TextureGroup* currentTexGroup = nullptr;
-	int index = 0;
-	for (auto face : obj.Faces)
-	{
-		if (face.Material == nullptr)
-		{
-			LOG_ERROR("Missing material for .obj file \"%s\"", obj.Path().string().c_str());
-			return;
+	Assimp::Importer importer;
+	const aiScene* scene = importer.ReadFile(fileName, aiProcess_CalcTangentSpace | aiProcess_Triangulate);
+
+	if (scene == nullptr) {
+		LOG_ERROR("Failed to load model \"%s\"", fileName.c_str());
+		LOG_ERROR("Assimp error: %s", importer.GetErrorString());
+		return;
+	}
+
+	auto meshes = scene->mMeshes;
+
+	// Pre-count vertices
+	int numVertices = 0;
+	int numIndices = 0;
+	for (int i = 0; i < scene->mNumMeshes; ++i) {
+		numVertices += meshes[i]->mNumVertices;
+
+		// Faces
+		for (int j = 0; j < meshes[i]->mNumFaces; ++j) {
+			auto face = meshes[i]->mFaces[j];
+			numIndices += face.mNumIndices;
 		}
-		// New material
-		if (face.Material != currentMaterial)
-		{
-			currentMaterial = face.Material;
+	}
+	LOG_DEBUG("Vertex count %i", numVertices);
+	LOG_DEBUG("Index count %i", numIndices);
 
-			// Load texture
-			auto texture = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(currentMaterial->DiffuseTexture.FileName));
-			// TODO: Load normal map
-			std::shared_ptr<Texture> normalMap = nullptr;
-			if (!currentMaterial->NormalMap.FileName.empty())
-			{
-				normalMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(currentMaterial->NormalMap.FileName));
-			}
-			else
-			{
-				normalMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>("Textures/NeutralNormalMap.png"));
-			}
-			// Load specular map
-			std::shared_ptr<Texture> specularMap = nullptr;
-			if (!currentMaterial->SpecularMap.FileName.empty())
-			{
-				specularMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(currentMaterial->SpecularMap.FileName));
-			}
-			else
-			{
-				specularMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>("Textures/NeutralSpecularMap.png"));
+	LOG_DEBUG("Model has %i embedded textures", scene->mNumTextures);
+
+	std::vector<std::tuple<std::string, glm::mat4>> boneInfo;
+	std::map<std::string, int> boneNameMapping;
+
+	for (int i = 0; i < scene->mNumMeshes; ++i) {
+		auto mesh = meshes[i];
+		auto material = scene->mMaterials[mesh->mMaterialIndex];
+		unsigned int indexOffset = m_Vertices.size();
+
+		// Vertices, normals and texture coordinates
+		for (int vertexIndex = 0; vertexIndex < mesh->mNumVertices; ++vertexIndex) {
+			Vertex desc;
+
+			// Position
+			auto position = mesh->mVertices[vertexIndex];
+			desc.Position = glm::vec3(position.x, position.y, position.z);
+
+			// Normal
+			auto normal = mesh->mNormals[vertexIndex];
+			desc.Normal = glm::vec3(normal.x, normal.y, normal.z);
+
+			//if (mesh->HasTangentsAndBitangents()) {
+			//	// Tangent
+			//	auto tangent = mesh->mTangents[vertexIndex];
+			//	desc.Tangent = glm::vec3(tangent.x, tangent.y, tangent.z);
+
+			//	// Bi-tangent
+			//	auto bitangent = mesh->mBitangents[vertexIndex];
+			//	desc.BiTangent = glm::vec3(bitangent.x, bitangent.y, bitangent.z);
+			//}
+
+			// UV
+			if (mesh->HasTextureCoords(0)) {
+				auto uv = mesh->mTextureCoords[0][vertexIndex];
+				desc.TextureCoords = glm::vec2(uv.x, uv.y);
 			}
 
-			// TODO: Load material parameters
-			// Create new texture group (start index of new group is upcoming index)
-			TextureGroup texGroup = { texture, normalMap, specularMap, index, index };
-			TextureGroups.push_back(texGroup);
-			currentTexGroup = &TextureGroups.back();
+			// Material diffuse color
+			aiColor4D diffuse;
+			material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
+			desc.DiffuseVertexColor = glm::vec4(diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+			// Material specular color
+			aiColor4D specular;
+			material->Get(AI_MATKEY_COLOR_SPECULAR, specular);
+			desc.SpecularVertexColor = glm::vec4(specular.r, specular.g, specular.b, specular.a);
+
+			m_Vertices.push_back(desc);
 		}
 
-		/*std::unordered_map<int, glm::vec3> similarNormals;
-		std::unordered_map<int, int> normalCount;
-		for (auto &faceDef : face.Definitions)
-		{
-			if (faceDef.NormalIndex == 0)
+		// Faces
+		for (int j = 0; j < mesh->mNumFaces; ++j) {
+			auto face = mesh->mFaces[j];
+			for (int k = 0; k < face.mNumIndices; ++k) {
+				unsigned int index = face.mIndices[k];
+				m_Indices.push_back(indexOffset + index);
+			}
+		}
+
+		// Calculate normal mapping tangents
+		for (int i = 0; i < m_Indices.size(); i += 3) {
+			Vertex& v0 = m_Vertices[m_Indices[i]];
+			Vertex& v1 = m_Vertices[m_Indices[i + 1]];
+			Vertex& v2 = m_Vertices[m_Indices[i + 2]];
+
+			glm::vec3 edge1 = v1.Position - v0.Position;
+			glm::vec3 edge2 = v2.Position - v0.Position;
+
+			float deltaU1 = v1.TextureCoords.x - v0.TextureCoords.x;
+			float deltaV1 = v1.TextureCoords.y - v0.TextureCoords.y;
+			float deltaU2 = v2.TextureCoords.x - v0.TextureCoords.x;
+			float deltaV2 = v2.TextureCoords.y - v0.TextureCoords.y;
+
+			float f = 1.0f / (deltaU1 * deltaV2 - deltaU2 * deltaV1);
+
+			glm::vec3 tangent;
+			tangent.x = f * (deltaV2 * edge1.x - deltaV1 * edge2.x);
+			tangent.y = f * (deltaV2 * edge1.y - deltaV1 * edge2.y);
+			tangent.z = f * (deltaV2 * edge1.z - deltaV1 * edge2.z);
+
+			v0.Tangent += tangent;
+			v1.Tangent += tangent;
+			v2.Tangent += tangent;
+		}
+		for (auto& vertex : m_Vertices) {
+			vertex.Tangent = glm::normalize(vertex.Tangent);
+			vertex.BiTangent = glm::normalize(glm::cross(vertex.Tangent, glm::normalize(vertex.Normal)));
+		}
+
+		// Material info
+		MaterialGroup matGroup;
+		matGroup.StartIndex = indexOffset;
+		matGroup.EndIndex = m_Indices.size() - 1;
+		// Material shininess
+		material->Get(AI_MATKEY_SHININESS, matGroup.Shininess);
+		LOG_DEBUG("Shininess: %f", matGroup.Shininess);
+		// Diffuse texture
+		LOG_DEBUG("%i diffuse textures found", material->GetTextureCount(aiTextureType_DIFFUSE));
+		if (material->GetTextureCount(aiTextureType_DIFFUSE)) {
+			aiString path;
+			aiTextureMapping mapping;
+			material->GetTexture(aiTextureType_DIFFUSE, 0, &path, &mapping);
+			std::string absolutePath = (boost::filesystem::path(fileName).branch_path() / path.C_Str()).string();
+			LOG_DEBUG("Diffuse texture: %s", absolutePath.c_str());
+			matGroup.Texture = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(absolutePath));
+		}
+		// Normal map
+		LOG_DEBUG("%i normal maps found", material->GetTextureCount(aiTextureType_HEIGHT));
+		if (material->GetTextureCount(aiTextureType_HEIGHT)) {
+			aiString path;
+			aiTextureMapping mapping;
+			material->GetTexture(aiTextureType_HEIGHT, 0, &path, &mapping);
+			std::string absolutePath = (boost::filesystem::path(fileName).branch_path() / path.C_Str()).string();
+			LOG_DEBUG("Normal map: %s", absolutePath.c_str());
+			matGroup.NormalMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(absolutePath));
+		}
+		// Specular map
+		LOG_DEBUG("%i specular maps found", material->GetTextureCount(aiTextureType_SPECULAR));
+		if (material->GetTextureCount(aiTextureType_SPECULAR)) {
+			aiString path;
+			aiTextureMapping mapping;
+			material->GetTexture(aiTextureType_SPECULAR, 0, &path, &mapping);
+			std::string absolutePath = (boost::filesystem::path(fileName).branch_path() / path.C_Str()).string();
+			LOG_DEBUG("Specular map: %s", absolutePath.c_str());
+			matGroup.SpecularMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(absolutePath));
+		}
+		TextureGroups.push_back(matGroup);
+
+		// Bones
+		std::map<int, std::vector<std::tuple<int, float>>> vertexWeights;
+		for (int j = 0; j < mesh->mNumBones; ++j) {
+			auto bone = mesh->mBones[j];
+			std::string boneName = bone->mName.C_Str();
+
+			auto mat = bone->mOffsetMatrix;
+			glm::mat4 glmMat(mat.a1, mat.b1, mat.c1, mat.d1,
+				mat.a2, mat.b2, mat.c2, mat.d2,
+				mat.a3, mat.b3, mat.c3, mat.d3,
+				mat.a4, mat.b4, mat.c4, mat.d4);
+
+			int boneIndex;
+			if (boneNameMapping.find(boneName) != boneNameMapping.end()) {
+				boneIndex = boneNameMapping[boneName];
+			} else {
+				boneIndex = boneInfo.size();
+				boneInfo.push_back(std::make_tuple(boneName, glmMat));
+				boneNameMapping[boneName] = boneIndex;
+			}
+
+			for (int k = 0; k < bone->mNumWeights; ++k) {
+				auto weight = bone->mWeights[k];
+				unsigned int offsetVertexId = weight.mVertexId + indexOffset;
+				vertexWeights[offsetVertexId].push_back(std::make_tuple(boneIndex, weight.mWeight));
+			}
+		}
+		for (auto &pair : vertexWeights) {
+			auto weights = pair.second;
+			Vertex& desc = m_Vertices[pair.first];
+
+			const int maxWeights = 8;
+			if (weights.size() > maxWeights) {
+				LOG_WARNING("Vertex weights (%i) greater than max weights per vertex (%i)", weights.size(), maxWeights);
+			}
+			for (int weightIndex = 0; weightIndex < weights.size() && weightIndex < maxWeights && weightIndex < 4; ++weightIndex) {
+				std::tie(desc.BoneIndices1[weightIndex], desc.BoneWeights1[weightIndex]) = weights[weightIndex];
+			}
+			for (int weightIndex = 4; weightIndex < weights.size() && weightIndex < maxWeights && weightIndex < 8; ++weightIndex) {
+				std::tie(desc.BoneIndices2[weightIndex - 4], desc.BoneWeights2[weightIndex - 4]) = weights[weightIndex];
+			}
+		}
+
+		//break;
+	}
+
+	// Traverse the node tree and build a skeleton
+	if (!boneInfo.empty()) {
+		m_Skeleton = new Skeleton();
+		CreateSkeleton(boneInfo, boneNameMapping, scene->mRootNode, -1);
+		int numBones = m_Skeleton->Bones.size();
+		LOG_DEBUG("Bone count: %i", numBones);
+		if (numBones > 0) {
+			m_Skeleton->PrintSkeleton();
+		}
+	}
+
+	// Animations
+	LOG_DEBUG("Animation count: %i", scene->mNumAnimations);
+	for (int i = 0; i < scene->mNumAnimations; ++i) {
+		auto animation = scene->mAnimations[i];
+		std::string animationName = animation->mName.C_Str();
+		LOG_DEBUG("Animation: %s", animationName.c_str());
+		LOG_DEBUG("Duration: %f", animation->mDuration);
+		LOG_DEBUG("Ticks per second: %f", animation->mTicksPerSecond);
+
+		Skeleton::Animation skelAnim;
+		skelAnim.Name = animationName;
+		skelAnim.Duration = animation->mDuration / animation->mTicksPerSecond;
+
+		std::map<int, double> frameTimes;
+		std::map<int, std::map<int, Skeleton::Animation::Keyframe::BoneProperty>> frameBoneProperties;
+		// For each animation channel (bone)
+		for (int channelIndex = 0; channelIndex < animation->mNumChannels; ++channelIndex) {
+			auto channel = animation->mChannels[channelIndex];
+			std::string boneName = channel->mNodeName.C_Str();
+			int boneID = m_Skeleton->GetBoneID(boneName);
+			if (boneID == -1) {
+				LOG_ERROR("Animation referenced a bone that doesn't exist: %s", boneName.c_str());
 				continue;
-
-
-			similarNormals[faceDef.VertexIndex - 1] += normal;
-			normalCount[faceDef.VertexIndex - 1]++;
-			int index = pair.first;
-			glm::vec3 averagedNormal = ;
-			Normals[]
-		}*/
-
-		// Face definitions
-		for (auto faceDef : face.Definitions)
-		{
-			glm::vec3 vertex;
-			std::tie(vertex.x, vertex.y, vertex.z) = obj.Vertices.at(faceDef.VertexIndex - 1);
-			Vertices.push_back(vertex);
-
-			if (faceDef.NormalIndex != 0)
-			{
-				glm::vec3 normal;
-				std::tie(normal.x, normal.y, normal.z) = obj.Normals.at(faceDef.NormalIndex - 1);
-				Normals.push_back(normal);
 			}
 
-			if (faceDef.TextureCoordIndex != 0)
-			{
-				glm::vec2 texCoord;
-				// TODO: W-coord?
-				std::tie(texCoord.x, texCoord.y, std::ignore) = obj.TextureCoords.at(faceDef.TextureCoordIndex - 1);
-				TextureCoords.push_back(texCoord);
+			// If you don't have the same amount of keyframes for every transformation type you're dumb.
+			if (channel->mNumPositionKeys != channel->mNumRotationKeys || channel->mNumPositionKeys != channel->mNumScalingKeys) {
+				LOG_ERROR("Hey, animation! You're dumb!", animationName);
+				continue;
 			}
 
-			currentTexGroup->EndIndex = index;
-			index++;
+			for (int keyframe = 0; keyframe < channel->mNumPositionKeys; ++keyframe) {
+				auto posKey = channel->mPositionKeys[keyframe];
+				auto rotKey = channel->mRotationKeys[keyframe];
+				auto scaleKey = channel->mScalingKeys[keyframe];
+
+				frameTimes[keyframe] = posKey.mTime;
+
+				auto &property = frameBoneProperties[keyframe][boneID];
+				property.ID = keyframe;
+				property.Position = glm::vec3(posKey.mValue.x, posKey.mValue.y, posKey.mValue.z);
+				property.Rotation = glm::quat(rotKey.mValue.w, rotKey.mValue.x, rotKey.mValue.y, rotKey.mValue.z);
+				property.Scale = glm::vec3(scaleKey.mValue.x, scaleKey.mValue.y, scaleKey.mValue.z);
+			}
 		}
-	}
 
-	if (Vertices.size() > 0)
-	{
-		CreateTangents();
-		if (average)
-		{
-			getSimilarVertexIndex();
+		// Create keyframes from bone properties
+		for (auto &kv : frameBoneProperties) {
+			int keyframe = kv.first;
+			Skeleton::Animation::Keyframe animationFrame;
+			animationFrame.Index = keyframe;
+			animationFrame.Time = frameTimes[keyframe] / animation->mTicksPerSecond;
+			for (auto &kv2 : kv.second) {
+				int boneID = kv2.first;
+				auto &property = kv2.second;
+				animationFrame.BoneProperties[boneID] = property;
+			}
+			skelAnim.Keyframes.push_back(animationFrame);
 		}
-		CreateBuffers(Vertices, Normals, TangentNormals, BiTangentNormals, TextureCoords);
-	}
-	else
-	{
-		LOG_WARNING("Loaded OBJ with no vertices!");
-	}
-}
 
-void Model::CreateBuffers( std::vector<glm::vec3> vertices, std::vector<glm::vec3> normals, std::vector<glm::vec3> tangents, std::vector<glm::vec3> biTangents, std::vector<glm::vec2>textureCoords)
-{
-
-	//LOG_INFO("Generating VertexBuffer");
-	glGenBuffers(1, &VertexBuffer);
-	if (vertices.size() > 0)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-		GLERROR("GLEW: BufferFail, VertexBuffer");
-	}
-	else
-	{
-		LOG_WARNING("Created empty vertex buffer!");
+		m_Skeleton->Animations[animationName] = skelAnim;
 	}
 
-	//LOG_INFO("Generating NormalBuffer");
-	glGenBuffers(1, &NormalBuffer);
-	if (normals.size() > 0)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
-		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), &normals[0], GL_STATIC_DRAW);
-		GLERROR("GLEW: BufferFail, NormalBuffer");
-	}
-	else
-	{
-		LOG_WARNING("Created empty normal buffer!");
-	}
+	// Generate GL buffers
+	GLuint buffer;
+	glGenBuffers(1, &buffer);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	glBufferData(GL_ARRAY_BUFFER, m_Vertices.size() * sizeof(Vertex), &m_Vertices[0], GL_STATIC_DRAW);
 
-	//LOG_INFO("Generating TangentNormalsBuffer");
-	glGenBuffers(1, &TangentNormalsBuffer);
-	if (tangents.size() > 0)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, TangentNormalsBuffer);
-		glBufferData(GL_ARRAY_BUFFER, tangents.size() * sizeof(glm::vec3), &tangents[0], GL_STATIC_DRAW);
-		GLERROR("GLEW: BufferFail, TangentNormalsBuffer");
-	}
-	else
-	{
-		LOG_WARNING("Created empty tangent buffer!");
-	}
-
-	//LOG_INFO("Generating BiTangentNormalsBuffer");
-	glGenBuffers(1, &BiTangentNormalsBuffer);
-	if (biTangents.size() > 0)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, BiTangentNormalsBuffer);
-		glBufferData(GL_ARRAY_BUFFER, biTangents.size() * sizeof(glm::vec3), &biTangents[0], GL_STATIC_DRAW);
-		GLERROR("GLEW: BufferFail, BiTangentNormalsBuffer");
-	}
-	else
-	{
-		LOG_WARNING("Created empty biTangent buffer!");
-	}
-
-
-	//LOG_INFO("Generating textureCoordBuffer");
-	glGenBuffers(1, &TextureCoordBuffer);
-	if (textureCoords.size() > 0)
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, TextureCoordBuffer);
-		glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(glm::vec2), &textureCoords[0], GL_STATIC_DRAW);
-		GLERROR("GLEW: BufferFail, TextureCoordBuffer");
-	}
-	else
-	{
-		LOG_WARNING("Created empty texture coordinate buffer!");
-	}
+	glGenBuffers(1, &ElementBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ElementBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned int), &m_Indices[0], GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 	GLERROR("GLEW: BufferFail4");
 
-	glBindBuffer(GL_ARRAY_BUFFER, VertexBuffer);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	GLERROR("GLEW: BufferFail5");
-
-	glBindBuffer(GL_ARRAY_BUFFER, NormalBuffer);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	GLERROR("GLEW: BufferFail5");
-
-	glBindBuffer(GL_ARRAY_BUFFER, TextureCoordBuffer);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, 0);
-	GLERROR("GLEW: BufferFail5");
-
-	glBindBuffer(GL_ARRAY_BUFFER, TangentNormalsBuffer);
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	GLERROR("GLEW: BufferFail5");
-
-	glBindBuffer(GL_ARRAY_BUFFER, BiTangentNormalsBuffer);
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, buffer);
+	std::vector<int> structSizes = { 3, 3, 3, 3, 2, 4, 4, 4, 4, 4, 4 };
+	int stride = 0;
+	for (int size : structSizes)
+		stride += size;
+	stride *= sizeof(GLfloat);
+	int offset = 0;
+	{
+		int element = 0;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * offset)); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+		glVertexAttribPointer(element, structSizes[element], GL_FLOAT, GL_FALSE, stride, (GLvoid*)(sizeof(GLfloat) * (offset += structSizes[element - 1]))); element++;
+	}
 	GLERROR("GLEW: BufferFail5");
 
 	glEnableVertexAttribArray(0);
@@ -203,84 +319,41 @@ void Model::CreateBuffers( std::vector<glm::vec3> vertices, std::vector<glm::vec
 	glEnableVertexAttribArray(2);
 	glEnableVertexAttribArray(3);
 	glEnableVertexAttribArray(4);
+	glEnableVertexAttribArray(5);
+	glEnableVertexAttribArray(6);
+	glEnableVertexAttribArray(7);
+	glEnableVertexAttribArray(8);
+	glEnableVertexAttribArray(9);
+	glEnableVertexAttribArray(10);
 	GLERROR("GLEW: BufferFail5");
+
+	//CreateBuffers();
 }
 
-bool Model::IsNear( float v1, float v2 )
+Model::~Model()
 {
-	return fabs(v1 - v2) < 0.001f;
-}
-
-void Model::getSimilarVertexIndex()
-{
-	for(int i = 0; i < Vertices.size(); i++)
-	{
-		for(int t = 0; t < Vertices.size(); t++)
-		{
-			if(i != t)
-			{
-				if(IsNear(Vertices[i].x, Vertices[t].x)
-					&& IsNear(Vertices[i].y, Vertices[t].y)
-					&& IsNear(Vertices[i].z, Vertices[t].z)
-					)
-				{
-					glm::vec3 tempNormal, tempTangent, tempBiTangent;
-
-					if(glm::dot(Normals[i], Normals[t]) > .4f)
-					{
-					tempNormal = Normals[i] + Normals[t];
-					tempTangent = TangentNormals[i] + TangentNormals[t];
-					tempBiTangent = BiTangentNormals[i] + BiTangentNormals[t];
-
-					Normals[i] = tempNormal;
-					Normals[t] = tempNormal;
-
-					TangentNormals[i] = tempTangent;
-					TangentNormals[t] = tempTangent;
-
-					BiTangentNormals[i] = tempBiTangent;
-					BiTangentNormals[t] = tempBiTangent;
-					}
-				}
-			}
-		}
+	if (m_Skeleton) {
+		delete m_Skeleton;
 	}
 }
 
-void Model::CreateTangents()
+void Model::CreateSkeleton(std::vector<std::tuple<std::string, glm::mat4>> &boneInfo, std::map<std::string, int> &boneNameMapping, aiNode* node, int parentID)
 {
-	for(int i = 0; i < Vertices.size(); i += 3)
-	{
-		glm::vec3 v0 = Vertices[i];
-		glm::vec3 v1 = Vertices[i+1];
-		glm::vec3 v2 = Vertices[i+2];
+	std::string nodeName = node->mName.C_Str();
 
-		glm::vec2 uv0 = TextureCoords[i];
-		glm::vec2 uv1 = TextureCoords[i+1];
-		glm::vec2 uv2 = TextureCoords[i+2];
+	// Find the bone by name in the bone info list
+	if (boneNameMapping.find(nodeName) == boneNameMapping.end()) {
+		LOG_DEBUG("Node \"%s\" was not a bone", nodeName.c_str());
+	} else {
+		glm::mat4 offsetMatrix;
+		int ID = boneNameMapping[nodeName];
+		std::tie(std::ignore, offsetMatrix) = boneInfo[ID];
+		m_Skeleton->CreateBone(ID, parentID, nodeName, offsetMatrix);
+		parentID = ID;
+	}
 
-		//Calculate the edge of the triangle
-		glm::vec3 edge1 = v1-v0;
-		glm::vec3 edge2 = v2-v0;
-
-		glm::vec2 deltaUV1 = uv1 - uv0;
-		glm::vec2 deltaUV2 = uv2 - uv0;
-
-		float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
-		glm::vec3 tangent, biTangent;
-
-		tangent = (edge1 * deltaUV2.y - edge2 * deltaUV1.y) * r;
-		biTangent = (edge2 * deltaUV1.x - edge1 * deltaUV2.x) * r;
-
-		TangentNormals.push_back(tangent);
-		TangentNormals.push_back(tangent);
-		TangentNormals.push_back(tangent);
-
-		BiTangentNormals.push_back(biTangent);
-		BiTangentNormals.push_back(biTangent);
-		BiTangentNormals.push_back(biTangent);
+	for (int childIndex = 0; childIndex < node->mNumChildren; ++childIndex) {
+		aiNode* child = node->mChildren[childIndex];
+		CreateSkeleton(boneInfo, boneNameMapping, child, parentID);
 	}
 }
-
-
-

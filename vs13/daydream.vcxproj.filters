@@ -237,6 +237,15 @@
     <ClInclude Include="..\include\dd\Core\EComponentCreated.h">
       <Filter>dd\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\dd\Core\Skeleton.h">
+      <Filter>dd\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\dd\Core\PNG.h">
+      <Filter>dd\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\dd\Core\Image.h">
+      <Filter>dd\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dd\Core\Camera.cpp">
@@ -295,6 +304,12 @@
     </ClCompile>
     <ClCompile Include="..\src\dd\PrecompiledHeader.cpp">
       <Filter>dd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dd\Core\Skeleton.cpp">
+      <Filter>dd\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\dd\Core\PNG.cpp">
+      <Filter>dd\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

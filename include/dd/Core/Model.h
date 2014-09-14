@@ -10,18 +10,42 @@
 #include <cstdlib>
 #include <stack>
 
-#include "ResourceManager.h"
-#include "Texture.h"
-#include "OBJ.h"
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+#include <boost/filesystem/path.hpp>
+
+#include "Core/ResourceManager.h"
+#include "Core/Texture.h"
+#include "Core/Skeleton.h"
 
 class Model : public Resource
 {
-public:
-	Model(OBJ &obj, bool average);
-	static Model* Create(std::string resourceName) { return new Model(*ResourceManager::Load<OBJ>(resourceName), false); }
+private:
+	Model(std::string fileName);
 
-	struct TextureGroup
+public:
+	~Model();
+	static Model* Create(std::string resourceName) { return new Model(resourceName); }
+
+	struct Vertex
 	{
+		glm::vec3 Position;
+		glm::vec3 Normal;
+		glm::vec3 Tangent;
+		glm::vec3 BiTangent;
+		glm::vec2 TextureCoords;
+		glm::vec4 DiffuseVertexColor;
+		glm::vec4 SpecularVertexColor;
+		glm::vec4 BoneIndices1;
+		glm::vec4 BoneIndices2;
+		glm::vec4 BoneWeights1;
+		glm::vec4 BoneWeights2;
+	};
+
+	struct MaterialGroup
+	{
+		float Shininess;
 		std::shared_ptr<::Texture> Texture;
 		std::shared_ptr<::Texture> NormalMap;
 		std::shared_ptr<::Texture> SpecularMap;
@@ -30,43 +54,35 @@ public:
 	};
 
 	GLuint VAO;
-	std::vector<TextureGroup> TextureGroups;
+	GLuint ElementBuffer;
+	std::vector<MaterialGroup> TextureGroups;
 
 	std::vector<std::shared_ptr<Texture>> texture;
 	glm::mat4 GetMatrix();
 	std::vector<glm::vec3> Vertices;
+	std::vector<Vertex> m_Vertices;
+	std::vector<unsigned int> m_Indices;
+	Skeleton* m_Skeleton = nullptr;
 
 private:
-
+	std::vector<glm::ivec2> BoneIndices;
+	std::vector<glm::vec2> BoneWeights;
 	std::vector<glm::vec3> Normals;
+	std::vector<glm::vec4> DiffuseVertexColor;
+	std::vector<glm::vec4> SpecularVertexColor;
 	std::vector<glm::vec3> TangentNormals;
 	std::vector<glm::vec3> BiTangentNormals;
 	std::vector<glm::vec2> TextureCoords;
 
 	GLuint VertexBuffer;
+	GLuint DiffuseVertexColorBuffer;
+	GLuint SpecularVertexColorBuffer;
 	GLuint NormalBuffer;
 	GLuint TangentNormalsBuffer;
 	GLuint BiTangentNormalsBuffer;
 	GLuint TextureCoordBuffer;
 
-	bool Loadobj(
-	    const char* path,
-	    std::vector <glm::vec3> &out_vertices,
-	    std::vector <glm::vec3> &out_normals,
-	    std::vector <glm::vec2> &out_TextureCoords
-	);
-
-	void CreateBuffers(
-	    std::vector<glm::vec3> _Vertices,
-		std::vector<glm::vec3> _Normals,
-		std::vector<glm::vec3> _Tangents,
-		std::vector<glm::vec3> _BiTangents,
-	    std::vector<glm::vec2>_TextureCoords
-	);
-
-	void CreateTangents();
-	bool IsNear(float v1, float v2);
-	void getSimilarVertexIndex();
-
+	void CreateSkeleton(std::vector<std::tuple<std::string, glm::mat4>> &boneInfo, std::map<std::string, int> &boneNameMapping, aiNode* node, int parentID);
 };
+
 #endif // Model_h__

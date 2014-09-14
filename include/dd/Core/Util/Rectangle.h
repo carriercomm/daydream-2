@@ -8,11 +8,14 @@ struct Rectangle
 	Rectangle()
 		: X(0), Y(0), Width(0), Height(0) { }
 
-	Rectangle(int x, int y, int width = 0, int height = 0) 
+	Rectangle(int width, int height)
+		: X(0), Y(0), Width(width), Height(height) { }
+
+	Rectangle(int x, int y, int width, int height)
 		: X(x), Y(y), Width(width), Height(height) { }
 
 	/*Rectangle(const Rectangle &rect)
-		: X(rect.X), Y(rect.Y), Width(rect.Width), Height(rect.Height) { }*/
+	: X(rect.X), Y(rect.Y), Width(rect.Width), Height(rect.Height) { }*/
 
 	int X;
 	int Y;
@@ -20,30 +23,29 @@ struct Rectangle
 	int Height;
 
 	virtual int Left() const { return X; }
-	void SetLeft(int left) 
+	void SetLeft(int left)
 	{
 		Width += X - left;
 		X = left;
 	}
 	virtual int Right() const { return X + Width; }
-	void SetRight(int right) 
+	void SetRight(int right)
 	{
 		Width = right - X;
 	}
 	virtual int Top() const { return Y; }
-	void SetTop(int top) 
-	{ 
+	void SetTop(int top)
+	{
 		Height += Y - top;
 		Y = top;
 	}
 	virtual int Bottom() const { return Y + Height; }
 	int SetBottom(int bottom)
-	{ 
+	{
 		Height = bottom - Y;
 	}
 
-	Rectangle& operator+=(const Rectangle &rhs)
-	{
+	Rectangle& operator+=(const Rectangle &rhs)	{
 		SetLeft(std::min(Left(), rhs.Left()));
 		SetRight(std::max(Right(), rhs.Right()));
 		SetTop(std::min(Top(), rhs.Top()));

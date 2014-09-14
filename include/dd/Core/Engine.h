@@ -22,7 +22,7 @@ public:
 		m_Renderer->SetResolution(Rectangle(0, 0, 1920, 1080));
 		m_Renderer->Initialize();
 
-		m_InputManager = std::make_shared<InputManager>(m_Renderer->GetWindow(), m_EventBroker);
+		m_InputManager = std::make_shared<InputManager>(m_Renderer->Window(), m_EventBroker);
 
 		//m_World = std::make_shared<World>(m_EventBroker, m_ResourceManager);
 		//m_World->Initialize();
@@ -30,7 +30,7 @@ public:
 		m_LastTime = glfwGetTime();
 	}
 
-	bool Running() const { return !glfwWindowShouldClose(m_Renderer->GetWindow()); }
+	bool Running() const { return !glfwWindowShouldClose(m_Renderer->Window()); }
 
 	void Tick()
 	{
@@ -44,7 +44,7 @@ public:
 		//m_World->Update(dt);
 
 		// Render scene
-		m_Renderer->Swap();
+		//m_Renderer->Draw();
 		
 		// Swap event queues
 		m_EventBroker->Clear();

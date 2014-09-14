@@ -6,11 +6,12 @@ class Camera
 public:
 	/** Camera constructor.
 	
+		@param aspectRatio Aspect ratio.
 		@param yFOV Vertical FOV.
 		@param nearClip Near clipping plane in meters.
 		@param farClip Far clipping plane in meters.
 	*/
-	Camera(float yFOV, float nearClip, float farClip);
+	Camera(float aspectRatio, float yFOV, float nearClip, float farClip);
 
 	/** Forward vector of the camera */
 	glm::vec3 Forward();
@@ -28,9 +29,11 @@ public:
 	float Yaw() const { return m_Yaw; }
 	void Yaw(float val);*/
 
-	glm::mat4 ProjectionMatrix(float aspectRatio);
-
+	glm::mat4 ProjectionMatrix() const { return m_ProjectionMatrix; }
 	glm::mat4 ViewMatrix() const { return m_ViewMatrix; }
+
+	float AspectRatio() const { return m_AspectRatio; }
+	void SetAspectRatio(float val);
 
 	float FOV() const { return m_FOV; }
 	void SetFOV(float val);
@@ -43,7 +46,9 @@ public:
 
 private:
 	void UpdateViewMatrix();
+	void UpdateProjectionMatrix();
 
+	float m_AspectRatio;
 	float m_FOV;
 	float m_NearClip;
 	float m_FarClip;
@@ -51,6 +56,7 @@ private:
 	glm::vec3 m_Position;
 	glm::quat m_Orientation;
 
+	glm::mat4 m_ProjectionMatrix;
 	glm::mat4 m_ViewMatrix;
 };
 

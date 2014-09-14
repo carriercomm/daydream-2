@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <forward_list>
 
-#include "ResourceManager.h"
 #include "Texture.h"
 #include "Model.h"
 
@@ -14,7 +13,6 @@ struct RenderJob
 {
 	friend class RenderQueue;
 
-	glm::mat4 ModelMatrix;
 	float Depth;
 
 protected:
@@ -33,14 +31,16 @@ struct ModelJob : RenderJob
 	unsigned int ShaderID;
 	unsigned int TextureID;
 
+	glm::mat4 ModelMatrix;
 	GLuint DiffuseTexture;
 	GLuint NormalTexture;
 	GLuint SpecularTexture;
+	float Shininess;
 	glm::vec4 Color;
 	GLuint VAO;
+	GLuint ElementBuffer;
 	unsigned int StartIndex;
 	unsigned int EndIndex;
-	float Transparent;
 
 	void CalculateHash() override
 	{
@@ -67,12 +67,26 @@ struct SpriteJob : RenderJob
 	unsigned int ShaderID;
 	unsigned int TextureID;
 
+	glm::mat4 ModelMatrix;
 	GLuint Texture;
 	glm::vec4 Color;
 
 	void CalculateHash() override
 	{
 		Hash = TextureID;
+	}
+};
+
+struct PointLightJob : RenderJob
+{
+	glm::vec3 Position;
+	glm::vec3 SpecularColor = glm::vec3(1, 1, 1);
+	glm::vec3 DiffuseColor = glm::vec3(1, 1, 1);
+	float Radius = 1.f;
+
+	void CalculateHash() override
+	{
+		Hash = 0;
 	}
 };
 
@@ -109,21 +123,24 @@ public:
 	std::forward_list<std::shared_ptr<RenderJob>> Jobs;
 };
 
-struct RenderQueuePair
+struct RenderQueueCollection
 {
 	RenderQueue Deferred;
 	RenderQueue Forward;
+	RenderQueue Lights;
 
 	void Clear()
 	{
 		Deferred.Clear();
 		Forward.Clear();
+		Lights.Clear();
 	}
 
 	void Sort()
 	{
 		Deferred.Sort();
 		Forward.Sort();
+		Lights.Sort();
 	}
 };
 
