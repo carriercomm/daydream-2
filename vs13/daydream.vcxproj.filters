@@ -234,6 +234,9 @@
     <ClInclude Include="..\include\dd\PrecompiledHeader.h">
       <Filter>dd</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\dd\Core\EComponentCreated.h">
+      <Filter>dd\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dd\Core\Camera.cpp">

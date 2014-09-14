@@ -100,6 +100,7 @@
     <ClInclude Include="..\include\dd\Core\CTemplate.h" />
     <ClInclude Include="..\include\dd\Core\CTransform.h" />
     <ClInclude Include="..\include\dd\Core\CubemapTexture.h" />
+    <ClInclude Include="..\include\dd\Core\EComponentCreated.h" />
     <ClInclude Include="..\include\dd\Core\EGamepadAxis.h" />
     <ClInclude Include="..\include\dd\Core\EGamepadButton.h" />
     <ClInclude Include="..\include\dd\Core\EKeyDown.h" />
