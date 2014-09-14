@@ -7,9 +7,12 @@
 namespace Events
 {
 
+/** Thrown when an entity _completely_ leaves a trigger volume. */
 struct LeaveTrigger : Event
 {
+	/** The trigger that was left. */
 	EntityID Trigger;
+	/** The entity that triggered the event. */
 	EntityID Entity;
 };
 

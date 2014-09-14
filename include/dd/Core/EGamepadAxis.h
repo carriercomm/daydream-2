@@ -5,6 +5,7 @@
 
 namespace Gamepad
 {
+	/** Gamepad axis type */
 	enum class Axis
 	{
 		LeftX,
@@ -20,10 +21,14 @@ namespace Gamepad
 namespace Events
 {
 
+/** Thrown when a gamepad axis changes value */
 struct GamepadAxis : Event
 {
+	/** ID of the gamepad. */
 	int GamepadID;
+	/** The axis type. */
 	Gamepad::Axis Axis;
+	/** The new value of the axis. */
 	float Value;
 };
 

@@ -6,8 +6,10 @@
 namespace Events
 {
 
+/** Thrown on key release. */
 struct KeyUp : Event
 {
+	/** GLFW key code */
 	int KeyCode;
 };
 

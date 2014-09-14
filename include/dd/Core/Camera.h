@@ -4,9 +4,17 @@
 class Camera
 {
 public:
+	/** Camera constructor.
+	
+		@param yFOV Vertical FOV.
+		@param nearClip Near clipping plane in meters.
+		@param farClip Far clipping plane in meters.
+	*/
 	Camera(float yFOV, float nearClip, float farClip);
 
+	/** Forward vector of the camera */
 	glm::vec3 Forward();
+	/** Right vector of the camera */
 	glm::vec3 Right();
 
 	glm::vec3 Position() const { return m_Position; }

@@ -6,8 +6,10 @@
 namespace Events
 {
 
+/** Thrown on key press. */
 struct KeyDown : Event
 {
+	/** GLFW key code */
 	int KeyCode;
 };
 

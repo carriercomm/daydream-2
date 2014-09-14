@@ -6,9 +6,12 @@
 namespace Events
 {
 
+/** Thrown on mouse button press. */
 struct MousePress : Event
 {
+	/** GLFW mouse button code */
 	int Button;
+	/** The click position in window coordinates. */
 	double X, Y;
 };
 
