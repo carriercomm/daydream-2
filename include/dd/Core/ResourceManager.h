@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 #include "Util/UnorderedMapPair.h"
-#include "Factory.h"
+#include "Util/Factory.h"
 
 class Resource
 {

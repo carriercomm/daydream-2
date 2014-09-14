@@ -1,7 +1,7 @@
 #ifndef Component_h__
 #define Component_h__
 
-#include "Factory.h"
+#include "Util/Factory.h"
 #include "Core/Entity.h"
 
 struct Component

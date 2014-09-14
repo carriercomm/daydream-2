@@ -1,7 +1,7 @@
 #ifndef Components_Rotate_h__
 #define Components_Rotate_h__
 
-#include "Component.h"
+#include "Core/Component.h"
 
 namespace Components
 {

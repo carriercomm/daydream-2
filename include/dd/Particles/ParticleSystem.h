@@ -44,11 +44,6 @@ private:
 
 	bool tempSpawnedExplosions;
 	
-// 	EventRelay<ParticleSystem, Events::KeyUp> m_EKeyUp;
-// 	bool OnKeyUp(const Events::KeyUp &e);
-	EventRelay<ParticleSystem, Events::CreateExplosion> m_EExplosion;
-	bool CreateExplosion(const Events::CreateExplosion &e);
-	
 	std::map<EntityID, double> m_ExplosionEmitters;
 	std::map<EntityID, EntityID> m_ParticlesToEmitter;
 };

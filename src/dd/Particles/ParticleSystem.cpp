@@ -6,7 +6,6 @@ void Systems::ParticleSystem::Initialize()
 {
 	m_TransformSystem = m_World->GetSystem<Systems::TransformSystem>();
 	tempSpawnedExplosions = false;
-	EVENT_SUBSCRIBE_MEMBER(m_EExplosion, &ParticleSystem::CreateExplosion);
 }
 
 void Systems::ParticleSystem::Update(double dt)
@@ -233,56 +232,4 @@ void Systems::ParticleSystem::ScalarInterpolation(double timeProgress, std::vect
 	if(spectrum[0] > spectrum[1])
 		dAlpha *= -1;
 	alpha = spectrum[0] + dAlpha * timeProgress; 
-}
-
-bool Systems::ParticleSystem::CreateExplosion(const Events::CreateExplosion &e)
-{
-	auto explosion = m_World->CreateEntity();
-	auto emitter = m_World->AddComponent<Components::ParticleEmitter>(explosion);
-	emitter->LifeTime = e.LifeTime;
-	emitter->SpawnCount = e.ParticlesToSpawn;
-	emitter->Speed = e.Speed;
-	emitter->SpreadAngle = e.SpreadAngle; 
-	emitter->Emitting = e.Emitting;
-	emitter->SpawnFrequency = e.SpawnFrequency;
-	//emitter->ScaleSpectrum.push_back(glm::vec3(e.ParticleScale));
-	emitter->SpawnFrequency = e.LifeTime + 20; //temp
-	emitter->Fade = true;
-	emitter->Color = e.Color;
-	if(e.UseGoalVector)
-	{
-		emitter->UseGoalVelocity = e.UseGoalVector;
-		emitter->GoalVelocity = e.GoalVelocity;
-	}
-	std::vector<glm::vec3> scale;
-	scale.push_back(glm::vec3(e.ParticleScale[0]));
-	if(e.ParticleScale.size() >= 2)
-		scale.push_back(glm::vec3(e.ParticleScale[1]));
-	emitter->ScaleSpectrum = scale;
-	// 	emitter->GoalVelocity = glm::vec3(0,-_speed, 0);
-	m_World->CommitEntity(explosion);
-
-	auto particleEnt = m_World->CreateEntity();
-	auto templateComponent = m_World->AddComponent<Components::Template>(particleEnt);
-	auto TEMP = m_World->AddComponent<Components::Transform>(particleEnt);
-	auto spriteComponent = m_World->AddComponent<Components::Sprite>(particleEnt);
-	if(e.usePointLight)
-	{
-		auto light = m_World->AddComponent<Components::PointLight>(particleEnt);
-		light->Diffuse = glm::vec3(231.f/255.f, 181.f/255.f, 48.f/255.f);
-		light->Specular = glm::vec3(0.5f, 0.5f, 0.5f);
-		light->Radius = 20.f;
-	}
-	spriteComponent->SpriteFile = e.spritePath;
-	m_World->CommitEntity(particleEnt);
-	emitter->ParticleTemplate = particleEnt;
-
-	auto transform = m_World->AddComponent<Components::Transform>(explosion);
-	transform->Position = e.Position;
-	transform->Orientation = e.RelativeUpOrientation;
-
-	SpawnParticles(explosion);
-	m_ExplosionEmitters[explosion] = glfwGetTime();
-
-	return true;
 }

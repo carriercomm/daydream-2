@@ -168,7 +168,7 @@ void Renderer::LoadContent()
 	CreateShadowMap(m_ShadowMapRes);
 	FrameBufferTextures();
 
-	m_sphereModel = ResourceManager->Load<Model>("Model", "Models/Placeholders/PhysicsTest/Sphere.obj");
+	m_sphereModel = ResourceManager->Load<Model>("Model", "Models/Core/UnitSphere.obj");
 	m_Skybox = std::make_shared<Skybox>("Textures/Skybox/sky36", "jpg");
 }
 

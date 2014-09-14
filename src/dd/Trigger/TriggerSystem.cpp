@@ -62,9 +62,6 @@ bool Systems::TriggerSystem::OnEnterTrigger( const Events::EnterTrigger &event )
 
 bool Systems::TriggerSystem::OnLeaveTrigger( const Events::LeaveTrigger &event )
 {
-	auto flagComponent1 = m_World->GetComponent<Components::Flag>(event.Trigger);
-	auto flagComponent2 = m_World->GetComponent<Components::Flag>(event.Entity);
-
 	auto triggerMoveComponent = m_World->GetComponent<Components::TriggerMove>(event.Trigger);
 	if (triggerMoveComponent)
 	{

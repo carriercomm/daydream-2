@@ -1,5 +1,5 @@
 #include "PrecompiledHeader.h"
-#include "SoundSystem.h"
+#include "Sound/SoundSystem.h"
 #include "Core/World.h"
 
 Systems::SoundSystem::~SoundSystem()

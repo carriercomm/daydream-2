@@ -6,16 +6,15 @@
 
 #include "Core/System.h"
 #include "Core/CTransform.h"
-#include "Physics/ESetVelocity.h"
-#include "Physics/EApplyForce.h"
-#include "Physics/EApplyPointImpulse.h"
 #include "Transform/EMove.h"
 #include "Transform/ERotate.h"
 
 #include "CTrigger.h"
 #include "CTriggerExplosion.h"
 #include "CTriggerMove.h"
+#include "CMove.h"
 #include "CTriggerRotate.h"
+#include "CRotate.h"
 #include "EEnterTrigger.h"
 #include "ELeaveTrigger.h"
 
@@ -24,7 +23,6 @@ namespace Systems
 	class TriggerSystem : public System
 	{
 	public:
-		
 		TriggerSystem(World* world, std::shared_ptr<::EventBroker> eventBroker, std::shared_ptr<::ResourceManager> resourceManager)
 			: System(world, eventBroker, resourceManager) { }
 

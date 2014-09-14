@@ -1,11 +1,11 @@
 #include "PrecompiledHeader.h"
-#include "InputManager.h"
-#include <XInput.h>
+#include "Core/InputManager.h"
 
 void InputManager::Initialize()
 {
-	m_LastGamepadAxisState = std::array<GamepadAxisState, XUSER_MAX_COUNT>();
-	m_LastGamepadButtonState = std::array<GamepadButtonState, XUSER_MAX_COUNT>();
+	// TODO: Gamepad
+	//m_LastGamepadAxisState = std::array<GamepadAxisState, XUSER_MAX_COUNT>();
+	//m_LastGamepadButtonState = std::array<GamepadButtonState, XUSER_MAX_COUNT>();
 
 	EVENT_SUBSCRIBE_MEMBER(m_ELockMouse, &InputManager::OnLockMouse);
 	EVENT_SUBSCRIBE_MEMBER(m_EUnlockMouse, &InputManager::OnUnlockMouse);
@@ -85,29 +85,6 @@ void InputManager::Update(double dt)
 		EventBroker->Publish(e);
 	}
 
-	
-	if(m_CurrentKeyState[GLFW_KEY_P])
-	{
-		Events::StopSound e;
-		e.Emitter = 1;
-		EventBroker->Publish(e);
-	}
-	if(m_CurrentKeyState[GLFW_KEY_L])
-	{
-		Events::PlayBGM e;
-		e.Resource = "Sounds/BGM/WilliamTellOverture.mp3";
-		e.Loop = true;
-		EventBroker->Publish(e);
-	}
-	if(m_CurrentKeyState[GLFW_KEY_O])
-	{
-		Events::PlayBGM e;
-		e.Resource = "Sounds/BGM/DiesIrae.mp3";
-		e.Loop = true;
-		EventBroker->Publish(e);
-	}
-
-
 	// // Lock mouse while holding LMB
 	// if (m_CurrentMouseState[GLFW_MOUSE_BUTTON_LEFT])
 	// {
@@ -125,9 +102,8 @@ void InputManager::Update(double dt)
 	// 	glfwSetInputMode(m_GLFWWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 	// }
 
-	// Xbox360 controller
-	//using namespace ;
-	DWORD dwResult;
+	// TODO: Xbox360 controller
+	/*DWORD dwResult;
 	for (int i = 0; i < MAX_GAMEPADS; i++)
 	{
 		XINPUT_STATE state = { 0 };
@@ -190,7 +166,7 @@ void InputManager::Update(double dt)
 			PublishGamepadButtonIfChanged(i, Gamepad::Button::X);
 			PublishGamepadButtonIfChanged(i, Gamepad::Button::Y);
 		}
-	}
+	}*/
 
 	m_LastKeyState = m_CurrentKeyState;
 	m_LastMouseState = m_CurrentMouseState;
