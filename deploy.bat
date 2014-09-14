@@ -22,4 +22,10 @@ IF %~1==Debug (
 IF %~1==Release (
 	COPY "libs\glew-1.11.0\bin\%Configuration%\Win32\glew32.dll" "%ConfigPath%\glew32.dll"
 )
+:: Licenses
+COPY "libs\assimp-3.1.1\LICENSE" "%ConfigPath%\Assimp License.txt"
+COPY "libs\glew-1.11.0\LICENSE.txt" "%ConfigPath%\GLEW License.txt"
+COPY "libs\glm-0.9.5.4\copying.txt" "%ConfigPath%\GLM License.txt"
+COPY "libs\assimp-3.1.1\LICENSE" "%ConfigPath%\Assimp License.txt"
+
 GOTO:eof
