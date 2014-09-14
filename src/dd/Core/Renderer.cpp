@@ -1,8 +1,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/Renderer.h"
 
-Renderer::Renderer(std::shared_ptr<::ResourceManager> resourceManager)
-	: ResourceManager(resourceManager)
+Renderer::Renderer()
 {
 	m_VSync = false;
 	m_Fullscreen = false;
@@ -168,7 +167,7 @@ void Renderer::LoadContent()
 	CreateShadowMap(m_ShadowMapRes);
 	FrameBufferTextures();
 
-	m_sphereModel = ResourceManager->Load<Model>("Model", "Models/Core/UnitSphere.obj");
+	m_sphereModel = ResourceManager::Load<Model>("Models/Core/UnitSphere.obj");
 	m_Skybox = std::make_shared<Skybox>("Textures/Skybox/sky36", "jpg");
 }
 

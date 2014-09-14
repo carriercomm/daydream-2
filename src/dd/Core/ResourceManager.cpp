@@ -1,44 +1,12 @@
 #include "PrecompiledHeader.h"
 #include "Core/ResourceManager.h"
 
-Resource* ResourceManager::CreateResource(std::string resourceType, std::string resourceName)
-{
-	auto facIt = m_FactoryFunctions.find(resourceType);
-	if (facIt == m_FactoryFunctions.end())
-	{
-		LOG_ERROR("Failed to load resource \"%s\" of type \"%s\": Type not registered", resourceName.c_str(), resourceType.c_str());
-		return nullptr;
-	}
-	
-	// Call the factory function
-	Resource* resource = facIt->second(resourceName);
-	// Store IDs
-	resource->TypeID = GetTypeID(resourceType);
-	resource->ResourceID = GetNewResourceID(resource->TypeID);
-	// Cache
-	m_ResourceCache[std::make_pair(resourceType, resourceName)] = resource;
-
-	return resource;
-}
-
-void ResourceManager::RegisterType(std::string resourceType, std::function<Resource*(std::string)> factoryFunction)
-{
-	m_FactoryFunctions[resourceType] = factoryFunction;
-}
-
-void ResourceManager::Preload(std::string resourceType, std::string resourceName)
-{
-	if (IsResourceLoaded(resourceType, resourceName))
-	{
-		LOG_WARNING("Attempted to preload resource \"%s\" multiple times!", resourceName);
-		return;
-	}
-
-	m_Preloading = true;
-	LOG_INFO("Preloading resource \"%s\"", resourceName.c_str());
-	CreateResource(resourceType, resourceName);
-	m_Preloading = false;
-}
+std::unordered_map<std::string, std::function<Resource*(std::string)>> ResourceManager::m_FactoryFunctions; // type -> factory function
+std::unordered_map<std::pair<std::string, std::string>, Resource*> ResourceManager::m_ResourceCache; // (type, name) -> resource
+unsigned int ResourceManager::m_CurrentResourceTypeID = 0;
+std::unordered_map<std::string, unsigned int> ResourceManager::m_ResourceTypeIDs;
+std::unordered_map<unsigned int, unsigned int> ResourceManager::m_ResourceCount;
+bool ResourceManager::m_Preloading = false;
 
 unsigned int ResourceManager::GetTypeID(std::string resourceType)
 {

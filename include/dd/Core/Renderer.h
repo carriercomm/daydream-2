@@ -32,7 +32,7 @@ public:
 	std::list<std::tuple<Texture*, glm::mat4, glm::vec3>> TexturesToRender;
 	std::list<std::tuple<glm::mat4, bool>> AABBsToRender;
 
-	Renderer(std::shared_ptr<::ResourceManager> resourceManager);
+	Renderer();
 
 	void Initialize();
 	void Draw(double dt);
@@ -109,8 +109,6 @@ public:
 	void SetSphereModel(Model* _model);
 
 private:
-	std::shared_ptr<::ResourceManager> ResourceManager;
-
 	bool m_Fullscreen;
 	int m_Width, m_Height;
 

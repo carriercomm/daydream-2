@@ -102,6 +102,7 @@ public:
 
 	OBJ() : m_CurrentMaterial(nullptr) { }
 	OBJ(std::string filename) : m_CurrentMaterial(nullptr) { LoadFromFile(filename); }
+	static OBJ* Create(std::string resourceName) { return new OBJ(resourceName); }
 
 	std::vector<std::tuple<float, float, float>> Vertices;
 	std::vector<std::tuple<float, float, float>> Normals;

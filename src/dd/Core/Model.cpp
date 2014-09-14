@@ -1,7 +1,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/Model.h"
 
-Model::Model(std::shared_ptr<ResourceManager> rm, OBJ &obj, bool average)
+Model::Model(OBJ &obj, bool average)
 {
 	OBJ::MaterialInfo* currentMaterial = nullptr;
 	TextureGroup* currentTexGroup = nullptr;
@@ -19,26 +19,26 @@ Model::Model(std::shared_ptr<ResourceManager> rm, OBJ &obj, bool average)
 			currentMaterial = face.Material;
 
 			// Load texture
-			auto texture = std::shared_ptr<Texture>(rm->Load<Texture>("Texture", currentMaterial->DiffuseTexture.FileName));
+			auto texture = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(currentMaterial->DiffuseTexture.FileName));
 			// TODO: Load normal map
 			std::shared_ptr<Texture> normalMap = nullptr;
 			if (!currentMaterial->NormalMap.FileName.empty())
 			{
-				normalMap = std::shared_ptr<Texture>(rm->Load<Texture>("Texture", currentMaterial->NormalMap.FileName));
+				normalMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(currentMaterial->NormalMap.FileName));
 			}
 			else
 			{
-				normalMap = std::shared_ptr<Texture>(rm->Load<Texture>("Texture", "Textures/NeutralNormalMap.png"));
+				normalMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>("Textures/NeutralNormalMap.png"));
 			}
 			// Load specular map
 			std::shared_ptr<Texture> specularMap = nullptr;
 			if (!currentMaterial->SpecularMap.FileName.empty())
 			{
-				specularMap = std::shared_ptr<Texture>(rm->Load<Texture>("Texture", currentMaterial->SpecularMap.FileName));
+				specularMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>(currentMaterial->SpecularMap.FileName));
 			}
 			else
 			{
-				specularMap = std::shared_ptr<Texture>(rm->Load<Texture>("Texture", "Textures/NeutralSpecularMap.png"));
+				specularMap = std::shared_ptr<Texture>(ResourceManager::Load<Texture>("Textures/NeutralSpecularMap.png"));
 			}
 
 			// TODO: Load material parameters

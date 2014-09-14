@@ -16,15 +16,8 @@ public:
 	Engine(int argc, char* argv[])
 	{
 		m_EventBroker = std::make_shared<EventBroker>();
-
-		m_ResourceManager = std::make_shared<ResourceManager>();
-		m_ResourceManager->RegisterType("OBJ", [](std::string resourceName) { return new OBJ(resourceName); });
-		auto rm = m_ResourceManager;
-		m_ResourceManager->RegisterType("Model", [rm](std::string resourceName) { return new Model(rm, *rm->Load<OBJ>("OBJ", resourceName), false); });
-		m_ResourceManager->RegisterType("AveragedModel", [rm](std::string resourceName) { return new Model(rm, *rm->Load<OBJ>("OBJ", resourceName), true); });
-		m_ResourceManager->RegisterType("Texture", [](std::string resourceName) { return new Texture(resourceName); });
 		
-		m_Renderer = std::make_shared<Renderer>(m_ResourceManager);
+		m_Renderer = std::make_shared<Renderer>();
 		m_Renderer->SetFullscreen(false);
 		m_Renderer->SetResolution(Rectangle(0, 0, 1920, 1080));
 		m_Renderer->Initialize();

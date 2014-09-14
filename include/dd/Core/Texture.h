@@ -13,6 +13,7 @@ class Texture : public Resource
 public:
 	Texture(std::string path);
 	~Texture();
+	static Texture* Create(std::string resourceName) { return new Texture(resourceName); }
 
 	void Load(std::string path);
 	void Bind();
