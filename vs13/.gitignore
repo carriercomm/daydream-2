@@ -1,3 +1,6 @@
+# Build Folders
+obj/
+
 # Visual Studio files
 *.[Oo]bj
 *.user
