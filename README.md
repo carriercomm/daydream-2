@@ -29,7 +29,6 @@ Libraries bundled along with binaries for Windows, available in the *libs* direc
 | **[GLEW](http://glew.sourceforge.net)**                       | 1.11.0       | [Modified BSD License](http://glew.sourceforge.net/glew.txt), [Mesa 3-D License](http://glew.sourceforge.net/mesa.txt), [Khronos License](http://glew.sourceforge.net/khronos.txt) |
 | **[Assimp](http://assimp.sourceforge.net)**                   | 3.1.1        | [BSD 3-Clause License](http://assimp.sourceforge.net/main_license.html)                                                                                                            |
 | **[libpng](http://www.libpng.org/pub/png/libpng.html)**       | 1.6.12       | [libpng License](http://www.libpng.org/pub/png/src/libpng-LICENSE.txt)                                                                                                             |
-| ~~**[SOIL](http://www.lonesock.net/soil.html)**~~             | July 7, 2008 | Public Domain                                                                                                                                                                      |
 
 #### External libraries
 Libraries that are too big to be bundled with the project.
