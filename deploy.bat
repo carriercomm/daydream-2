@@ -19,6 +19,7 @@ MKLINK "%ConfigPath%\Shaders\" "src\dd\Core\Shaders\" /J
 COPY "libs\assimp-3.1.1\lib\%Configuration%\assimp%ConfigurationShort%.dll" "%ConfigPath%\assimp%ConfigurationShort%.dll"
 COPY "libs\glfw-3.0.4\lib\%Configuration%\glfw3.dll" "%ConfigPath%\glfw3.dll"
 COPY "libs\glew-1.11.0\bin\%Configuration%\Win32\glew32%ConfigurationShort%.dll" "%ConfigPath%\glew32%ConfigurationShort%.dll"
+COPY "libs\lpng1612\lib\%Configuration%\libpng16.dll" "%ConfigPath%\libpng16.dll"
 :: Licenses
 COPY "libs\assimp-3.1.1\LICENSE" "%ConfigPath%\Assimp License.txt"
 COPY "libs\glew-1.11.0\LICENSE.txt" "%ConfigPath%\GLEW License.txt"
