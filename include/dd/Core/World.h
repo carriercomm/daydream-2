@@ -15,7 +15,6 @@
 #include "Entity.h"
 #include "Component.h"
 #include "System.h"
-#include "CTemplate.h"
 #include "EventBroker.h"
 #include "EComponentCreated.h"
 #include "ResourceManager.h"
