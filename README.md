@@ -27,6 +27,7 @@ Libraries bundled along with binaries for Windows, available in the *libs* direc
 | **[GLFW](http://www.glfw.org)**                   | 3.0.4        | [zlib/libpng License](http://www.glfw.org/license.html)                                                                                                                            |
 | **[GLM](http://glm.g-truc.net/0.9.5/index.html)** | 0.9.5.4      | [MIT License](http://glm.g-truc.net/copying.txt)                                                                                                                                   |
 | **[GLEW](http://glew.sourceforge.net)**           | 1.11.0       | [Modified BSD License](http://glew.sourceforge.net/glew.txt), [Mesa 3-D License](http://glew.sourceforge.net/mesa.txt), [Khronos License](http://glew.sourceforge.net/khronos.txt) |
+| **[Assimp](http://assimp.sourceforge.net)**       | 3.1.1        | [BSD 3-Clause License](http://assimp.sourceforge.net/main_license.html)                                                                                                            |
 | ~~**[SOIL](http://www.lonesock.net/soil.html)**~~ | July 7, 2008 | Public Domain                                                                                                                                                                      |
 
 #### External libraries
