@@ -7,10 +7,8 @@
 struct Component
 {
 	EntityID Entity;
-
-	virtual Component* Clone() const = 0;
 };
 
-class ComponentFactory : public Factory<Component*> { };
+class ComponentFactory : public Factory<Component> { };
 
 #endif // Component_h__

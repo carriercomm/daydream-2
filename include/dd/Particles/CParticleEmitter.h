@@ -40,9 +40,6 @@ struct ParticleEmitter : Component
 
 private:
 	double TimeSinceLastSpawn;
-
-	virtual ParticleEmitter* Clone() const override { return new ParticleEmitter(*this); }
-
 };
 
 }

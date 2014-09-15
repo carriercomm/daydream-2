@@ -6,18 +6,17 @@
 namespace Components
 {
 
-	struct TriggerMove : Component
-	{
-		TriggerMove()
-			: Queue(false)
-			, Swap(true)
-		{ }
+struct TriggerMove : Component
+{
+	TriggerMove()
+		: Queue(false)
+		, Swap(true)
+	{ }
 
-		EntityID Entity;
-		bool Queue;
-		bool Swap;
-		virtual TriggerMove* Clone() const override { return new TriggerMove(*this); }
-	};
+	EntityID Entity;
+	bool Queue;
+	bool Swap;
+};
 
 }
 

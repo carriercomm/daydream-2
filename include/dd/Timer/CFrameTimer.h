@@ -9,7 +9,6 @@ namespace Components
 struct FrameTimer : public Component
 {
 	int Frames;
-	virtual FrameTimer* Clone() const override { return new FrameTimer(*this); }
 };
 
 }

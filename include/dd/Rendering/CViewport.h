@@ -21,8 +21,6 @@ struct Viewport : Component
 	float Bottom;
 
 	EntityID Camera;
-
-	virtual Viewport* Clone() const override { return new Viewport(*this); }
 };
 
 }

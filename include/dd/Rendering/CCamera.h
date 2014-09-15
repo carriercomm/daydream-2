@@ -17,8 +17,6 @@ struct Camera : Component
 	float FOV;
 	float NearClip;
 	float FarClip;
-
-	virtual Camera* Clone() const override { return new Camera(*this); }
 };
 
 }

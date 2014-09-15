@@ -17,8 +17,6 @@ struct Particle : Component
 	std::vector<glm::vec3> VelocitySpectrum;
 	std::vector<float> AngularVelocitySpectrum;
 	std::vector<glm::vec3> OrientationSpectrum; //Keep?
-
-	virtual Particle* Clone() const override { return new Particle(*this); }
 };
 
 }

@@ -31,8 +31,6 @@ struct BlendMap : Component
 	std::string	TextureBlueNormal;
 	std::string	TextureBlueSpecular;
 	float TextureRepeats;
-
-	virtual BlendMap* Clone() const override { return new BlendMap(*this); }
 };
 
 }

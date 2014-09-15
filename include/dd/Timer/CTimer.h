@@ -9,7 +9,6 @@ namespace Components
 struct Timer : public Component
 {
 	double Time;
-	virtual Timer* Clone() const override { return new Timer(*this); }
 };
 
 }

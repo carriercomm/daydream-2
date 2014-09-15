@@ -17,8 +17,6 @@ struct Model : Component
 	bool ShadowCaster;
 	bool Transparent;
 	bool AverageNormals;
-
-	virtual Model* Clone() const override { return new Model(*this); }
 };
 
 }

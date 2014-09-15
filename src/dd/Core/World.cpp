@@ -171,7 +171,7 @@ EntityID World::CloneEntity(EntityID entity, EntityID parent /* = 0 */)
 	for (auto pair : m_EntityComponents[entity])
 	{
 		auto type = pair.first;
-		auto component = std::shared_ptr<Component>(pair.second->Clone());
+		auto component = std::shared_ptr<Component>(m_ComponentFactory.Copy(type, pair.second.get()));
 		if (component != nullptr)
 		{
 			AddComponent(clone, type, component);

@@ -6,18 +6,17 @@
 namespace Components
 {
 
-	struct TriggerRotate : Component
-	{
-		TriggerRotate()
-			: Queue(false)
-			, Swap(true)
-		{ }
+struct TriggerRotate : Component
+{
+	TriggerRotate()
+		: Queue(false)
+		, Swap(true)
+	{ }
 
-		EntityID Entity;
-		bool Queue;
-		bool Swap;
-		virtual TriggerRotate* Clone() const override { return new TriggerRotate(*this); }
-	};
+	EntityID Entity;
+	bool Queue;
+	bool Swap;
+};
 
 }
 

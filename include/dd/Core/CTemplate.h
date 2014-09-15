@@ -15,10 +15,7 @@ namespace Components
 
 	__Observe:__ Cloning an entity with a Template component will not remove the template component!
 */
-struct Template : public Component 
-{
-	virtual Template* Clone() const override { return nullptr; }
-};
+struct Template : public Component { };
 
 }
 

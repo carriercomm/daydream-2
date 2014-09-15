@@ -5,6 +5,7 @@
 
 namespace Components
 {
+
 /** Spatial data of an entity. */
 struct Transform : public Component
 {
@@ -19,8 +20,6 @@ struct Transform : public Component
 	glm::vec3 Velocity;
 	/** Physical scale multiplier. */
 	glm::vec3 Scale;
-
-	virtual Transform* Clone() const override { return new Transform(*this); }
 };
 
 }

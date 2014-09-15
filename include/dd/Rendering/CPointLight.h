@@ -27,8 +27,6 @@ struct PointLight : Component
 	glm::vec3 Diffuse;
 	float specularExponent;
 	float Scale;
-	
-	virtual PointLight* Clone() const override { return new PointLight(*this); }
 };
 
 }

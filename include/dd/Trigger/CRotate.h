@@ -11,7 +11,6 @@ struct Rotate : Component
 	float Time;
 	glm::quat StartRotation;
 	glm::quat GoalRotation;
-	virtual Rotate* Clone() const override { return new Rotate(*this); }
 };
 
 }

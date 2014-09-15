@@ -19,8 +19,6 @@ struct DamageModel : Component
 	glm::vec4 Color;
 	bool ShadowCaster;
 	bool Transparent;
-
-	virtual DamageModel* Clone() const override { return new DamageModel(*this); }
 };
 
 }

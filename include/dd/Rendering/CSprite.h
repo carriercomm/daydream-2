@@ -14,8 +14,6 @@ struct Sprite : Component
 
 	std::string SpriteFile;
 	glm::vec4 Color;
-	
-	virtual Sprite* Clone() const override { return new Sprite(*this); }
 };
 
 }
