@@ -6,6 +6,11 @@
 #include <functional>
 #include <map>
 
+/** Generic object factory. 
+	
+	Creates dynamically allocated objects of base type T.
+	@tparam T Object type.
+*/
 template <typename T>
 class Factory
 {
@@ -15,12 +20,21 @@ public:
 		m_FactoryFunctions[name] = factoryFunction;
 	}*/
 
+	/** Register a custom factory function for a type with the factory.
+
+		@tparam T2 Object type of base type T.
+		@param The lambda factory function.
+	*/
 	template <typename T2>
 	void Register(std::function<T*(void)> factoryFunction)
 	{
 		m_FactoryFunctions[typeid(T2).name()] = factoryFunction;
 	}
 
+	/** Register a type with the factory.
+
+		@tparam T2 Object type of base type T.
+	*/
 	template <typename T2>
 	void Register()
 	{
@@ -28,6 +42,11 @@ public:
 		m_CopyFunctions[typeid(T2).name()] = [](const T* t) { return new T2(*static_cast<const T2*>(t)); };
 	}
 
+	/** Create an instance of a specific typename.
+
+		@param name Typename of type of base type T, as a string.
+		@returns Pointer to the new object of type T.
+	*/
 	T* Create(std::string name)
 	{
 		auto it = m_FactoryFunctions.find(name);
@@ -41,6 +60,11 @@ public:
 		}
 	}
 
+	/** Create an instance of a specific type.
+
+		@tparam T2 Type of base type T.
+		@returns Pointer to the new object of type T.
+	*/
 	template <typename T2>
 	T* Create()
 	{
@@ -55,6 +79,12 @@ public:
 		}
 	}
 
+	/** Create a copy of an existing object of a specific _type_ registered with the factory.
+
+		@param name Typename of type of base type T, as a string.
+		@param toCopy The existing object to copy.
+		@returns Pointer to the new object of type T2.
+	*/
 	T* Copy(std::string name, const T* toCopy)
 	{
 		auto it = m_CopyFunctions.find(name);
@@ -68,6 +98,12 @@ public:
 		}
 	}
 
+	/** Create a copy of an existing object of a specific _typename_ registered with the factory.
+
+		@tparam T2 Type of base type T.
+		@param toCopy The existing object to copy.
+		@returns Pointer to the new object of type T2.
+	*/
 	template <typename T2>
 	T* Copy(const T* toCopy)
 	{
