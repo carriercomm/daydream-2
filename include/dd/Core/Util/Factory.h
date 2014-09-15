@@ -16,12 +16,19 @@ public:
 	}*/
 
 	template <typename T2>
-	void Register(std::function<T(void)> factoryFunction)
+	void Register(std::function<T*(void)> factoryFunction)
 	{
 		m_FactoryFunctions[typeid(T2).name()] = factoryFunction;
 	}
 
-	T Create(std::string name)
+	template <typename T2>
+	void Register()
+	{
+		m_FactoryFunctions[typeid(T2).name()] = []() { return new T2(); };
+		m_CopyFunctions[typeid(T2).name()] = [](const T* t) { return new T2(*static_cast<const T2*>(t)); };
+	}
+
+	T* Create(std::string name)
 	{
 		auto it = m_FactoryFunctions.find(name);
 		if (it != m_FactoryFunctions.end())
@@ -35,7 +42,7 @@ public:
 	}
 
 	template <typename T2>
-	T Create()
+	T* Create()
 	{
 		auto it = m_FactoryFunctions.find(typeid(T2).name());
 		if (it != m_FactoryFunctions.end())
@@ -48,8 +55,35 @@ public:
 		}
 	}
 
+	T* Copy(std::string name, const T* toCopy)
+	{
+		auto it = m_CopyFunctions.find(name);
+		if (it != m_CopyFunctions.end())
+		{
+			return it->second(toCopy);
+		} 
+		else
+		{
+			return nullptr;
+		}
+	}
+
+	template <typename T2>
+	T* Copy(const T* toCopy)
+	{
+		auto it = m_CopyFunctions.find(typeid(T2).name());
+		if (it != m_CopyFunctions.end())
+		{
+			return it->second(toCopy);
+		} else
+		{
+			return nullptr;
+		}
+	}
+
 private:
-	std::map<std::string, std::function<T(void)>> m_FactoryFunctions;
+	std::map<std::string, std::function<T*(void)>> m_FactoryFunctions;
+	std::map<std::string, std::function<T*(const T*)>> m_CopyFunctions;
 };
 
 #endif // ComponentFactory_h__
