@@ -50,3 +50,6 @@ Libraries only available under non-free licences. This list should eventually be
 * [Tobias *"Tleety"* Dahl](https://github.com/Tleety)
 * [Simon *"Sippeangelo"* Holmberg](https://github.com/sippeangelo)
 * [Viktor Ljung](https://github.com/ViktorLjung)
+
+## License
+Daydream Engine is licensed under the [GNU Lesser General Public License](https://github.com/sippeangelo/daydream/blob/master/COPYING.LESSER)
