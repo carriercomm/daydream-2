@@ -41,7 +41,7 @@ public:
 	/** Register a custom factory function for a type with the factory.
 
 		@tparam T2 Object type of base type T.
-		@param The lambda factory function.
+		@param factoryFunction The lambda factory function.
 	*/
 	template <typename T2>
 	void Register(std::function<T*(void)> factoryFunction)
