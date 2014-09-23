@@ -22,6 +22,9 @@
 #include "Core/EventBroker.h"
 #include "Core/Entity.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -33,6 +36,8 @@ struct EnterTrigger : Event
 	/** The entity that triggered the event. */
 	EntityID Entity;
 };
+
+}
 
 }
 

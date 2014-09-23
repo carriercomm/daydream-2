@@ -20,12 +20,12 @@
 #include "Input/InputSystem.h"
 #include "Core/World.h"
 
-void Systems::InputSystem::RegisterComponents(ComponentFactory* cf)
+void dd::Systems::InputSystem::RegisterComponents(ComponentFactory* cf)
 {
 	
 }
 
-void Systems::InputSystem::Initialize()
+void dd::Systems::InputSystem::Initialize()
 {
 	// Subscribe to events
 	EVENT_SUBSCRIBE_MEMBER(m_EKeyDown, &Systems::InputSystem::OnKeyDown);
@@ -41,7 +41,7 @@ void Systems::InputSystem::Initialize()
 	EVENT_SUBSCRIBE_MEMBER(m_EBindGamepadButton, &Systems::InputSystem::OnBindGamepadButton);
 }
 
-void Systems::InputSystem::Update(double dt)
+void dd::Systems::InputSystem::Update(double dt)
 {
 // #ifdef DEBUG
 // 	// Wireframe
@@ -62,7 +62,7 @@ void Systems::InputSystem::Update(double dt)
 // #endif
 }
 
-bool Systems::InputSystem::OnKeyDown(const Events::KeyDown &event)
+bool dd::Systems::InputSystem::OnKeyDown(const Events::KeyDown &event)
 {
 	auto range = m_KeyBindings.equal_range(event.KeyCode);
 	for (auto bindingIt = range.first; bindingIt != range.second; bindingIt++)
@@ -77,7 +77,7 @@ bool Systems::InputSystem::OnKeyDown(const Events::KeyDown &event)
 	return true;
 }
 
-bool Systems::InputSystem::OnKeyUp(const Events::KeyUp &event)
+bool dd::Systems::InputSystem::OnKeyUp(const Events::KeyUp &event)
 {
 	auto range = m_KeyBindings.equal_range(event.KeyCode);
 	for (auto bindingIt = range.first; bindingIt != range.second; bindingIt++)
@@ -92,7 +92,7 @@ bool Systems::InputSystem::OnKeyUp(const Events::KeyUp &event)
 	return true;
 }
 
-bool Systems::InputSystem::OnMousePress(const Events::MousePress &event)
+bool dd::Systems::InputSystem::OnMousePress(const Events::MousePress &event)
 {
 	auto range = m_MouseButtonBindings.equal_range(event.Button);
 	for (auto bindingIt = range.first; bindingIt != range.second; bindingIt++)
@@ -107,7 +107,7 @@ bool Systems::InputSystem::OnMousePress(const Events::MousePress &event)
 	return true;
 }
 
-bool Systems::InputSystem::OnMouseRelease(const Events::MouseRelease &event)
+bool dd::Systems::InputSystem::OnMouseRelease(const Events::MouseRelease &event)
 {
 	auto range = m_MouseButtonBindings.equal_range(event.Button);
 	for (auto bindingIt = range.first; bindingIt != range.second; bindingIt++)
@@ -122,7 +122,7 @@ bool Systems::InputSystem::OnMouseRelease(const Events::MouseRelease &event)
 	return true;
 }
 
-bool Systems::InputSystem::OnGamepadAxis(const Events::GamepadAxis &event)
+bool dd::Systems::InputSystem::OnGamepadAxis(const Events::GamepadAxis &event)
 {
 	auto range = m_GamepadAxisBindings.equal_range(event.Axis);
 	for (auto bindingIt = range.first; bindingIt != range.second; bindingIt++)
@@ -137,7 +137,7 @@ bool Systems::InputSystem::OnGamepadAxis(const Events::GamepadAxis &event)
 	return true;
 }
 
-bool Systems::InputSystem::OnGamepadButtonDown(const Events::GamepadButtonDown &event)
+bool dd::Systems::InputSystem::OnGamepadButtonDown(const Events::GamepadButtonDown &event)
 {
 	auto range = m_GamepadButtonBindings.equal_range(event.Button);
 	for (auto bindingIt = range.first; bindingIt != range.second; bindingIt++)
@@ -152,7 +152,7 @@ bool Systems::InputSystem::OnGamepadButtonDown(const Events::GamepadButtonDown &
 	return true;
 }
 
-bool Systems::InputSystem::OnGamepadButtonUp(const Events::GamepadButtonUp &event)
+bool dd::Systems::InputSystem::OnGamepadButtonUp(const Events::GamepadButtonUp &event)
 {
 	auto range = m_GamepadButtonBindings.equal_range(event.Button);
 	for (auto bindingIt = range.first; bindingIt != range.second; bindingIt++)
@@ -167,7 +167,7 @@ bool Systems::InputSystem::OnGamepadButtonUp(const Events::GamepadButtonUp &even
 	return true;
 }
 
-bool Systems::InputSystem::OnBindKey(const Events::BindKey &event)
+bool dd::Systems::InputSystem::OnBindKey(const Events::BindKey &event)
 {
 	if (event.Command.empty())
 		return false;
@@ -178,7 +178,7 @@ bool Systems::InputSystem::OnBindKey(const Events::BindKey &event)
 	return true;
 }
 
-bool Systems::InputSystem::OnBindMouseButton(const Events::BindMouseButton &event)
+bool dd::Systems::InputSystem::OnBindMouseButton(const Events::BindMouseButton &event)
 {
 	if (event.Command.empty())
 		return false;
@@ -189,7 +189,7 @@ bool Systems::InputSystem::OnBindMouseButton(const Events::BindMouseButton &even
 	return true;
 }
 
-bool Systems::InputSystem::OnBindGamepadAxis(const Events::BindGamepadAxis &event)
+bool dd::Systems::InputSystem::OnBindGamepadAxis(const Events::BindGamepadAxis &event)
 {
 	if (event.Command.empty())
 		return false;
@@ -200,7 +200,7 @@ bool Systems::InputSystem::OnBindGamepadAxis(const Events::BindGamepadAxis &even
 	return true;
 }
 
-bool Systems::InputSystem::OnBindGamepadButton(const Events::BindGamepadButton &event)
+bool dd::Systems::InputSystem::OnBindGamepadButton(const Events::BindGamepadButton &event)
 {
 	if (event.Command.empty())
 		return false;
@@ -211,7 +211,7 @@ bool Systems::InputSystem::OnBindGamepadButton(const Events::BindGamepadButton &
 	return true;
 }
 
-float Systems::InputSystem::GetCommandTotalValue(std::string command)
+float dd::Systems::InputSystem::GetCommandTotalValue(std::string command)
 {
 	float value = 0.f;
 
@@ -254,7 +254,7 @@ float Systems::InputSystem::GetCommandTotalValue(std::string command)
 	return std::max(-1.f, std::min(value, 1.f));
 }
 
-void Systems::InputSystem::PublishCommand(int playerID, std::string command, float value)
+void dd::Systems::InputSystem::PublishCommand(int playerID, std::string command, float value)
 {
 	Events::InputCommand e;
 	e.PlayerID = playerID;

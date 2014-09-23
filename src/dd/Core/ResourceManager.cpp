@@ -19,14 +19,14 @@
 #include "PrecompiledHeader.h"
 #include "Core/ResourceManager.h"
 
-std::unordered_map<std::string, std::function<Resource*(std::string)>> ResourceManager::m_FactoryFunctions; // type -> factory function
-std::unordered_map<std::pair<std::string, std::string>, Resource*> ResourceManager::m_ResourceCache; // (type, name) -> resource
-unsigned int ResourceManager::m_CurrentResourceTypeID = 0;
-std::unordered_map<std::string, unsigned int> ResourceManager::m_ResourceTypeIDs;
-std::unordered_map<unsigned int, unsigned int> ResourceManager::m_ResourceCount;
-bool ResourceManager::m_Preloading = false;
+std::unordered_map<std::string, std::function<dd::Resource*(std::string)>> dd::ResourceManager::m_FactoryFunctions; // type -> factory function
+std::unordered_map<std::pair<std::string, std::string>, dd::Resource*> dd::ResourceManager::m_ResourceCache; // (type, name) -> resource
+unsigned int dd::ResourceManager::m_CurrentResourceTypeID = 0;
+std::unordered_map<std::string, unsigned int> dd::ResourceManager::m_ResourceTypeIDs;
+std::unordered_map<unsigned int, unsigned int> dd::ResourceManager::m_ResourceCount;
+bool dd::ResourceManager::m_Preloading = false;
 
-unsigned int ResourceManager::GetTypeID(std::string resourceType)
+unsigned int dd::ResourceManager::GetTypeID(std::string resourceType)
 {
 	if (m_ResourceTypeIDs.find(resourceType) == m_ResourceTypeIDs.end())
 	{
@@ -35,12 +35,12 @@ unsigned int ResourceManager::GetTypeID(std::string resourceType)
 	return m_ResourceTypeIDs[resourceType];
 }
 
-unsigned int ResourceManager::GetNewResourceID(unsigned int typeID)
+unsigned int dd::ResourceManager::GetNewResourceID(unsigned int typeID)
 {
 	return m_ResourceCount[typeID]++;
 }
 
-bool ResourceManager::IsResourceLoaded(std::string resourceType, std::string resourceName)
+bool dd::ResourceManager::IsResourceLoaded(std::string resourceType, std::string resourceName)
 {
 	return m_ResourceCache.find(std::make_pair(resourceType, resourceName)) != m_ResourceCache.end();
 }

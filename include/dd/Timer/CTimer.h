@@ -21,6 +21,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -28,6 +31,8 @@ struct Timer : public Component
 {
 	double Time;
 };
+
+}
 
 }
 

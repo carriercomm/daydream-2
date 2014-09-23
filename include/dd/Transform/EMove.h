@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -31,6 +34,8 @@ struct Move : Event
 	float Speed;
 	bool Queue;
 };
+
+}
 
 }
 

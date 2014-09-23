@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -28,6 +31,8 @@ namespace Events
 struct LockMouse : Event { };
 /** Called to unlock mouse from the middle of the window. */
 struct UnlockMouse : Event { };
+
+}
 
 }
 

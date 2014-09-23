@@ -25,11 +25,14 @@
 #include "EMouseMove.h"
 #include "Input/EInputCommand.h"
 
+namespace dd
+{
+
 template <typename EventContext>
 class InputController
 {
 public:
-	InputController(std::shared_ptr<::EventBroker> eventBroker)
+	InputController(std::shared_ptr<dd::EventBroker> eventBroker)
 		: EventBroker(eventBroker)
 		, InGame(true)
 	{ Initialize(); }
@@ -56,7 +59,7 @@ public:
 	}
 
 protected:
-	std::shared_ptr<::EventBroker> EventBroker;
+	std::shared_ptr<dd::EventBroker> EventBroker;
 	bool InGame;
 
 private:
@@ -80,5 +83,7 @@ private:
 			return false; 
 	}
 };
+
+}
 
 #endif // InputController_h__

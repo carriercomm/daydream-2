@@ -21,6 +21,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -29,6 +32,8 @@ struct Trigger : Component
 	bool TriggerOnce;
 	int TeamID;
 };
+
+}
 
 }
 

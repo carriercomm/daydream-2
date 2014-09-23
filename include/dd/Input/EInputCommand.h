@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Events
 {
 /** Thrown when an input command is sent. */
@@ -33,6 +36,8 @@ struct InputCommand : Event
 	/** The value of the command. */
 	float Value;
 };
+
+}
 
 }
 

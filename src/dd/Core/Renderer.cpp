@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/Renderer.h"
 
-void Renderer::Initialize()
+void dd::Renderer::Initialize()
 {
 	// Initialize GLFW
 	if (!glfwInit()) {
@@ -59,7 +59,7 @@ void Renderer::Initialize()
 	}
 
 	// Create default camera
-	m_DefaultCamera = std::unique_ptr<::Camera>(new ::Camera((float)m_Resolution.Width / m_Resolution.Height, 45.f, 0.01f, 5000.f));
+	m_DefaultCamera = std::unique_ptr<dd::Camera>(new dd::Camera((float)m_Resolution.Width / m_Resolution.Height, 45.f, 0.01f, 5000.f));
 	m_DefaultCamera->SetPosition(glm::vec3(0, 90, 200));
 	if (m_Camera == nullptr) {
 		m_Camera = m_DefaultCamera.get();
@@ -72,7 +72,7 @@ void Renderer::Initialize()
 
 	m_CurrentScreenBuffer = m_tFinal;
 }
-void Renderer::LoadShaders()
+void dd::Renderer::LoadShaders()
 {
 	/*
 	Deferred rendering
@@ -120,7 +120,7 @@ void Renderer::LoadShaders()
 	m_spScreen.Link();
 }
 
-void Renderer::CreateBuffers()
+void dd::Renderer::CreateBuffers()
 {
 	m_UnitQuad = CreateQuad();
 	m_UnitSphere = ResourceManager::Load<Model>("Models/UnitSphere.obj");
@@ -216,7 +216,7 @@ void Renderer::CreateBuffers()
 	}
 }
 
-void Renderer::Draw(RenderQueueCollection& rq)
+void dd::Renderer::Draw(RenderQueueCollection& rq)
 {
 	DrawDeferred(rq.Deferred, rq.Lights);
 	DrawForward(rq.Forward, rq.Lights);
@@ -240,7 +240,7 @@ void Renderer::Draw(RenderQueueCollection& rq)
 	DebugKeys();
 }
 
-void Renderer::DrawDeferred(RenderQueue &objects, RenderQueue &lights)
+void dd::Renderer::DrawDeferred(RenderQueue &objects, RenderQueue &lights)
 {
 	// Pass #1: Fill G-buffers
 	glDisable(GL_CULL_FACE);
@@ -285,7 +285,7 @@ void Renderer::DrawDeferred(RenderQueue &objects, RenderQueue &lights)
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-void Renderer::DrawForward(RenderQueue &objects, RenderQueue &lights)
+void dd::Renderer::DrawForward(RenderQueue &objects, RenderQueue &lights)
 {
 	// Forward-render semi-transparent objects on top of the current framebuffer
 	glDisable(GL_CULL_FACE);
@@ -299,7 +299,7 @@ void Renderer::DrawForward(RenderQueue &objects, RenderQueue &lights)
 	DrawScene(objects, m_spForward);
 }
 
-void Renderer::DrawScene(RenderQueue &objects, ShaderProgram &program)
+void dd::Renderer::DrawScene(RenderQueue &objects, ShaderProgram &program)
 {
 	GLuint shaderProgramHandle = program;
 
@@ -336,7 +336,7 @@ void Renderer::DrawScene(RenderQueue &objects, ShaderProgram &program)
 	}
 }
 
-void Renderer::DrawLightSpheres(RenderQueue &lights)
+void dd::Renderer::DrawLightSpheres(RenderQueue &lights)
 {
 	GLuint shaderProgramHandle = m_spDeferred2;
 
@@ -373,7 +373,7 @@ void Renderer::DrawLightSpheres(RenderQueue &lights)
 	}
 }
 
-GLuint Renderer::CreateQuad()
+GLuint dd::Renderer::CreateQuad()
 {
 	float quadVertices[] =
 	{
@@ -416,7 +416,7 @@ GLuint Renderer::CreateQuad()
 	return vao;
 }
 
-void Renderer::DebugKeys()
+void dd::Renderer::DebugKeys()
 {
 	if (glfwGetKey(m_Window, GLFW_KEY_F1)) {
 		m_CurrentScreenBuffer = m_tFinal;

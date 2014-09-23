@@ -23,6 +23,9 @@
 #include "Core/Color.h"
 #include <vector>
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -38,4 +41,6 @@ struct Particle : Component
 };
 
 }
+}
+
 #endif // !Components_Particle_h__

@@ -29,6 +29,9 @@
 
 #include "ResourceManager.h"
 
+namespace dd
+{
+
 class Shader
 {
 public:
@@ -107,5 +110,7 @@ private:
 
 	void LoadFromFolder(std::string folderPath);
 };
+
+}
 
 #endif // ShaderProgram_h__

@@ -22,6 +22,9 @@
 #include "Core/Component.h"
 #include "Core/Color.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -48,4 +51,6 @@ struct PointLight : Component
 };
 
 }
+}
+
 #endif // !Components_PointLight_h__

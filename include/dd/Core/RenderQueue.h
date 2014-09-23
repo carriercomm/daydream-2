@@ -25,6 +25,9 @@
 #include "Texture.h"
 #include "Model.h"
 
+namespace dd
+{
+
 class RenderQueue;
 
 struct RenderJob
@@ -161,5 +164,7 @@ struct RenderQueueCollection
 		Lights.Sort();
 	}
 };
+
+}
 
 #endif // RenderQueue_h__

@@ -25,13 +25,16 @@
 #include "CTimer.h"
 #include "CFrameTimer.h"
 
+namespace dd
+{
+
 namespace Systems
 {
 
 class TimerSystem : public System
 {
 public:
-	TimerSystem(World* world, std::shared_ptr<::EventBroker> eventBroker, std::shared_ptr<::ResourceManager> resourceManager)
+	TimerSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
 		: System(world, eventBroker, resourceManager) { }
 
 	void RegisterComponents(ComponentFactory* cf) override;
@@ -42,4 +45,6 @@ private:
 };
 
 }
+}
+
 #endif // TimerSystem_h__

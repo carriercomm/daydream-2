@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/OBJ.h"
 
-bool OBJ::LoadFromFile(std::string filename)
+bool dd::OBJ::LoadFromFile(std::string filename)
 {
 	m_Path = boost::filesystem::path(filename);
 
@@ -129,7 +129,7 @@ bool OBJ::LoadFromFile(std::string filename)
 	return true;
 }
 
-void OBJ::ParseMaterial()
+void dd::OBJ::ParseMaterial()
 {
 	// http://paulbourke.net/dataformats/mtl/
 	std::ifstream file(m_MaterialPath.string());
@@ -305,7 +305,7 @@ void OBJ::ParseMaterial()
 	}
 }
 
-void OBJ::ParseTextureMap(unsigned int line, std::stringstream &ss, std::string prefix, std::string arg, MaterialInfo::TextureMap &textureMap)
+void dd::OBJ::ParseTextureMap(unsigned int line, std::stringstream &ss, std::string prefix, std::string arg, MaterialInfo::TextureMap &textureMap)
 {
 	if (arg == "-blendu")
 	{
@@ -373,7 +373,7 @@ void OBJ::ParseTextureMap(unsigned int line, std::stringstream &ss, std::string 
 	}
 }
 
-void OBJ::ParseColorMap(unsigned int line, std::stringstream &ss, std::string prefix, std::string arg, MaterialInfo::ColorMap &colorMap)
+void dd::OBJ::ParseColorMap(unsigned int line, std::stringstream &ss, std::string prefix, std::string arg, MaterialInfo::ColorMap &colorMap)
 {
 	if (arg == "-cc")
 	{
@@ -404,7 +404,7 @@ void OBJ::ParseColorMap(unsigned int line, std::stringstream &ss, std::string pr
 	}
 }
 
-void OBJ::ParseBumpMap(unsigned int line, std::stringstream &ss, std::string prefix, std::string arg, MaterialInfo::BumpMap &bumpMap)
+void dd::OBJ::ParseBumpMap(unsigned int line, std::stringstream &ss, std::string prefix, std::string arg, MaterialInfo::BumpMap &bumpMap)
 {
 	if (arg == "-bm")
 	{

@@ -22,11 +22,16 @@
 #include "Util/Factory.h"
 #include "Core/Entity.h"
 
+namespace dd
+{
+
 struct Component
 {
 	EntityID Entity;
 };
 
 class ComponentFactory : public Factory<Component> { };
+
+}
 
 #endif // Component_h__

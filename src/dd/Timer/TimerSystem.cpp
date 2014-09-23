@@ -20,13 +20,13 @@
 #include "Timer/TimerSystem.h"
 #include "Core/World.h"
 
-void Systems::TimerSystem::RegisterComponents( ComponentFactory* cf )
+void dd::Systems::TimerSystem::RegisterComponents( ComponentFactory* cf )
 {
 	cf->Register<Components::Timer>([]() { return new Components::Timer(); });
 	cf->Register<Components::FrameTimer>([]() { return new Components::FrameTimer(); });
 }
 
-void Systems::TimerSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
+void dd::Systems::TimerSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
 {
 	auto timer = m_World->GetComponent<Components::Timer>(entity);
 	if(timer)

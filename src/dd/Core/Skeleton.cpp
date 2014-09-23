@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/Skeleton.h"
 
-int Skeleton::CreateBone(int ID, int parentID, std::string name, glm::mat4 offsetMatrix)
+int dd::Skeleton::CreateBone(int ID, int parentID, std::string name, glm::mat4 offsetMatrix)
 {
 	if (m_BonesByName.find(name) != m_BonesByName.end()) {
 		return m_BonesByName.at(name)->ID;
@@ -41,14 +41,14 @@ int Skeleton::CreateBone(int ID, int parentID, std::string name, glm::mat4 offse
 	}
 }
 
-Skeleton::~Skeleton()
+dd::Skeleton::~Skeleton()
 {
 	for (auto &kv : Bones) {
 		delete kv.second;
 	}
 }
 
-std::vector<glm::mat4> Skeleton::GetFrameBones(std::string animationName, double time, bool noRootMotion /*= false*/)
+std::vector<glm::mat4> dd::Skeleton::GetFrameBones(std::string animationName, double time, bool noRootMotion /*= false*/)
 {
 	auto& animation = Animations.at(animationName);
 	
@@ -75,7 +75,7 @@ std::vector<glm::mat4> Skeleton::GetFrameBones(std::string animationName, double
 	return finalMatrices;
 }
 
-void Skeleton::AccumulateBoneTransforms(bool noRootMotion, Animation::Keyframe &currentFrame, Animation::Keyframe &nextFrame, float progress, std::map<int, glm::mat4> &boneMatrices, Bone* bone, glm::mat4 parentMatrix)
+void dd::Skeleton::AccumulateBoneTransforms(bool noRootMotion, Animation::Keyframe &currentFrame, Animation::Keyframe &nextFrame, float progress, std::map<int, glm::mat4> &boneMatrices, Bone* bone, glm::mat4 parentMatrix)
 {
 	glm::mat4 boneMatrix;
 
@@ -106,7 +106,7 @@ void Skeleton::AccumulateBoneTransforms(bool noRootMotion, Animation::Keyframe &
 	}
 }
 
-int Skeleton::GetBoneID(std::string name)
+int dd::Skeleton::GetBoneID(std::string name)
 {
 	if (m_BonesByName.find(name) == m_BonesByName.end()) {
 		return -1;
@@ -115,12 +115,12 @@ int Skeleton::GetBoneID(std::string name)
 	}
 }
 
-void Skeleton::PrintSkeleton()
+void dd::Skeleton::PrintSkeleton()
 {
 	PrintSkeleton(RootBone, 0);
 }
 
-void Skeleton::PrintSkeleton(Bone* bone, int depthCount)
+void dd::Skeleton::PrintSkeleton(Bone* bone, int depthCount)
 {
 	std::stringstream ss;
 	ss << std::string(depthCount, ' ');
@@ -134,7 +134,7 @@ void Skeleton::PrintSkeleton(Bone* bone, int depthCount)
 	}
 }
 
-int Skeleton::GetKeyframe(Animation& animation, double time)
+int dd::Skeleton::GetKeyframe(Animation& animation, double time)
 {
 	if (time < 0)
 		time = 0;

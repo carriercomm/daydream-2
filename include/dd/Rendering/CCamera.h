@@ -22,6 +22,9 @@
 #include "Core/Component.h"
 #include "Core/Entity.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -38,4 +41,6 @@ struct Camera : Component
 };
 
 }
+}
+
 #endif // !Components_Camera_h__

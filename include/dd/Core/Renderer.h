@@ -24,6 +24,9 @@
 #include "RenderQueue.h"
 #include "ShaderProgram.h"
 
+namespace dd
+{
+
 class Renderer
 {
 public:
@@ -39,7 +42,7 @@ public:
 	//void SetViewport(const Rectangle& viewport) { m_Viewport = viewport; }
 	//void SetScissor(const Rectangle& scissor) { m_Scissor = scissor; }
 	const Camera* Camera() const { return m_Camera; }
-	void SetCamera(const ::Camera* camera)
+	void SetCamera(const dd::Camera* camera)
 	{
 		if (camera == nullptr) {
 			m_Camera = m_DefaultCamera.get();
@@ -57,8 +60,8 @@ private:
 	bool m_VSYNC = false;
 	//Rectangle m_Viewport;
 	//Rectangle m_Scissor;
-	std::unique_ptr<::Camera> m_DefaultCamera = nullptr;
-	const ::Camera* m_Camera = nullptr;
+	std::unique_ptr<dd::Camera> m_DefaultCamera = nullptr;
+	const dd::Camera* m_Camera = nullptr;
 
 	int m_GLVersion[2];
 	std::string m_GLVendor;
@@ -95,5 +98,7 @@ private:
 	void DrawLightSpheres(RenderQueue &lights);
 	void DebugKeys();
 };
+
+}
 
 #endif // Renderer_h__

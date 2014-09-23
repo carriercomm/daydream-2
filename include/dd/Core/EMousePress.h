@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -32,6 +35,8 @@ struct MousePress : Event
 	/** The click position in window coordinates. */
 	double X, Y;
 };
+
+}
 
 }
 

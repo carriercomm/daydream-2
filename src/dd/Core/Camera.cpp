@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/Camera.h"
 
-Camera::Camera(float aspectRatio, float yFOV, float nearClip, float farClip)
+dd::Camera::Camera(float aspectRatio, float yFOV, float nearClip, float farClip)
 {
 	m_AspectRatio = aspectRatio;
 	m_FOV = yFOV;
@@ -32,7 +32,7 @@ Camera::Camera(float aspectRatio, float yFOV, float nearClip, float farClip)
 	UpdateViewMatrix();
 }
 
-glm::vec3 Camera::Forward()
+glm::vec3 dd::Camera::Forward()
 {
 	return m_Orientation * glm::vec3(0, 0, -1);
 }
@@ -50,14 +50,14 @@ glm::vec3 Camera::Forward()
 //	return orientation;
 //}
 
-void Camera::SetPosition(glm::vec3 val)
+void dd::Camera::SetPosition(glm::vec3 val)
 {
 	m_Position = val;
 	UpdateViewMatrix();
 }
 
 
-void Camera::SetOrientation(glm::quat val)
+void dd::Camera::SetOrientation(glm::quat val)
 {
 	m_Orientation = val;
 	UpdateViewMatrix();
@@ -75,7 +75,7 @@ void Camera::SetOrientation(glm::quat val)
 //	UpdateViewMatrix();
 //}
 
-void Camera::UpdateProjectionMatrix()
+void dd::Camera::UpdateProjectionMatrix()
 {
 	m_ProjectionMatrix = glm::perspective(
 		m_FOV,
@@ -85,31 +85,31 @@ void Camera::UpdateProjectionMatrix()
 		);
 }
 
-void Camera::UpdateViewMatrix()
+void dd::Camera::UpdateViewMatrix()
 {
 	m_ViewMatrix = glm::toMat4(glm::inverse(m_Orientation))
 		* glm::translate(-m_Position);
 }
 
-void Camera::SetAspectRatio(float val)
+void dd::Camera::SetAspectRatio(float val)
 {
 	m_AspectRatio = val;
 	UpdateProjectionMatrix();
 }
 
-void Camera::SetFOV(float val)
+void dd::Camera::SetFOV(float val)
 {
 	m_FOV = val;
 	UpdateProjectionMatrix();
 }
 
-void Camera::SetNearClip(float val)
+void dd::Camera::SetNearClip(float val)
 {
 	m_NearClip = val;
 	UpdateProjectionMatrix();
 }
 
-void Camera::SetFarClip(float val)
+void dd::Camera::SetFarClip(float val)
 {
 	m_FarClip = val;
 	UpdateProjectionMatrix();

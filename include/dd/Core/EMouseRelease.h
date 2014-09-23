@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -32,6 +35,8 @@ struct MouseRelease : Event
 	/** The mouse position in window coordinates. */
 	double X, Y;
 };
+
+}
 
 }
 

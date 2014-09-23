@@ -23,6 +23,9 @@
 #include "Entity.h"
 #include "Component.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -32,8 +35,10 @@ struct ComponentCreated : Event
 	/** The entity the component was attached to. */
 	EntityID Entity;
 	/** Pointer to the newly created component. */
-	std::shared_ptr<::Component> Component;
+	std::shared_ptr<dd::Component> Component;
 };
+
+}
 
 }
 

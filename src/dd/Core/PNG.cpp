@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/PNG.h"
 
-PNG::PNG(std::string path)
+dd::PNG::PNG(std::string path)
 {
 	FILE* file = fopen(path.c_str(), "rb");
 	if (!file) {
@@ -105,7 +105,7 @@ PNG::PNG(std::string path)
 	fclose(file);
 }
 
-PNG::~PNG()
+dd::PNG::~PNG()
 {
 	if (Data) {
 		delete[] Data;

@@ -23,16 +23,18 @@
 
 namespace std
 {
-	template<typename S, typename T> struct hash<pair<S, T>>
+
+template<typename S, typename T> struct hash < pair<S, T> >
+{
+	inline size_t operator()(const pair<S, T> & v) const
 	{
-		inline size_t operator()(const pair<S, T> & v) const
-		{
-			size_t seed = 0;
-			boost::hash_combine(seed, v.first);
-			boost::hash_combine(seed, v.second);
-			return seed;
-		}
-	};
+		size_t seed = 0;
+		boost::hash_combine(seed, v.first);
+		boost::hash_combine(seed, v.second);
+		return seed;
+	}
+};
+
 }
 
 #endif // Util_UnorderedMapPair_h__

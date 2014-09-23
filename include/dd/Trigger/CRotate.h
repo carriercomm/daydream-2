@@ -21,6 +21,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -30,6 +33,8 @@ struct Rotate : Component
 	glm::quat StartRotation;
 	glm::quat GoalRotation;
 };
+
+}
 
 }
 

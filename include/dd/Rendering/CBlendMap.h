@@ -22,6 +22,9 @@
 #include "Core/Component.h"
 #include "Core/Entity.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -52,4 +55,6 @@ struct BlendMap : Component
 };
 
 }
+}
+
 #endif // !Components_BlendMap_h__

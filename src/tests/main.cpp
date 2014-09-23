@@ -21,6 +21,8 @@
 #include "Core/Component.h"
 #include "Core/Util/Factory.h"
 
+using namespace dd;
+
 struct TestComponent : public Component
 {
 	int Int = 5;

@@ -24,6 +24,9 @@
 #include <functional>
 #include <map>
 
+namespace dd
+{
+
 /** Generic object factory. 
 	
 	Creates dynamically allocated objects of base type T.
@@ -139,5 +142,7 @@ private:
 	std::map<std::string, std::function<T*(void)>> m_FactoryFunctions;
 	std::map<std::string, std::function<T*(const T*)>> m_CopyFunctions;
 };
+
+}
 
 #endif // ComponentFactory_h__

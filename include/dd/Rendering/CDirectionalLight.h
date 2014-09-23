@@ -22,6 +22,9 @@
 #include "Core/Component.h"
 #include "Core/Color.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -34,4 +37,6 @@ struct DirectionalLight : Component
 };
 
 }
+}
+
 #endif // !Components_DirectionalLight_h__

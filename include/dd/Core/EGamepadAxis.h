@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Gamepad
 {
 	/** Gamepad axis type */
@@ -49,6 +52,8 @@ struct GamepadAxis : Event
 	/** The new value of the axis. */
 	float Value;
 };
+
+}
 
 }
 

@@ -21,6 +21,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -42,4 +45,6 @@ struct Viewport : Component
 };
 
 }
+}
+
 #endif // Components_Viewport_h__

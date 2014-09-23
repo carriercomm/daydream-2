@@ -21,6 +21,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -35,6 +38,8 @@ struct TriggerRotate : Component
 	bool Queue;
 	bool Swap;
 };
+
+}
 
 }
 

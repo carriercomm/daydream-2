@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Gamepad
 {
 	/** Gamepad button type */
@@ -64,6 +67,8 @@ struct GamepadButtonUp : Event
 	/** The button that was released. */
 	Gamepad::Button Button;
 };
+
+}
 
 }
 

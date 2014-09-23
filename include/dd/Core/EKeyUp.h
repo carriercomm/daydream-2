@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -30,6 +33,8 @@ struct KeyUp : Event
 	/** GLFW key code */
 	int KeyCode;
 };
+
+}
 
 }
 

@@ -37,6 +37,9 @@
 #include "Core/Texture.h"
 #include "Core/Skeleton.h"
 
+namespace dd
+{
+
 class Model : public Resource
 {
 private:
@@ -64,9 +67,9 @@ public:
 	struct MaterialGroup
 	{
 		float Shininess;
-		std::shared_ptr<::Texture> Texture;
-		std::shared_ptr<::Texture> NormalMap;
-		std::shared_ptr<::Texture> SpecularMap;
+		std::shared_ptr<dd::Texture> Texture;
+		std::shared_ptr<dd::Texture> NormalMap;
+		std::shared_ptr<dd::Texture> SpecularMap;
 		unsigned int StartIndex;
 		unsigned int EndIndex;
 	};
@@ -102,5 +105,7 @@ private:
 
 	void CreateSkeleton(std::vector<std::tuple<std::string, glm::mat4>> &boneInfo, std::map<std::string, int> &boneNameMapping, aiNode* node, int parentID);
 };
+
+}
 
 #endif // Model_h__

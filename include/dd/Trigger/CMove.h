@@ -21,6 +21,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -30,6 +33,8 @@ struct Move : Component
 	glm::vec3 StartPosition;
 	glm::vec3 GoalPosition;
 };
+
+}
 
 }
 

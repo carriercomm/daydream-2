@@ -27,13 +27,16 @@
 #include "EMove.h"
 #include "ERotate.h"
 
+namespace dd
+{
+
 namespace Systems
 {
 
 class TransformSystem : public System
 {
 public:
-	TransformSystem(World* world, std::shared_ptr<::EventBroker> eventBroker, std::shared_ptr<::ResourceManager> resourceManager)
+	TransformSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
 		: System(world, eventBroker, resourceManager)
 	{ }
 	//void Update(double dt) override;
@@ -69,6 +72,8 @@ private:
 	std::unordered_map<EntityID, RotationItems> m_RotationItems;
 	std::multimap<EntityID, RotationItems> m_QueuedRotationItems;
 };
+
+}
 
 }
 

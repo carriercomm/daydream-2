@@ -25,6 +25,9 @@
 
 #include "Image.h"
 
+namespace dd
+{
+
 class PNG : public Image
 {
 public:
@@ -34,5 +37,7 @@ public:
 private:
 
 };
+
+}
 
 #endif

@@ -21,6 +21,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -33,6 +36,8 @@ struct TriggerExplosion : Component
 	float MaxVelocity;
 	float Radius; //HACK: Radius should only be in the SphereShapeComponent
 };
+
+}
 
 }
 

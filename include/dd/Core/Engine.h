@@ -28,13 +28,16 @@
 #include "Renderer.h"
 #include "InputManager.h"
 
+namespace dd
+{
+
 class Engine
 {
 public:
 	Engine(int argc, char* argv[])
 	{
 		m_EventBroker = std::make_shared<EventBroker>();
-		
+
 		m_Renderer = std::make_shared<Renderer>();
 		m_Renderer->SetFullscreen(false);
 		m_Renderer->SetResolution(Rectangle(0, 0, 1920, 1080));
@@ -63,7 +66,7 @@ public:
 
 		// Render scene
 		//m_Renderer->Draw();
-		
+
 		// Swap event queues
 		m_EventBroker->Clear();
 
@@ -79,3 +82,5 @@ private:
 
 	double m_LastTime;
 };
+
+}

@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/EventBroker.h"
 
-BaseEventRelay::~BaseEventRelay()
+dd::BaseEventRelay::~BaseEventRelay()
 {
 	if (m_Broker != nullptr)
 	{
@@ -27,7 +27,7 @@ BaseEventRelay::~BaseEventRelay()
 	}
 }
 
-void EventBroker::Unsubscribe(BaseEventRelay &relay) // ?
+void dd::EventBroker::Unsubscribe(BaseEventRelay &relay) // ?
 {
 	auto contextIt = m_ContextRelays.find(relay.m_ContextTypeName);
 	if (contextIt == m_ContextRelays.end())
@@ -46,13 +46,13 @@ void EventBroker::Unsubscribe(BaseEventRelay &relay) // ?
 	}
 }
 
-void EventBroker::Subscribe(BaseEventRelay &relay)
+void dd::EventBroker::Subscribe(BaseEventRelay &relay)
 {
 	relay.m_Broker = this;
 	m_ContextRelays[relay.m_ContextTypeName].insert(std::make_pair(relay.m_EventTypeName, &relay));
 }
 
-int EventBroker::Process(std::string contextTypeName)
+int dd::EventBroker::Process(std::string contextTypeName)
 {
 	auto it = m_ContextRelays.find(contextTypeName);
 	if (it == m_ContextRelays.end())
@@ -78,7 +78,7 @@ int EventBroker::Process(std::string contextTypeName)
 	return eventsProcessed;
 }
 
-void EventBroker::Clear()
+void dd::EventBroker::Clear()
 {
 	std::swap(m_EventQueueRead, m_EventQueueWrite);
 	m_EventQueueWrite->clear();

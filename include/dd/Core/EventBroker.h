@@ -29,6 +29,9 @@
 	relay = decltype(relay)(std::bind(handler, this, std::placeholders::_1)); \
 	EventBroker->Subscribe(relay);
 
+namespace dd
+{
+
 struct Event
 {
 protected:
@@ -158,6 +161,8 @@ void EventBroker::UnsubscribeAll()
 {
 	const std::string contextTypeName = typeid(ContextType).name();
 	m_ContextRelays.erase(contextTypeName);
+}
+
 }
 
 #endif // MessageRelay_h__

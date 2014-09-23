@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/Texture.h"
 
-Texture::Texture(std::string path)
+dd::Texture::Texture(std::string path)
 {
 	std::unique_ptr<Image> image = std::make_unique<PNG>(path);
 
@@ -53,12 +53,12 @@ Texture::Texture(std::string path)
 	GLERROR("Texture load");
 }
 
-Texture::~Texture()
+dd::Texture::~Texture()
 {
 	glDeleteTextures(1, &m_Texture);
 }
 
-void Texture::Bind(GLenum textureUnit /* = GL_TEXTURE0 */)
+void dd::Texture::Bind(GLenum textureUnit /* = GL_TEXTURE0 */)
 {
 	glActiveTexture(textureUnit);
 	glBindTexture(GL_TEXTURE_2D, m_Texture);

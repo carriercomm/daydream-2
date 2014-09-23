@@ -19,6 +19,9 @@
 #ifndef Camera_h__
 #define Camera_h__
 
+namespace dd
+{
+
 class Camera
 {
 public:
@@ -77,5 +80,7 @@ private:
 	glm::mat4 m_ProjectionMatrix;
 	glm::mat4 m_ViewMatrix;
 };
+
+}
 
 #endif // Camera_h__

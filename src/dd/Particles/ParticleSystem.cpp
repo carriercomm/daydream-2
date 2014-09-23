@@ -20,13 +20,13 @@
 #include "Particles/ParticleSystem.h"
 #include "Core/World.h"
 
-void Systems::ParticleSystem::Initialize()
+void dd::Systems::ParticleSystem::Initialize()
 {
 	m_TransformSystem = m_World->GetSystem<Systems::TransformSystem>();
 	tempSpawnedExplosions = false;
 }
 
-void Systems::ParticleSystem::Update(double dt)
+void dd::Systems::ParticleSystem::Update(double dt)
 {
 	std::map<EntityID, double>::iterator it;
 	for(it = m_ExplosionEmitters.begin(); it != m_ExplosionEmitters.end();)
@@ -53,7 +53,7 @@ void Systems::ParticleSystem::Update(double dt)
 	}
 }
 
-void Systems::ParticleSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
+void dd::Systems::ParticleSystem::UpdateEntity(double dt, EntityID entity, EntityID parent)
 {
 	auto transformComponent = m_World->GetComponent<Components::Transform>(entity);
 	if(!transformComponent)
@@ -148,14 +148,14 @@ void Systems::ParticleSystem::UpdateEntity(double dt, EntityID entity, EntityID 
 	}
 }
 
-void Systems::ParticleSystem::RegisterComponents(ComponentFactory* cf)
+void dd::Systems::ParticleSystem::RegisterComponents(ComponentFactory* cf)
 {
 	cf->Register<Components::ParticleEmitter>([]() { return new Components::ParticleEmitter(); });
 	cf->Register<Components::Particle>([]() { return new Components::Particle(); });
 }
 
 
-void Systems::ParticleSystem::SpawnParticles(EntityID emitterID)
+void dd::Systems::ParticleSystem::SpawnParticles(EntityID emitterID)
 {
 	auto eComponent = m_World->GetComponent<Components::ParticleEmitter>(emitterID);
 	auto eTransform = m_World->GetComponent<Components::Transform>(emitterID);
@@ -222,13 +222,13 @@ void Systems::ParticleSystem::SpawnParticles(EntityID emitterID)
 }
 
 //Randomizes between -spreadAngle/2 and spreadAngle/2
-float Systems::ParticleSystem::RandomizeAngle(float spreadAngle)
+float dd::Systems::ParticleSystem::RandomizeAngle(float spreadAngle)
 {
 	return ((float)rand() / ((float)RAND_MAX + 1) * spreadAngle) - spreadAngle/2;
 }
 
 //Interpolates the velocity of the particle
-void Systems::ParticleSystem::VectorInterpolation(double timeProgress, std::vector<glm::vec3> spectrum, glm::vec3 &v)
+void dd::Systems::ParticleSystem::VectorInterpolation(double timeProgress, std::vector<glm::vec3> spectrum, glm::vec3 &v)
 {
 	float dAxisValue = glm::abs(spectrum[0].x - spectrum[1].x);
 	if(spectrum[0].x > spectrum[1].x)
@@ -244,7 +244,7 @@ void Systems::ParticleSystem::VectorInterpolation(double timeProgress, std::vect
 	v.z = spectrum[0].z + dAxisValue * timeProgress;
 }
 
-void Systems::ParticleSystem::ScalarInterpolation(double timeProgress, std::vector<float> spectrum, float &alpha)
+void dd::Systems::ParticleSystem::ScalarInterpolation(double timeProgress, std::vector<float> spectrum, float &alpha)
 {
 	float dAlpha = glm::abs(spectrum[0] - spectrum[1]);
 	if(spectrum[0] > spectrum[1])

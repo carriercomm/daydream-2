@@ -25,6 +25,9 @@
 #include "EventBroker.h"
 #include "ResourceManager.h"
 
+namespace dd
+{
+
 class World;
 
 class System
@@ -38,7 +41,7 @@ public:
 	virtual ~System() { }
 
 	virtual void RegisterComponents(ComponentFactory* cf) { }
-	virtual void RegisterResourceTypes(std::shared_ptr<::ResourceManager> rm) { }
+	virtual void RegisterResourceTypes(std::shared_ptr<dd::ResourceManager> rm) { }
 
 	virtual void Initialize() { }
 
@@ -60,5 +63,7 @@ protected:
 };
 
 class SystemFactory : public Factory<System*> { };
+
+}
 
 #endif // System_h__

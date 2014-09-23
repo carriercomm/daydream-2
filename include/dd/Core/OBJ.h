@@ -32,6 +32,9 @@
 
 #include "ResourceManager.h"
 
+namespace dd
+{
+
 class OBJ : public Resource
 {
 public:
@@ -141,5 +144,7 @@ private:
 	void ParseColorMap(unsigned int line, std::stringstream &ss, std::string prefix, std::string arg, MaterialInfo::ColorMap &textureMap);
 	void ParseBumpMap(unsigned int line, std::stringstream &ss, std::string prefix, std::string arg, MaterialInfo::BumpMap &textureMap);
 };
+
+}
 
 #endif // OBJ_h__

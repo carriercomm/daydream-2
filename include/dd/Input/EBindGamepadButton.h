@@ -22,6 +22,9 @@
 #include "Core/EventBroker.h"
 #include "Core/EGamepadButton.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -38,6 +41,8 @@ struct BindGamepadButton : Event
 	*/
 	float Value;
 };
+
+}
 
 }
 

@@ -21,6 +21,9 @@
 
 #include <sstream>
 
+namespace dd
+{
+
 //struct Bone
 //{
 //	Bone(std::string name, glm::mat4 offsetMatrix)
@@ -108,5 +111,7 @@ private:
 
 	int GetKeyframe(Animation& animation, double time);
 };
+
+}
 
 #endif // Skeleton_h__

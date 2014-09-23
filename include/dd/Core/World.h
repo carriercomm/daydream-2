@@ -37,6 +37,9 @@
 #include "EComponentCreated.h"
 #include "ResourceManager.h"
 
+namespace dd
+{
+
 /** The entity manager.
 
 	Governs over the lifetime of entities.
@@ -44,7 +47,7 @@
 class World
 {
 public:
-	World(std::shared_ptr<::EventBroker> eventBroker, std::shared_ptr<::ResourceManager> resourceManager)
+	World(std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
 		: EventBroker(eventBroker)
 		, ResourceManager(resourceManager)
 		, m_LastEntityID(0) { }
@@ -220,8 +223,8 @@ public:
 	std::unordered_map<EntityID, EntityID>* GetEntities() { return &m_EntityParents; }
 
 protected:
-	std::shared_ptr<::EventBroker> EventBroker;
-	std::shared_ptr<::ResourceManager> ResourceManager;
+	std::shared_ptr<dd::EventBroker> EventBroker;
+	std::shared_ptr<dd::ResourceManager> ResourceManager;
 
 	SystemFactory m_SystemFactory;
 	ComponentFactory m_ComponentFactory;
@@ -327,6 +330,8 @@ T* World::GetComponent(EntityID entity)
 	{
 		return nullptr;
 	}
+}
+
 }
 
 #endif // World_h__

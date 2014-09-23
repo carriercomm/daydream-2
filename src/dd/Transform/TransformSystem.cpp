@@ -31,13 +31,13 @@
 //	transform->Position = parentTransform->Position + transform->RelativePosition;
 //}
 
-void Systems::TransformSystem::Initialize()
+void dd::Systems::TransformSystem::Initialize()
 {
 	EVENT_SUBSCRIBE_MEMBER(m_EMove, &Systems::TransformSystem::OnMove);
 	EVENT_SUBSCRIBE_MEMBER(m_ERotate, &Systems::TransformSystem::OnRotate);
 }
 
-void Systems::TransformSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
+void dd::Systems::TransformSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
 {
 	if(m_MoveItems.find(entity) != m_MoveItems.end())
 	{
@@ -93,7 +93,7 @@ void Systems::TransformSystem::UpdateEntity( double dt, EntityID entity, EntityI
 	}
 }
 
-bool Systems::TransformSystem::OnRotate( const Events::Rotate &event )
+bool dd::Systems::TransformSystem::OnRotate( const Events::Rotate &event )
 {
 	RotationItems item;
 	item.Entity = event.Entity;
@@ -118,7 +118,7 @@ bool Systems::TransformSystem::OnRotate( const Events::Rotate &event )
 	return true;
 }
 
-bool Systems::TransformSystem::OnMove( const Events::Move &event )
+bool dd::Systems::TransformSystem::OnMove( const Events::Move &event )
 {
 	MoveItems item;
 	item.Entity = event.Entity;
@@ -144,7 +144,7 @@ bool Systems::TransformSystem::OnMove( const Events::Move &event )
 }
 
 
-glm::vec3 Systems::TransformSystem::AbsolutePosition(EntityID entity)
+glm::vec3 dd::Systems::TransformSystem::AbsolutePosition(EntityID entity)
 {
 	glm::vec3 absPosition;
 	glm::quat accumulativeOrientation;
@@ -164,7 +164,7 @@ glm::vec3 Systems::TransformSystem::AbsolutePosition(EntityID entity)
 	return absPosition * accumulativeOrientation;
 }
 
-glm::quat Systems::TransformSystem::AbsoluteOrientation(EntityID entity)
+glm::quat dd::Systems::TransformSystem::AbsoluteOrientation(EntityID entity)
 {
 	glm::quat absOrientation;
 
@@ -178,7 +178,7 @@ glm::quat Systems::TransformSystem::AbsoluteOrientation(EntityID entity)
 	return absOrientation;
 }
 
-glm::vec3 Systems::TransformSystem::AbsoluteScale(EntityID entity)
+glm::vec3 dd::Systems::TransformSystem::AbsoluteScale(EntityID entity)
 {
 	glm::vec3 absScale(1);
 
@@ -192,7 +192,7 @@ glm::vec3 Systems::TransformSystem::AbsoluteScale(EntityID entity)
 	return absScale;
 }
 
-Components::Transform Systems::TransformSystem::AbsoluteTransform(EntityID entity)
+dd::Components::Transform dd::Systems::TransformSystem::AbsoluteTransform(EntityID entity)
 {
 	glm::vec3 absPosition;
 	glm::quat absOrientation;

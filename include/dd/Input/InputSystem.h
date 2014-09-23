@@ -35,13 +35,16 @@
 #include "EBindGamepadButton.h"
 #include "EInputCommand.h"
 
+namespace dd
+{
+
 namespace Systems
 {
 
 class InputSystem : public System
 {
 public:
-	InputSystem(World* world, std::shared_ptr<::EventBroker> eventBroker, std::shared_ptr<::ResourceManager> resourceManager)
+	InputSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
 		: System(world, eventBroker, resourceManager)
 	{ }
 
@@ -89,6 +92,8 @@ private:
 	float GetCommandTotalValue(std::string command);
 	void PublishCommand(int playerID, std::string command, float value);
 };
+
+}
 
 }
 

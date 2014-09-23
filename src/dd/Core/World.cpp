@@ -19,12 +19,12 @@
 #include "PrecompiledHeader.h"
 #include "Core/World.h"
 
-void World::RecycleEntityID(EntityID id)
+void dd::World::RecycleEntityID(EntityID id)
 {
 	m_RecycledEntityIDs.push(id);
 }
 
-EntityID World::GenerateEntityID()
+EntityID dd::World::GenerateEntityID()
 {
 	if (!m_RecycledEntityIDs.empty())
 	{
@@ -38,7 +38,7 @@ EntityID World::GenerateEntityID()
 	}
 }
 
-void World::RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID parentEntity)
+void dd::World::RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID parentEntity)
 {
 	for (auto &pair : m_EntityParents)
 	{
@@ -50,7 +50,7 @@ void World::RecursiveUpdate(std::shared_ptr<System> system, double dt, EntityID 
 	}
 }
 
-void World::Update(double dt)
+void dd::World::Update(double dt)
 {
 	for (auto pair : m_Systems)
 	{
@@ -73,13 +73,13 @@ void World::Update(double dt)
 //	return children;
 //}
 
-EntityID World::GetEntityParent(EntityID entity)
+EntityID dd::World::GetEntityParent(EntityID entity)
 {
 	auto it = m_EntityParents.find(entity);
 	return it == m_EntityParents.end() ? 0 : it->second;
 }
 
-EntityID World::GetEntityBaseParent(EntityID entity)
+EntityID dd::World::GetEntityBaseParent(EntityID entity)
 {
 	EntityID parent = GetEntityParent(entity);
 	if (parent == 0)
@@ -88,13 +88,13 @@ EntityID World::GetEntityBaseParent(EntityID entity)
 		return GetEntityBaseParent(parent);
 }
 
-bool World::ValidEntity(EntityID entity)
+bool dd::World::ValidEntity(EntityID entity)
 {
 	return m_EntityParents.find(entity) != m_EntityParents.end()
 		&& m_EntitiesToRemove.find(entity) == m_EntitiesToRemove.end();
 }
 
-void World::RemoveEntity(EntityID entity)
+void dd::World::RemoveEntity(EntityID entity)
 {
 	m_EntitiesToRemove.insert(entity);
 
@@ -108,7 +108,7 @@ void World::RemoveEntity(EntityID entity)
 	}
 }
 
-void World::ProcessEntityRemovals()
+void dd::World::ProcessEntityRemovals()
 {
 	for (auto entity : m_EntitiesToRemove)
 	{
@@ -140,7 +140,7 @@ void World::ProcessEntityRemovals()
 	m_EntitiesToRemove.clear();
 }
 
-EntityID World::CreateEntity(EntityID parent /*= 0*/)
+EntityID dd::World::CreateEntity(EntityID parent /*= 0*/)
 {
 	EntityID newEntity = GenerateEntityID();
 	m_EntityParents[newEntity] = parent;
@@ -148,7 +148,7 @@ EntityID World::CreateEntity(EntityID parent /*= 0*/)
 	return newEntity;
 }
 
-void World::Initialize()
+void dd::World::Initialize()
 {
 	RegisterSystems();
 	AddSystems();
@@ -161,7 +161,7 @@ void World::Initialize()
 	}
 }
 
-void World::CommitEntity(EntityID entity)
+void dd::World::CommitEntity(EntityID entity)
 {
 	for (auto pair : m_Systems)
 	{
@@ -170,7 +170,7 @@ void World::CommitEntity(EntityID entity)
 	}
 }
 
-void World::AddComponent(EntityID entity, std::string componentType, std::shared_ptr<Component> component)
+void dd::World::AddComponent(EntityID entity, std::string componentType, std::shared_ptr<Component> component)
 {
 	component->Entity = entity;
 	m_ComponentsOfType[componentType].push_back(component);
@@ -182,7 +182,7 @@ void World::AddComponent(EntityID entity, std::string componentType, std::shared
 	EventBroker->Publish(e);
 }
 
-EntityID World::CloneEntity(EntityID entity, EntityID parent /* = 0 */)
+EntityID dd::World::CloneEntity(EntityID entity, EntityID parent /* = 0 */)
 {
 	int clone = CreateEntity(parent);
 
@@ -210,7 +210,7 @@ EntityID World::CloneEntity(EntityID entity, EntityID parent /* = 0 */)
 	return clone;
 }
 
-std::list<EntityID> World::GetEntityChildren(EntityID entity)
+std::list<EntityID> dd::World::GetEntityChildren(EntityID entity)
 {
 	auto it = m_EntityChildren.find(entity);
 	if (it == m_EntityChildren.end())
@@ -223,7 +223,7 @@ std::list<EntityID> World::GetEntityChildren(EntityID entity)
 	}
 }
 
-void World::SetEntityParent(EntityID entity, EntityID newParent)
+void dd::World::SetEntityParent(EntityID entity, EntityID newParent)
 {
 	EntityID currentParent = m_EntityParents[entity];
 	m_EntityChildren[currentParent].remove(entity);

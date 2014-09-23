@@ -21,6 +21,9 @@
 
 #include <algorithm>
 
+namespace dd
+{
+
 struct Rectangle
 {
 	Rectangle()
@@ -110,6 +113,8 @@ inline Rectangle operator+(Rectangle lhs, const Rectangle &rhs)
 {
 	lhs += rhs;
 	return lhs;
+}
+
 }
 
 #endif // Util_Rectangle_h__

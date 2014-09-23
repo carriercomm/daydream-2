@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/ShaderProgram.h"
 
-GLuint Shader::CompileShader(GLenum shaderType, std::string fileName)
+GLuint dd::Shader::CompileShader(GLenum shaderType, std::string fileName)
 {
 	LOG_INFO("Compiling shader \"%s\"", fileName.c_str());
 
@@ -67,12 +67,12 @@ GLuint Shader::CompileShader(GLenum shaderType, std::string fileName)
 	return shader;
 }
 
-Shader::Shader(GLenum shaderType, std::string fileName) : m_ShaderType(shaderType), m_FileName(fileName)
+dd::Shader::Shader(GLenum shaderType, std::string fileName) : m_ShaderType(shaderType), m_FileName(fileName)
 {
 	m_ShaderHandle = 0;
 }
 
-Shader::~Shader()
+dd::Shader::~Shader()
 {
 	if (m_ShaderHandle != 0)
 	{
@@ -80,33 +80,33 @@ Shader::~Shader()
 	}
 }
 
-GLuint Shader::Compile()
+GLuint dd::Shader::Compile()
 {
 	m_ShaderHandle = CompileShader(m_ShaderType, m_FileName);
 	return m_ShaderHandle;
 }
 
-GLenum Shader::GetType() const
+GLenum dd::Shader::GetType() const
 {
 	return m_ShaderType;
 }
 
-std::string Shader::GetFileName() const
+std::string dd::Shader::GetFileName() const
 {
 	return m_FileName;
 }
 
-GLuint Shader::GetHandle() const
+GLuint dd::Shader::GetHandle() const
 {
 	return m_ShaderHandle;
 }
 
-bool Shader::IsCompiled() const
+bool dd::Shader::IsCompiled() const
 {
 	return m_ShaderHandle != 0;
 }
 
-ShaderProgram::~ShaderProgram()
+dd::ShaderProgram::~ShaderProgram()
 {
 	if (m_ShaderProgramHandle != 0)
 	{
@@ -114,12 +114,12 @@ ShaderProgram::~ShaderProgram()
 	}
 }
 
-void ShaderProgram::AddShader(std::shared_ptr<Shader> shader)
+void dd::ShaderProgram::AddShader(std::shared_ptr<Shader> shader)
 {
 	m_Shaders.push_back(shader);
 }
 
-void ShaderProgram::Compile()
+void dd::ShaderProgram::Compile()
 {
 	if (m_ShaderProgramHandle == 0)
 	{
@@ -135,7 +135,7 @@ void ShaderProgram::Compile()
 	}
 }
 
-GLuint ShaderProgram::Link()
+GLuint dd::ShaderProgram::Link()
 {
 	if (m_Shaders.size() == 0)
 	{
@@ -157,12 +157,12 @@ GLuint ShaderProgram::Link()
 	return m_ShaderProgramHandle;
 }
 
-GLuint ShaderProgram::GetHandle()
+GLuint dd::ShaderProgram::GetHandle()
 {
 	return m_ShaderProgramHandle;
 }
 
-void ShaderProgram::Bind()
+void dd::ShaderProgram::Bind()
 {
 	if (m_ShaderProgramHandle == 0)
 		return;
@@ -170,12 +170,12 @@ void ShaderProgram::Bind()
 	glUseProgram(m_ShaderProgramHandle);
 }
 
-void ShaderProgram::Unbind()
+void dd::ShaderProgram::Unbind()
 {
 	glActiveShaderProgram(0, 0);
 }
 
-void ShaderProgram::LoadFromFolder(std::string folderPath)
+void dd::ShaderProgram::LoadFromFolder(std::string folderPath)
 {
 	auto path = boost::filesystem::path(folderPath);
 
@@ -204,7 +204,7 @@ void ShaderProgram::LoadFromFolder(std::string folderPath)
 	}
 }
 
-void ShaderProgram::BindFragDataLocation(int colorNumber, std::string name)
+void dd::ShaderProgram::BindFragDataLocation(int colorNumber, std::string name)
 {
 	if (m_ShaderProgramHandle == 0)
 		return;

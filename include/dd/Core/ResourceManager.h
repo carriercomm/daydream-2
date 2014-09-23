@@ -27,6 +27,9 @@
 #include "Util/UnorderedMapPair.h"
 #include "Util/Factory.h"
 
+namespace dd
+{
+
 /** Base Resource class.
 
 	Implement this class for every resource to be handled by the resource manager.
@@ -193,6 +196,8 @@ T* ResourceManager::CreateResource(std::string resourceName)
 	m_ResourceCache[std::make_pair(resourceType, resourceName)] = resource;
 
 	return resource;
+}
+
 }
 
 #endif // ResourceManager_h__

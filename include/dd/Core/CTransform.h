@@ -21,6 +21,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -39,6 +42,8 @@ struct Transform : public Component
 	/** Physical scale multiplier. */
 	glm::vec3 Scale;
 };
+
+}
 
 }
 

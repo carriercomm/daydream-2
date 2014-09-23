@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/Model.h"
 
-Model::Model(std::string fileName)
+dd::Model::Model(std::string fileName)
 {
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(fileName, aiProcess_CalcTangentSpace | aiProcess_Triangulate);
@@ -348,14 +348,14 @@ Model::Model(std::string fileName)
 	//CreateBuffers();
 }
 
-Model::~Model()
+dd::Model::~Model()
 {
 	if (m_Skeleton) {
 		delete m_Skeleton;
 	}
 }
 
-void Model::CreateSkeleton(std::vector<std::tuple<std::string, glm::mat4>> &boneInfo, std::map<std::string, int> &boneNameMapping, aiNode* node, int parentID)
+void dd::Model::CreateSkeleton(std::vector<std::tuple<std::string, glm::mat4>> &boneInfo, std::map<std::string, int> &boneNameMapping, aiNode* node, int parentID)
 {
 	std::string nodeName = node->mName.C_Str();
 

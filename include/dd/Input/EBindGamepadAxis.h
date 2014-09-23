@@ -22,6 +22,9 @@
 #include "Core/EventBroker.h"
 #include "Core/EGamepadAxis.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -38,6 +41,8 @@ struct BindGamepadAxis : Event
 	*/
 	float Value;
 };
+
+}
 
 }
 

@@ -19,6 +19,9 @@
 #ifndef Image_h
 #define Image_h
 
+namespace dd
+{
+
 struct Image
 {
 	enum class Format
@@ -40,5 +43,7 @@ struct Image
 	Image::Format Format;
 	unsigned char* Data;
 };
+
+}
 
 #endif

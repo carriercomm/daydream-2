@@ -26,6 +26,9 @@
 #include "ResourceManager.h"
 #include "PNG.h"
 
+namespace dd
+{
+
 class Texture : public Resource
 {
 private:
@@ -43,5 +46,7 @@ private:
 	GLuint m_Texture = 0;
 };
 
+
+}
 
 #endif // Texture_h__

@@ -19,7 +19,7 @@
 #include "PrecompiledHeader.h"
 #include "Core/InputManager.h"
 
-void InputManager::Initialize()
+void dd::InputManager::Initialize()
 {
 	// TODO: Gamepad
 	//m_LastGamepadAxisState = std::array<GamepadAxisState, XUSER_MAX_COUNT>();
@@ -29,7 +29,7 @@ void InputManager::Initialize()
 	EVENT_SUBSCRIBE_MEMBER(m_EUnlockMouse, &InputManager::OnUnlockMouse);
 }
 
-void InputManager::Update(double dt)
+void dd::InputManager::Update(double dt)
 {
 	EventBroker->Process<InputManager>();
 
@@ -194,7 +194,7 @@ void InputManager::Update(double dt)
 	m_LastGamepadButtonState = m_CurrentGamepadButtonState;
 }
 
-void InputManager::PublishGamepadAxisIfChanged(int gamepadID, Gamepad::Axis axis)
+void dd::InputManager::PublishGamepadAxisIfChanged(int gamepadID, Gamepad::Axis axis)
 {
 	float currentValue = m_CurrentGamepadAxisState[gamepadID][static_cast<int>(axis)];
 	float lastValue = m_LastGamepadAxisState[gamepadID][static_cast<int>(axis)];
@@ -208,7 +208,7 @@ void InputManager::PublishGamepadAxisIfChanged(int gamepadID, Gamepad::Axis axis
 	}
 }
 
-void InputManager::PublishGamepadButtonIfChanged(int gamepadID, Gamepad::Button button)
+void dd::InputManager::PublishGamepadButtonIfChanged(int gamepadID, Gamepad::Button button)
 {
 	bool currentState = m_CurrentGamepadButtonState[gamepadID][static_cast<int>(button)];
 	float lastState = m_LastGamepadButtonState[gamepadID][static_cast<int>(button)];
@@ -231,7 +231,7 @@ void InputManager::PublishGamepadButtonIfChanged(int gamepadID, Gamepad::Button 
 	}
 }
 
-bool InputManager::OnLockMouse(const Events::LockMouse &event)
+bool dd::InputManager::OnLockMouse(const Events::LockMouse &event)
 {
 	m_MouseLocked = true;
 	glfwSetInputMode(m_GLFWWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -239,7 +239,7 @@ bool InputManager::OnLockMouse(const Events::LockMouse &event)
 	return true;
 }
 
-bool InputManager::OnUnlockMouse(const Events::UnlockMouse &event)
+bool dd::InputManager::OnUnlockMouse(const Events::UnlockMouse &event)
 {
 	m_MouseLocked = false;
 	glfwSetInputMode(m_GLFWWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

@@ -23,6 +23,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -40,4 +43,6 @@ struct DamageModel : Component
 };
 
 }
+}
+
 #endif // !Components_DamageModel_h__

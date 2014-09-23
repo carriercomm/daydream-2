@@ -21,6 +21,9 @@
 
 #include "Core/EventBroker.h"
 
+namespace dd
+{
+
 namespace Events
 {
 
@@ -32,6 +35,8 @@ struct MouseMove : Event
 	/** The delta movement of the mouse. */
 	double DeltaX, DeltaY;
 };
+
+}
 
 }
 

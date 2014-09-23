@@ -30,13 +30,16 @@
 #include "CParticle.h"
 #include "CParticleEmitter.h"
 
+namespace dd
+{
+
 namespace Systems
 {
 
 class ParticleSystem : public System
 {
 public:
-	ParticleSystem(World* world, std::shared_ptr<::EventBroker> eventBroker, std::shared_ptr<::ResourceManager> resourceManager)
+	ParticleSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
 		: System(world, eventBroker, resourceManager)
 	{ }
 
@@ -68,5 +71,7 @@ private:
 
 }
 
+
+}
 
 #endif // !ParticleSystem_h__

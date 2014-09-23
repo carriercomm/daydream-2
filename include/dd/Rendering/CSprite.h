@@ -23,6 +23,9 @@
 
 #include "Core/Component.h"
 
+namespace dd
+{
+
 namespace Components
 {
 
@@ -35,4 +38,6 @@ struct Sprite : Component
 };
 
 }
+}
+
 #endif // !Components_Sprite_h__

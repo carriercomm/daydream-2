@@ -20,7 +20,7 @@
 #include "Trigger/TriggerSystem.h"
 #include "Core/World.h"
 
-void Systems::TriggerSystem::RegisterComponents( ComponentFactory* cf )
+void dd::Systems::TriggerSystem::RegisterComponents( ComponentFactory* cf )
 {
 	cf->Register<Components::Trigger>([]() { return new Components::Trigger(); });
 	cf->Register<Components::TriggerExplosion>([]() { return new Components::TriggerExplosion(); });
@@ -28,57 +28,39 @@ void Systems::TriggerSystem::RegisterComponents( ComponentFactory* cf )
 	cf->Register<Components::TriggerRotate>([]() { return new Components::TriggerRotate(); });
 }
 
-void Systems::TriggerSystem::Initialize()
+void dd::Systems::TriggerSystem::Initialize()
 {
 	EVENT_SUBSCRIBE_MEMBER(m_EEnterTrigger, &Systems::TriggerSystem::OnEnterTrigger);
 	EVENT_SUBSCRIBE_MEMBER(m_ELeaveTrigger, &Systems::TriggerSystem::OnLeaveTrigger);
 }
 
-void Systems::TriggerSystem::Update( double dt )
+void dd::Systems::TriggerSystem::Update( double dt )
 {
 
 }
 
-void Systems::TriggerSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
+void dd::Systems::TriggerSystem::UpdateEntity( double dt, EntityID entity, EntityID parent )
 {
 
 }
 
 
-void Systems::TriggerSystem::OnComponentRemoved(EntityID entity, std::string type, Component* component )
+void dd::Systems::TriggerSystem::OnComponentRemoved(EntityID entity, std::string type, Component* component )
 {
 
 }
 
-void Systems::TriggerSystem::OnEntityCommit( EntityID entity )
+void dd::Systems::TriggerSystem::OnEntityCommit( EntityID entity )
 {
 
 }
 
-void Systems::TriggerSystem::OnEntityRemoved( EntityID entity )
+void dd::Systems::TriggerSystem::OnEntityRemoved( EntityID entity )
 {
 
 }
 
-bool Systems::TriggerSystem::OnEnterTrigger( const Events::EnterTrigger &event )
-{
-	auto triggerMoveComponent = m_World->GetComponent<Components::TriggerMove>(event.Trigger);
-	if (triggerMoveComponent)
-	{
-		Move(triggerMoveComponent->Entity, triggerMoveComponent->Queue, triggerMoveComponent->Swap);
-	}
-
-	auto triggerRotateComponent = m_World->GetComponent<Components::TriggerRotate>(event.Trigger);
-	if (triggerRotateComponent)
-	{
-		Rotate(triggerMoveComponent->Entity, triggerMoveComponent->Queue, triggerMoveComponent->Swap);
-	}
-
-	return true;
-}
-
-
-bool Systems::TriggerSystem::OnLeaveTrigger( const Events::LeaveTrigger &event )
+bool dd::Systems::TriggerSystem::OnEnterTrigger( const Events::EnterTrigger &event )
 {
 	auto triggerMoveComponent = m_World->GetComponent<Components::TriggerMove>(event.Trigger);
 	if (triggerMoveComponent)
@@ -96,7 +78,25 @@ bool Systems::TriggerSystem::OnLeaveTrigger( const Events::LeaveTrigger &event )
 }
 
 
-void Systems::TriggerSystem::Rotate(EntityID entity, bool queue, bool swap)
+bool dd::Systems::TriggerSystem::OnLeaveTrigger( const Events::LeaveTrigger &event )
+{
+	auto triggerMoveComponent = m_World->GetComponent<Components::TriggerMove>(event.Trigger);
+	if (triggerMoveComponent)
+	{
+		Move(triggerMoveComponent->Entity, triggerMoveComponent->Queue, triggerMoveComponent->Swap);
+	}
+
+	auto triggerRotateComponent = m_World->GetComponent<Components::TriggerRotate>(event.Trigger);
+	if (triggerRotateComponent)
+	{
+		Rotate(triggerMoveComponent->Entity, triggerMoveComponent->Queue, triggerMoveComponent->Swap);
+	}
+
+	return true;
+}
+
+
+void dd::Systems::TriggerSystem::Rotate(EntityID entity, bool queue, bool swap)
 {
 	auto transform = m_World->GetComponent<Components::Transform>(entity);
 	auto rotate = m_World->GetComponent<Components::Rotate>(entity);
@@ -116,7 +116,7 @@ void Systems::TriggerSystem::Rotate(EntityID entity, bool queue, bool swap)
 
 
 
-void Systems::TriggerSystem::Move(EntityID entity, bool queue, bool swap)
+void dd::Systems::TriggerSystem::Move(EntityID entity, bool queue, bool swap)
 {
 	auto move = m_World->GetComponent<Components::Move>(entity);
 	Events::Move e;
@@ -132,7 +132,7 @@ void Systems::TriggerSystem::Move(EntityID entity, bool queue, bool swap)
 	}
 }
 
-void Systems::TriggerSystem::Explosion( EntityID entity, EntityID phantomEntity )
+void dd::Systems::TriggerSystem::Explosion( EntityID entity, EntityID phantomEntity )
 {
 	/*auto transformComponent = m_World->GetComponent<Components::Transform>(entity);
 	auto PhantomTransformComponent = m_World->GetComponent<Components::Transform>(phantomEntity);

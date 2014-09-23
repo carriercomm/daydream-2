@@ -23,6 +23,9 @@
 #include "Core/Color.h"
 #include <vector>
 
+namespace dd
+{
+
 namespace Systems { class ParticleSystem; }
 
 namespace Components
@@ -61,4 +64,6 @@ private:
 };
 
 }
+}
+
 #endif // !Components_ParticleEmitter_h__

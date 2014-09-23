@@ -36,12 +36,15 @@
 #include "EEnterTrigger.h"
 #include "ELeaveTrigger.h"
 
+namespace dd
+{
+
 namespace Systems
 {
 	class TriggerSystem : public System
 	{
 	public:
-		TriggerSystem(World* world, std::shared_ptr<::EventBroker> eventBroker, std::shared_ptr<::ResourceManager> resourceManager)
+		TriggerSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
 			: System(world, eventBroker, resourceManager) { }
 
 		void Initialize() override;
@@ -64,4 +67,7 @@ namespace Systems
 	};
 
 }
+
+}
+
 #endif // TriggerSystem_h__
