@@ -39,14 +39,14 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(IncludePath)</IncludePath>
-    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Debug;$(SolutionDir)\..\libs\glew-1.11.0\lib\Debug\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Debug;$(SolutionDir)\..\libs\lpng1612\lib\Debug;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\bullet3\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Debug;$(SolutionDir)\..\libs\glew-1.11.0\lib\Debug\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Debug;$(SolutionDir)\..\libs\lpng1612\lib\Debug;$(SolutionDir)\..\libs\bullet3\lib\Debug;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)\..\bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(IncludePath)</IncludePath>
-    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Release;$(SolutionDir)\..\libs\glew-1.11.0\lib\Release\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Release;$(SolutionDir)\..\libs\lpng1612\lib\Release;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\bullet3\src;$(IncludePath)</IncludePath>
+    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Release;$(SolutionDir)\..\libs\glew-1.11.0\lib\Release\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Release;$(SolutionDir)\..\libs\lpng1612\lib\Release;C:\daydream\libs\bullet3\lib\Release</LibraryPath>
     <OutDir>$(SolutionDir)\..\bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)\obj\$(Configuration)\</IntDir>
   </PropertyGroup>
