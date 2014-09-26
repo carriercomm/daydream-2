@@ -44,8 +44,8 @@ namespace Systems
 class InputSystem : public System
 {
 public:
-	InputSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
-		: System(world, eventBroker, resourceManager)
+	InputSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker)
+		: System(world, eventBroker)
 	{ }
 
 	void RegisterComponents(ComponentFactory* cf) override;

@@ -34,8 +34,8 @@ namespace Systems
 class TimerSystem : public System
 {
 public:
-	TimerSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
-		: System(world, eventBroker, resourceManager) { }
+	TimerSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker)
+		: System(world, eventBroker) { }
 
 	void RegisterComponents(ComponentFactory* cf) override;
 	void UpdateEntity(double dt, EntityID entity, EntityID parent) override;

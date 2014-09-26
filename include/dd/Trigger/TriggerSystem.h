@@ -44,8 +44,8 @@ namespace Systems
 	class TriggerSystem : public System
 	{
 	public:
-		TriggerSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
-			: System(world, eventBroker, resourceManager) { }
+		TriggerSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker)
+			: System(world, eventBroker) { }
 
 		void Initialize() override;
 		void RegisterComponents(ComponentFactory* cf) override;

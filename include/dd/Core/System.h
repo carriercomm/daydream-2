@@ -33,10 +33,9 @@ class World;
 class System
 {
 public:
-	System(World* world, std::shared_ptr<EventBroker> eventBroker, std::shared_ptr<ResourceManager> resourceManager)
+	System(World* world, std::shared_ptr<EventBroker> eventBroker)
 		: m_World(world)
 		, EventBroker(eventBroker)
-		, ResourceManager(resourceManager)
 	{ }
 	virtual ~System() { }
 
@@ -59,10 +58,9 @@ public:
 protected:
 	World* m_World;
 	std::shared_ptr<EventBroker> EventBroker;
-	std::shared_ptr<ResourceManager> ResourceManager;
 };
 
-class SystemFactory : public Factory<System*> { };
+class SystemFactory : public Factory<System> { };
 
 }
 

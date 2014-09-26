@@ -47,9 +47,8 @@ namespace dd
 class World
 {
 public:
-	World(std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
+	World(std::shared_ptr<dd::EventBroker> eventBroker)
 		: EventBroker(eventBroker)
-		, ResourceManager(resourceManager)
 		, m_LastEntityID(0) { }
 	~World() { }
 
@@ -65,26 +64,26 @@ public:
 		Implemented to register systems with the systemfactory before 
 		adding them to the world.
 	*/
-	virtual void RegisterSystems() = 0;
+	virtual void RegisterSystems() {}
 	/** Add systems to the world.
 	
 		Called by Initialize.
 		Implemented to fill the world with the desired systems.
 	*/ 
-	virtual void AddSystems() = 0;
+	virtual void AddSystems() {}
 	/** Register components with the world.
 		
 		Implemented to register World-global components.
 		@deprecated Components are now registered through individual Systems.
 	*/
 	// TODO: Get rid of this
-	virtual void RegisterComponents() = 0;
+	virtual void RegisterComponents() {}
 
 	/** Add a system to the World */
 	template <typename T>
 	void AddSystem()
 	{
-		m_Systems[typeid(T).name()] = std::shared_ptr<System>(m_SystemFactory.Create<T>());
+		m_Systems[typeid(T).name()] = std::shared_ptr<System>(SystemFactory.Create<T>());
 	}
 	/** Fetch a system by type.		
 
@@ -222,12 +221,12 @@ public:
 	*/
 	std::unordered_map<EntityID, EntityID>* GetEntities() { return &m_EntityParents; }
 
+	dd::SystemFactory SystemFactory;
+	dd::ComponentFactory ComponentFactory;
+
 protected:
 	std::shared_ptr<dd::EventBroker> EventBroker;
 	std::shared_ptr<dd::ResourceManager> ResourceManager;
-
-	SystemFactory m_SystemFactory;
-	ComponentFactory m_ComponentFactory;
 
 	std::unordered_map<std::string, std::shared_ptr<System>> m_Systems;
 
@@ -283,7 +282,7 @@ std::shared_ptr<T> World::AddComponent(EntityID entity)
 {
 	const char* componentType = typeid(T).name();
 
-	std::shared_ptr<T> component = std::shared_ptr<T>(static_cast<T*>(m_ComponentFactory.Create<T>()));
+	std::shared_ptr<T> component = std::shared_ptr<T>(static_cast<T*>(ComponentFactory.Create<T>()));
 	if (component == nullptr)
 	{
 		LOG_ERROR("Failed to attach invalid component \"%s\" to entity #%i", componentType, entity);
