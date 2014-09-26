@@ -155,7 +155,7 @@ void dd::World::Initialize()
 	for (auto pair : m_Systems)
 	{
 		auto system = pair.second;
-		system->RegisterComponents(&m_ComponentFactory);
+		system->RegisterComponents(&ComponentFactory);
 		system->RegisterResourceTypes(ResourceManager);
 		system->Initialize();
 	}
@@ -189,7 +189,7 @@ EntityID dd::World::CloneEntity(EntityID entity, EntityID parent /* = 0 */)
 	for (auto pair : m_EntityComponents[entity])
 	{
 		auto type = pair.first;
-		auto component = std::shared_ptr<Component>(m_ComponentFactory.Copy(type, pair.second.get()));
+		auto component = std::shared_ptr<Component>(ComponentFactory.Copy(type, pair.second.get()));
 		if (component != nullptr)
 		{
 			AddComponent(clone, type, component);

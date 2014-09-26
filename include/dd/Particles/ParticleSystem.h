@@ -39,8 +39,8 @@ namespace Systems
 class ParticleSystem : public System
 {
 public:
-	ParticleSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
-		: System(world, eventBroker, resourceManager)
+	ParticleSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker)
+		: System(world, eventBroker)
 	{ }
 
 	void RegisterComponents(ComponentFactory* cf) override;

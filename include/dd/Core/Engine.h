@@ -27,6 +27,12 @@
 #include "RenderQueue.h"
 #include "Renderer.h"
 #include "InputManager.h"
+//TODO: Remove includes that are only here for the temporary draw solution.
+#include "World.h"
+#include "CTransform.h"
+#include "Rendering/CModel.h"
+#include "CTemplate.h"
+#include "Transform/TransformSystem.h"
 
 namespace dd
 {
@@ -45,8 +51,15 @@ public:
 
 		m_InputManager = std::make_shared<InputManager>(m_Renderer->Window(), m_EventBroker);
 
-		//m_World = std::make_shared<World>(m_EventBroker, m_ResourceManager);
-		//m_World->Initialize();
+		m_World = std::make_shared<World>(m_EventBroker);
+
+		//TODO: Move this out of engine.h
+		m_World->ComponentFactory.Register<Components::Transform>();
+		m_World->SystemFactory.Register<Systems::TransformSystem>([this]() { return new Systems::TransformSystem(m_World.get(), m_EventBroker); });
+		m_World->AddSystem<Systems::TransformSystem>();
+		m_World->ComponentFactory.Register<Components::Model>();
+		m_World->ComponentFactory.Register<Components::Template>();
+		m_World->Initialize();
 
 		m_LastTime = glfwGetTime();
 	}
@@ -62,10 +75,15 @@ public:
 		// Update input
 		m_InputManager->Update(dt);
 
-		//m_World->Update(dt);
+		m_World->Update(dt);
+
+		//TODO Fill up the renderQueue with models (Temp fix)
+
+		TEMPAddToRenderQueue();
 
 		// Render scene
-		//m_Renderer->Draw();
+		//TODO send renderqueue to draw.
+		m_Renderer->Draw(m_RendererQueue);
 
 		// Swap event queues
 		m_EventBroker->Clear();
@@ -73,12 +91,76 @@ public:
 		glfwPollEvents();
 	}
 
+	std::shared_ptr<Systems::TransformSystem> m_TransformSystem;
+
+	//TODO: Get this out of engine.h
+	void TEMPAddToRenderQueue()
+	{
+
+		if (!m_TransformSystem)
+			m_TransformSystem = m_World->GetSystem<Systems::TransformSystem>();
+
+		m_RendererQueue.Clear();
+
+		for (auto &pair : *m_World->GetEntities())
+		{
+			EntityID entity = pair.first;
+
+			auto templateComponent = m_World->GetComponent<Components::Template>(entity);
+			if (templateComponent)
+				continue;
+
+			auto transform = m_World->GetComponent<Components::Transform>(entity);
+			if (!transform)
+				continue;
+
+			auto modelComponent = m_World->GetComponent<Components::Model>(entity);
+			if (modelComponent)
+			{
+				Model* modelAsset = nullptr;
+				modelAsset = ResourceManager::Load<Model>(modelComponent->ModelFile);
+
+				if (modelAsset)
+				{
+					Components::Transform absoluteTransform = m_TransformSystem->AbsoluteTransform(entity);
+					glm::mat4 modelMatrix = glm::translate(glm::mat4(), absoluteTransform.Position)
+						* glm::toMat4(absoluteTransform.Orientation)
+						* glm::scale(absoluteTransform.Scale);
+					EnqueueModel(modelAsset, modelMatrix, modelComponent->Transparent, modelComponent->Color);
+				}
+			}
+		}
+
+		m_RendererQueue.Sort();
+	}
+
+	//TODO: Get this out of engine.h
+	void EnqueueModel(Model* model, glm::mat4 modelMatrix, float transparent, glm::vec4 color)
+	{
+		for (auto texGroup : model->TextureGroups)
+		{
+			ModelJob job;
+			job.TextureID = texGroup.Texture->ResourceID;
+			job.DiffuseTexture = *texGroup.Texture;
+			job.NormalTexture = (texGroup.NormalMap) ? *texGroup.NormalMap : 0;
+			job.SpecularTexture = (texGroup.SpecularMap) ? *texGroup.SpecularMap : 0;
+			job.VAO = model->VAO;
+			job.StartIndex = texGroup.StartIndex;
+			job.EndIndex = texGroup.EndIndex;
+			job.ModelMatrix = modelMatrix;
+			job.Color = color;
+
+			m_RendererQueue.Deferred.Add(job);
+		}
+	}
+
 private:
-	std::shared_ptr<ResourceManager> m_ResourceManager;
+	//std::shared_ptr<ResourceManager> m_ResourceManager;
 	std::shared_ptr<EventBroker> m_EventBroker;
 	std::shared_ptr<Renderer> m_Renderer;
+	RenderQueueCollection m_RendererQueue;
 	std::shared_ptr<InputManager> m_InputManager;
-	//std::shared_ptr<World> m_World;
+	std::shared_ptr<World> m_World;
 
 	double m_LastTime;
 };

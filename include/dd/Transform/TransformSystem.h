@@ -36,8 +36,8 @@ namespace Systems
 class TransformSystem : public System
 {
 public:
-	TransformSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker, std::shared_ptr<dd::ResourceManager> resourceManager)
-		: System(world, eventBroker, resourceManager)
+	TransformSystem(World* world, std::shared_ptr<dd::EventBroker> eventBroker)
+		: System(world, eventBroker)
 	{ }
 	//void Update(double dt) override;
 
