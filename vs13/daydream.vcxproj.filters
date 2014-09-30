@@ -240,6 +240,9 @@
     <ClInclude Include="..\include\dd\Core\Image.h">
       <Filter>dd\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\dd\Core\Util\FileWatcher.h">
+      <Filter>dd\Core\Util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dd\Core\Camera.cpp">

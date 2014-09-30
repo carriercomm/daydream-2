@@ -17,9 +17,11 @@
 */
 
 #include <iostream>
+#include "Core/Util/Logging.h"
 
 #include "Core/Component.h"
 #include "Core/Util/Factory.h"
+#include "Core/Util/FileWatcher.h"
 
 using namespace dd;
 
@@ -33,6 +35,35 @@ struct TestComponent : public Component
 
 int main(int argc, char* argv[])
 {
+	FileWatcher fw("test");
+
+	fw.Watch("test.txt", [](std::string path, FileWatcher::FileEventFlags flags)
+	{ 
+		if (flags & FileWatcher::FileEventFlags::SizeChanged) {
+			std::cout << path << " says size changed!" << std::endl;
+		}
+		
+		if (flags & FileWatcher::FileEventFlags::DateChanged) {
+			std::cout << path << " says date changed!" << std::endl;
+		}
+	
+		if (flags & FileWatcher::FileEventFlags::Created) {
+			std::cout << path << " says created!" << std::endl;
+		}
+
+		if (flags & FileWatcher::FileEventFlags::Deleted) {
+			std::cout << path << " says deleted!" << std::endl;
+		}
+	});
+	std::cin.get();
+	fw.Watch("test2.txt", nullptr);
+
+	while (true)
+	{
+
+	}
+	return 0;
+
 	auto componentFactory = new Factory<Component>();
 	componentFactory->Register<TestComponent>();
 
@@ -47,4 +78,6 @@ int main(int argc, char* argv[])
 	std::cout << "component2->Float = " << component2->Float << std::endl;
 	std::cout << "component2->Double = " << component2->Double << std::endl;
 	std::cout << "component2->String = " << component2->String.c_str() << std::endl;
+
+
 }

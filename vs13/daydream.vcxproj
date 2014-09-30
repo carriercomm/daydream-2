@@ -125,6 +125,7 @@
     <ClInclude Include="..\include\dd\Core\System.h" />
     <ClInclude Include="..\include\dd\Core\Texture.h" />
     <ClInclude Include="..\include\dd\Core\Util\Factory.h" />
+    <ClInclude Include="..\include\dd\Core\Util\FileWatcher.h" />
     <ClInclude Include="..\include\dd\Core\Util\GLError.h" />
     <ClInclude Include="..\include\dd\Core\Util\Logging.h" />
     <ClInclude Include="..\include\dd\Core\Util\Rectangle.h" />
