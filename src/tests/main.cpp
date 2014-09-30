@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
 			std::cout << path << " says size changed!" << std::endl;
 		}
 		
-		if (flags & FileWatcher::FileEventFlags::DateChanged) {
+		if (flags & FileWatcher::FileEventFlags::TimestampChanged) {
 			std::cout << path << " says date changed!" << std::endl;
 		}
 	

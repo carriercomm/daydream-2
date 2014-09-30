@@ -164,6 +164,7 @@
     <ClInclude Include="..\include\dd\Trigger\EEnterTrigger.h" />
     <ClInclude Include="..\include\dd\Trigger\ELeaveTrigger.h" />
     <ClInclude Include="..\include\dd\Trigger\TriggerSystem.h" />
+    <ClInclude Include="..\src\dd\Core\Util\FileWatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dd\Core\Camera.cpp" />
