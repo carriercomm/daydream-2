@@ -117,7 +117,6 @@ private:
 	static unsigned int GetNewResourceID(unsigned int typeID);
 
 	// Internal: Create a resource and cache it
-
 	template <typename T>
 	static T* CreateResource(std::string resourceName);
 };

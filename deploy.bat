@@ -7,7 +7,7 @@ GOTO:eof
 :deploy
 SET Configuration=%~1
 SET ConfigurationShort=%~2
-SET ConfigPath=bin\%~1
+SET ConfigPath=bin\game\%~1
 ECHO Deploying %Configuration%
 :: Asset folders
 MKLINK "%ConfigPath%\Models\" "assets\Models" /J

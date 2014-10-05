@@ -16,13 +16,13 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -40,15 +40,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\bullet3\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Debug;$(SolutionDir)\..\libs\glew-1.11.0\lib\Debug\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Debug;$(SolutionDir)\..\libs\lpng1612\lib\Debug;$(SolutionDir)\..\libs\bullet3\lib\Debug;$(LibraryPath)</LibraryPath>
-    <OutDir>$(SolutionDir)\..\bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\obj\$(Configuration)\</IntDir>
+    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\$(Configuration);$(SolutionDir)\..\libs\glew-1.11.0\lib\$(Configuration)\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\$(Configuration);$(SolutionDir)\..\libs\lpng1612\lib\$(Configuration);$(SolutionDir)\..\libs\bullet3\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\..\bin\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\bullet3\src;$(IncludePath)</IncludePath>
-    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\Release;$(SolutionDir)\..\libs\glew-1.11.0\lib\Release\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\Release;$(SolutionDir)\..\libs\lpng1612\lib\Release;C:\daydream\libs\bullet3\lib\Release</LibraryPath>
-    <OutDir>$(SolutionDir)\..\bin\$(Configuration)\</OutDir>
-    <IntDir>$(SolutionDir)\obj\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)\..\bin\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <LibraryPath>$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(SolutionDir)\..\libs\assimp-3.1.1\lib\$(Configuration);$(SolutionDir)\..\libs\glew-1.11.0\lib\$(Configuration)\Win32;$(SolutionDir)\..\libs\glfw-3.0.4\lib\$(Configuration);$(SolutionDir)\..\libs\lpng1612\lib\$(Configuration);$(SolutionDir)\..\libs\bullet3\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -72,6 +72,11 @@
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
     </Bscmake>
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;assimpd.lib;glew32d.lib;glfw3dll.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <PostBuildEvent />
+    <PostBuildEvent />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -92,6 +97,9 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;assimp.lib;glew32.lib;glfw3dll.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <CustomBuildStep />
+    <Lib>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;assimp.lib;glew32.lib;glfw3dll.lib;libpng16.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\dd\Core\Camera.h" />
@@ -164,7 +172,6 @@
     <ClInclude Include="..\include\dd\Trigger\EEnterTrigger.h" />
     <ClInclude Include="..\include\dd\Trigger\ELeaveTrigger.h" />
     <ClInclude Include="..\include\dd\Trigger\TriggerSystem.h" />
-    <ClInclude Include="..\src\dd\Core\Util\FileWatcher.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\dd\Core\Camera.cpp" />
@@ -178,9 +185,9 @@
     <ClCompile Include="..\src\dd\Core\ShaderProgram.cpp" />
     <ClCompile Include="..\src\dd\Core\Skeleton.cpp" />
     <ClCompile Include="..\src\dd\Core\Texture.cpp" />
+    <ClCompile Include="..\src\dd\Core\Util\FileWatcher.cpp" />
     <ClCompile Include="..\src\dd\Core\World.cpp" />
     <ClCompile Include="..\src\dd\Input\InputSystem.cpp" />
-    <ClCompile Include="..\src\dd\main.cpp" />
     <ClCompile Include="..\src\dd\Particles\ParticleSystem.cpp" />
     <ClCompile Include="..\src\dd\PrecompiledHeader.cpp" />
     <ClCompile Include="..\src\dd\Timer\TimerSystem.cpp" />

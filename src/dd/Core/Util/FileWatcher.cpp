@@ -1,53 +1,54 @@
+#include "PrecompiledHeader.h"
 #include "Core/Util/FileWatcher.h"
 
 dd::FileWatcher::FileWatcher(std::string rootPath)
 {
 	m_RootPath = rootPath;
 	m_Worker = new Worker;
-	m_Thread = boost::thread(m_Worker);
 }
 
 dd::FileWatcher::~FileWatcher()
 {
-	m_Thread.detach();
+	m_Thread.interrupt();
 	if (m_Worker != nullptr)
 	{
 		delete m_Worker;
 	}
 }
 
-void dd::FileWatcher::Watch(std::string path, FileEventCallback_t callback)
+void dd::FileWatcher::AddWatch(std::string path, FileEventCallback_t callback)
 {
-	m_Worker.Watch(path, callback);
+	m_Worker->AddWatch(path, callback);
 }
 
-std::string dd::FileWatcher::RootPath() const
+void dd::FileWatcher::Start()
 {
-	return m_RootPath.string();
+	m_Thread.interrupt();
+	m_Thread = boost::thread(boost::ref(*m_Worker));
+}
+
+void dd::FileWatcher::Stop()
+{
+	m_Thread.interrupt();
+}
+
+void dd::FileWatcher::Check()
+{
+	m_Worker->Check();
 }
 
 void dd::FileWatcher::Worker::operator()()
 {
 	while (true)
 	{
-		m_Mutex.lock();
-		for (auto &kv : m_FileCallbacks)
-		{
-			boost::filesystem::path path = kv.first;
-			FileEventCallback_t& callback = kv.second;
-			FileEventFlags flags = UpdateFileInfo(path);
-			if (flags != FileEventFlags::None && callback != nullptr)
-			{
-				callback(path.string(), flags);
-			}
-		}
-		m_Mutex.unlock();
+		boost::this_thread::interruption_point();
+		Check();
 		boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 	}
 }
 
 
-void dd::FileWatcher::Worker::Watch(std::string path, FileEventCallback_t callback)
+void dd::FileWatcher::Worker::AddWatch(std::string path, FileEventCallback_t callback)
 {
 	m_Mutex.lock();
 	boost::filesystem::path bpath(path);
@@ -55,6 +56,22 @@ void dd::FileWatcher::Worker::Watch(std::string path, FileEventCallback_t callba
 	if (boost::filesystem::exists(bpath))
 	{
 		m_FileInfo[bpath] = GetFileInfo(bpath);
+	}
+	m_Mutex.unlock();
+}
+
+void dd::FileWatcher::Worker::Check()
+{
+	m_Mutex.lock();
+	for (auto &kv : m_FileCallbacks)
+	{
+		boost::filesystem::path path = kv.first;
+		FileEventCallback_t& callback = kv.second;
+		FileEventFlags flags = UpdateFileInfo(path);
+		if (flags != FileEventFlags::None && callback != nullptr)
+		{
+			callback(path.string(), flags);
+		}
 	}
 	m_Mutex.unlock();
 }
@@ -89,14 +106,14 @@ dd::FileWatcher::FileEventFlags dd::FileWatcher::Worker::UpdateFileInfo(boost::f
 				flags = flags | FileEventFlags::TimestampChanged;
 
 			}
-		}
+		} 
 		else
 		{
 			LOG_DEBUG("FileWatcher: \"%s\" was created!", path.string().c_str());
 			flags = flags | FileEventFlags::Created;
 		}
 		m_FileInfo[path] = GetFileInfo(path);
-	}
+	} 
 	else
 	{
 		auto fileInfoIt = m_FileInfo.find(path);

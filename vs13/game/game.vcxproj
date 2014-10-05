@@ -11,8 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{5C44EDD3-11EE-49B1-A170-39A63E53508D}</ProjectGuid>
-    <RootNamespace>tests</RootNamespace>
+    <ProjectGuid>{264EE0AC-0D48-458A-9728-459A3727BF3E}</ProjectGuid>
+    <RootNamespace>game</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -39,15 +39,15 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)\..\bin\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)\</IntDir>
     <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\bullet3\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\bin\daydream\$(Configuration);$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(LibraryPath)</LibraryPath>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)\</IntDir>
-    <OutDir>$(SolutionDir)\..\bin\$(ProjectName)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\bullet3\src;$(IncludePath)</IncludePath>
-    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)\..\bin\$(ProjectName)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <IncludePath>$(SolutionDir)..\include\dd;$(BOOST_1_55_0_ROOT);$(SolutionDir)\..\libs;$(SolutionDir)\..\libs\assimp-3.1.1\include;$(SolutionDir)\..\libs\glew-1.11.0\include;$(SolutionDir)\..\libs\glfw-3.0.4\include;$(SolutionDir)\..\libs\glm-0.9.5.4;$(SolutionDir)\..\libs\lpng1612;$(SolutionDir)\..\libs\bullet3\src;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)..\bin\daydream\$(Configuration);$(BOOST_1_55_0_ROOT)\lib32-msvc-12.0;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -59,15 +59,8 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <SubSystem>Console</SubSystem>
       <AdditionalDependencies>daydream.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>$(SolutionDir)..\bin\tests\$(Configuration)\tests.exe --log_level=message</Command>
-    </PostBuildEvent>
-    <PostBuildEvent>
-      <Message>Running unit tests</Message>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -84,15 +77,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>daydream.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>$(SolutionDir)..\bin\tests\$(Configuration)\tests.exe --log_level=message</Command>
-      <Message>Running unit tests</Message>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\tests\ComponentCopyTest.cpp" />
-    <ClCompile Include="..\..\src\tests\FileWatcherTest.cpp" />
-    <ClCompile Include="..\..\src\tests\main.cpp" />
+    <ClCompile Include="..\..\src\game\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -123,7 +123,7 @@ void dd::Renderer::LoadShaders()
 void dd::Renderer::CreateBuffers()
 {
 	m_UnitQuad = CreateQuad();
-	m_UnitSphere = ResourceManager::Load<Model>("Models/UnitSphere.obj");
+	m_UnitSphere = ResourceManager::Load<Model>("Models/Core/UnitSphere.obj");
 
 	glGenRenderbuffers(1, &m_rbDepthBuffer);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_rbDepthBuffer);

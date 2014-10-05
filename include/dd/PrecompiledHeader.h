@@ -16,6 +16,8 @@
 	along with Daydream Engine.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// TODO: Get rid of precompiled headers
+
 #include <memory>
 #include <string>
 #include <vector>
