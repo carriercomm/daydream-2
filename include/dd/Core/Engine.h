@@ -145,6 +145,7 @@ public:
 			job.NormalTexture = (texGroup.NormalMap) ? *texGroup.NormalMap : 0;
 			job.SpecularTexture = (texGroup.SpecularMap) ? *texGroup.SpecularMap : 0;
 			job.VAO = model->VAO;
+			job.ElementBuffer = model->ElementBuffer;
 			job.StartIndex = texGroup.StartIndex;
 			job.EndIndex = texGroup.EndIndex;
 			job.ModelMatrix = modelMatrix;
