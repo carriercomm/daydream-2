@@ -259,7 +259,7 @@ dd::Model::Model(std::string fileName)
 
 			// If you don't have the same amount of keyframes for every transformation type you're dumb.
 			if (channel->mNumPositionKeys != channel->mNumRotationKeys || channel->mNumPositionKeys != channel->mNumScalingKeys) {
-				LOG_ERROR("Hey, animation! You're dumb!", animationName);
+				LOG_ERROR("Hey, animation! You're dumb!", animationName.c_str());
 				continue;
 			}
 

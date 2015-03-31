@@ -23,9 +23,9 @@ dd::Texture::Texture(std::string path)
 {
 	std::unique_ptr<Image> image = std::make_unique<PNG>(path);
 
-	if (image->Width == 0 && image->Height == 0 || image->Format == Image::Format::Unknown) {
+	if (image->Width == 0 && image->Height == 0 || image->Format == Image::ImageFormat::Unknown) {
 		image = std::make_unique<PNG>("Textures/ErrorTexture.png");
-		if (image->Width == 0 && image->Height == 0 || image->Format == Image::Format::Unknown) {
+		if (image->Width == 0 && image->Height == 0 || image->Format == Image::ImageFormat::Unknown) {
 			LOG_ERROR("Couldn't even load the error texture. This is a dark day indeed.");
 			return;
 		}
@@ -33,10 +33,10 @@ dd::Texture::Texture(std::string path)
 
 	GLint format;
 	switch (image->Format) {
-	case Image::Format::RGB:
+	case Image::ImageFormat::RGB:
 		format = GL_RGB;
 		break;
-	case Image::Format::RGBA:
+	case Image::ImageFormat::RGBA:
 		format = GL_RGBA;
 		break;
 	}

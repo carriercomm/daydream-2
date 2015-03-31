@@ -24,24 +24,17 @@ namespace dd
 
 struct Image
 {
-	enum class Format
+	enum class ImageFormat
 	{
 		Unknown,
 		RGB,
 		RGBA
 	};
 
-	Image()
-		: Width(0)
-		, Height(0)
-		, Format(Image::Format::Unknown)
-		, Data(nullptr) 
-	{ }
-
-	unsigned int Width;
-	unsigned int Height;
-	Image::Format Format;
-	unsigned char* Data;
+	unsigned int Width = 0;
+	unsigned int Height = 0;
+	ImageFormat Format = ImageFormat::Unknown;
+	unsigned char* Data = nullptr;
 };
 
 }

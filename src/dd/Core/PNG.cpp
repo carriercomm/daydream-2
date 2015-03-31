@@ -23,7 +23,7 @@ dd::PNG::PNG(std::string path)
 {
 	FILE* file = fopen(path.c_str(), "rb");
 	if (!file) {
-		LOG_ERROR("Failed to open texture file \"%s\": %s", path.c_str(), strerror(errno));
+		LOG_ERROR("Failed to open texture file \"%s\": %s", path.c_str(), const_cast<const char*>(strerror(errno)));
 		return;
 	}
 
@@ -75,10 +75,10 @@ dd::PNG::PNG(std::string path)
 	}
 	switch (color_type) {
 		case PNG_COLOR_TYPE_RGB:
-			Format = Image::Format::RGB;
+			Format = Image::ImageFormat::RGB;
 			break;
 		case PNG_COLOR_TYPE_RGBA:
-			Format = Image::Format::RGBA;
+			Format = Image::ImageFormat::RGBA;
 			break;
 		default:
 			LOG_ERROR("libpng: Unsupported color format \"%i\" of image \"%s\"", color_type, path.c_str());

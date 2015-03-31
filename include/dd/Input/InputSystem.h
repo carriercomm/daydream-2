@@ -29,6 +29,7 @@
 #include "Core/EMouseRelease.h"
 #include "Core/EGamepadAxis.h"
 #include "Core/EGamepadButton.h"
+#include "Core/Util/EnumClassHash.h"
 #include "EBindKey.h"
 #include "EBindMouseButton.h"
 #include "EBindGamepadAxis.h"
@@ -56,13 +57,13 @@ public:
 private:
 	std::unordered_map<std::string, std::unordered_map<int, float>> m_CommandKeyboardValues; // command string -> keyboard key value for command
 	std::unordered_map<std::string, std::unordered_map<int, float>> m_CommandMouseButtonValues; // command string -> mouse button value for command
-	std::unordered_map<std::string, std::unordered_map<Gamepad::Axis, float>> m_CommandGamepadAxisValues; // command string -> gamepad axis value for command
-	std::unordered_map<std::string, std::unordered_map<Gamepad::Button, float>> m_CommandGamepadButtonValues; // command string -> gamepad button value for command
+	std::unordered_map<std::string, std::unordered_map<Gamepad::Axis, float, EnumClassHash>> m_CommandGamepadAxisValues; // command string -> gamepad axis value for command
+	std::unordered_map<std::string, std::unordered_map<Gamepad::Button, float, EnumClassHash>> m_CommandGamepadButtonValues; // command string -> gamepad button value for command
 	// Input binding tables
 	std::unordered_multimap<int, std::tuple<std::string, float>> m_KeyBindings; // GLFW_KEY... -> command string & value
 	std::unordered_multimap<int, std::tuple<std::string, float>> m_MouseButtonBindings; // GLFW_MOUSE_BUTTON... -> command string
-	std::unordered_multimap<Gamepad::Axis, std::tuple<std::string, float>> m_GamepadAxisBindings; // Gamepad::Axis -> command string & value
-	std::unordered_multimap<Gamepad::Button, std::tuple<std::string, float>> m_GamepadButtonBindings; // Gamepad::Button -> command string
+	std::unordered_multimap<Gamepad::Axis, std::tuple<std::string, float>, EnumClassHash> m_GamepadAxisBindings; // Gamepad::Axis -> command string & value
+	std::unordered_multimap<Gamepad::Button, std::tuple<std::string, float>, EnumClassHash> m_GamepadButtonBindings; // Gamepad::Button -> command string
 
 	// Input events
 	EventRelay<InputSystem, Events::KeyDown> m_EKeyDown;
