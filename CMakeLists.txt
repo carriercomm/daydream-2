@@ -1,113 +1,31 @@
-cmake_minimum_required(VERSION 2.8.4)
+cmake_minimum_required(VERSION 3.0)
 project(daydream)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+include(cotire)
 
-set(SOURCE_FILES
-    include/dd/Core/Util/Factory.h
-    include/dd/Core/Util/FileWatcher.h
-    include/dd/Core/Util/GLError.h
-    include/dd/Core/Util/Logging.h
-    include/dd/Core/Util/Rectangle.h
-    include/dd/Core/Util/UnorderedMapPair.h
-    include/dd/Core/Camera.h
-    include/dd/Core/Color.h
-    include/dd/Core/Component.h
-    include/dd/Core/CTemplate.h
-    include/dd/Core/CTransform.h
-    include/dd/Core/EComponentCreated.h
-    include/dd/Core/EGamepadAxis.h
-    include/dd/Core/EGamepadButton.h
-    include/dd/Core/EKeyDown.h
-    include/dd/Core/EKeyUp.h
-    include/dd/Core/ELockMouse.h
-    include/dd/Core/EMouseMove.h
-    include/dd/Core/EMousePress.h
-    include/dd/Core/EMouseRelease.h
-    include/dd/Core/Engine.h
-    include/dd/Core/Entity.h
-    include/dd/Core/EventBroker.h
-    include/dd/Core/Image.h
-    include/dd/Core/InputController.h
-    include/dd/Core/InputManager.h
-    include/dd/Core/Model.h
-    include/dd/Core/OBJ.h
-    include/dd/Core/PNG.h
-    include/dd/Core/Renderer.h
-    include/dd/Core/RenderQueue.h
-    include/dd/Core/ResourceManager.h
-    include/dd/Core/ShaderProgram.h
-    include/dd/Core/Skeleton.h
-    include/dd/Core/System.h
-    include/dd/Core/Texture.h
-    include/dd/Core/World.h
-    include/dd/Input/EBindGamepadAxis.h
-    include/dd/Input/EBindGamepadButton.h
-    include/dd/Input/EBindKey.h
-    include/dd/Input/EBindMouseButton.h
-    include/dd/Input/EInputCommand.h
-    include/dd/Input/InputSystem.h
-    include/dd/Particles/CParticle.h
-    include/dd/Particles/CParticleEmitter.h
-    include/dd/Particles/ParticleSystem.h
-    include/dd/Rendering/CBlendMap.h
-    include/dd/Rendering/CCamera.h
-    include/dd/Rendering/CDamageModel.h
-    include/dd/Rendering/CDirectionalLight.h
-    include/dd/Rendering/CModel.h
-    include/dd/Rendering/CPointLight.h
-    include/dd/Rendering/CSprite.h
-    include/dd/Rendering/CViewport.h
-    include/dd/Timer/CFrameTimer.h
-    include/dd/Timer/CTimer.h
-    include/dd/Timer/TimerSystem.h
-    include/dd/Transform/EMove.h
-    include/dd/Transform/ERotate.h
-    include/dd/Transform/TransformSystem.h
-    include/dd/Trigger/CMove.h
-    include/dd/Trigger/CRotate.h
-    include/dd/Trigger/CTrigger.h
-    include/dd/Trigger/CTriggerExplosion.h
-    include/dd/Trigger/CTriggerMove.h
-    include/dd/Trigger/CTriggerRotate.h
-    include/dd/Trigger/EEnterTrigger.h
-    include/dd/Trigger/ELeaveTrigger.h
-    include/dd/Trigger/TriggerSystem.h
-    include/dd/PrecompiledHeader.h
-    src/dd/Core/Util/FileWatcher.cpp
-    src/dd/Core/Camera.cpp
-    src/dd/Core/EventBroker.cpp
-    src/dd/Core/InputManager.cpp
-    src/dd/Core/Model.cpp
-    src/dd/Core/OBJ.cpp
-    src/dd/Core/PNG.cpp
-    src/dd/Core/Renderer.cpp
-    src/dd/Core/ResourceManager.cpp
-    src/dd/Core/ShaderProgram.cpp
-    src/dd/Core/Skeleton.cpp
-    src/dd/Core/Texture.cpp
-    src/dd/Core/World.cpp
-    src/dd/Input/InputSystem.cpp
-    src/dd/Particles/ParticleSystem.cpp
-    src/dd/Sound/Sound.cpp
-    src/dd/Sound/SoundSystem.cpp
-    src/dd/Timer/TimerSystem.cpp
-    src/dd/Transform/TransformSystem.cpp
-    src/dd/Trigger/TriggerSystem.cpp
-    src/dd/main.cpp
-    src/dd/PrecompiledHeader.cpp)
+set(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "${PROJECT_SOURCE_DIR}/deps/include")
 
-include_directories(
-    include/dd
-    $ENV{BOOST_1_55_0_ROOT}
-    libs/
-    libs/
-    libs/assimp-3.1.1/include
-    libs/glew-1.11.0/include
-    libs/glfw-3.0.4/include
-    libs/glm-0.9.5.4
-    libs/lpng1612
-    libs/bullet3/src
-    )
+if(MINGW)
+    set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/deps/lib/mingw/x64")
+elseif(MSVC)
+    set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "${PROJECT_SOURCE_DIR}/deps/lib/msvc/x64")
+endif()
 
-add_executable(daydream ${SOURCE_FILES})
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+#set(GLEW_INCLUDE_DIR ${daydream_SOURCE_DIR}/libs/glew-1.11.0/include)
+#set(GLEW_LIBRARY ${daydream_SOURCE_DIR}/libs/glew-1.11.0/lib/Release/glew32.lib)
+
+#set(GLFW_INCLUDE_DIR ${daydream_SOURCE_DIR}/libs/glfw-3.0.4/include)
+#set(GLFW_LIBRARY ${daydream_SOURCE_DIR}/libs/glfw-3.0.4/lib/Release/glfw3dll.lib)
+
+set(Boost_DEBUG ON)
+#set(BOOST_INCLUDEDIR ${BOOST_ROOT}/boost)
+#set(BOOST_LIBRARYDIR ${BOOST_ROOT}/lib32-msvc-12.0)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -fpermissive")
+
+add_subdirectory(src/dd)
+add_subdirectory(src/game)
+add_subdirectory(src/tests)
