@@ -34,11 +34,12 @@
 #include <iostream>
 #include <limits>
 #include <string>
-#include <stdio.h>
+#include <cstdio>
 #include <stdarg.h>
 
 enum _LOG_LEVEL
 {
+	LOG_LEVEL_NONE,
 	LOG_LEVEL_ERROR,
 	LOG_LEVEL_WARNING,
 	LOG_LEVEL_INFO,
@@ -59,17 +60,20 @@ const static char* _LOG_LEVEL_PREFIX[] =
 	"D: "
 };
 
-static void _LOG(_LOG_LEVEL logLevel, char* file, char* func, unsigned int line, const char* format, ...)
+static void _LOG(_LOG_LEVEL logLevel, const char* file, const char* func, unsigned int line, const char* format, ...)
 {
 	if (logLevel > LOG_LEVEL)
 		return;
 
-	va_list args;
-	va_start(args, format);
 	char* message = nullptr;
-	size_t size = vsnprintf(message, 0, format, args);
-	message = new char[size + 1];
-	message[size] = '\0';
+	va_list args;
+
+	va_start(args, format);
+	size_t size = vsnprintf(message, 0, format, args) + 1;
+	va_end(args);
+
+	va_start(args, format);
+	message = new char[size];
 	vsnprintf(message, size, format, args);
 	va_end(args);
 

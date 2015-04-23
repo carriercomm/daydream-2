@@ -22,7 +22,7 @@
 #include "PrecompiledHeader.h"
 #include <iostream>
 
-inline bool _GLERROR(char* info, char* file, char* func, unsigned int line)
+inline bool _GLERROR(const char* info, const char* file, const char* func, unsigned int line)
 {
 	GLenum error = glGetError();
 	if (error != GL_NO_ERROR)
