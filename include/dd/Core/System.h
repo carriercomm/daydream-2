@@ -57,7 +57,7 @@ public:
 
 protected:
 	World* m_World;
-	std::shared_ptr<EventBroker> EventBroker;
+	std::shared_ptr<dd::EventBroker> EventBroker;
 };
 
 class SystemFactory : public Factory<System> { };

@@ -41,7 +41,7 @@ public:
 	void SetVSYNC(bool vsync) { m_VSYNC = vsync; }
 	//void SetViewport(const Rectangle& viewport) { m_Viewport = viewport; }
 	//void SetScissor(const Rectangle& scissor) { m_Scissor = scissor; }
-	const Camera* Camera() const { return m_Camera; }
+	const dd::Camera* Camera() const { return m_Camera; }
 	void SetCamera(const dd::Camera* camera)
 	{
 		if (camera == nullptr) {

@@ -122,7 +122,7 @@ private:
 };
 
 template <typename T>
-static T* ResourceManager::Load(std::string resourceName)
+T* ResourceManager::Load(std::string resourceName)
 {
 	auto resourceType = typeid(T).name();
 	auto it = m_ResourceCache.find(std::make_pair(resourceType, resourceName));
@@ -139,7 +139,7 @@ static T* ResourceManager::Load(std::string resourceName)
 }
 
 template <typename T>
-static T* ResourceManager::Fetch(std::string resourceName)
+T* ResourceManager::Fetch(std::string resourceName)
 {
 	auto resourceType = typeid(T).name();
 	auto it = m_ResourceCache.find(std::make_pair(resourceType, resourceName));
@@ -154,7 +154,7 @@ static T* ResourceManager::Fetch(std::string resourceName)
 }
 
 template <typename T>
-static void ResourceManager::RegisterType(std::function<Resource*(std::string)> factoryFunction)
+void ResourceManager::RegisterType(std::function<Resource*(std::string)> factoryFunction)
 {
 	m_FactoryFunctions[typeid(T).name()] = factoryFunction;
 }

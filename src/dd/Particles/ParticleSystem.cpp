@@ -37,7 +37,7 @@ void dd::Systems::ParticleSystem::Update(double dt)
 		double timeLived = glfwGetTime() - spawnTime;
 		auto eComp = m_World->GetComponent<Components::ParticleEmitter>(explosionID);
 
-		if(timeLived > eComp->LifeTime && m_ParticlesToEmitter[explosionID] == NULL)
+		if(timeLived > eComp->LifeTime && m_ParticlesToEmitter[explosionID] == NULL) // FIXME: Don't compare EntityID with NULL!
 		{
 			auto e = m_World->GetComponent<Components::ParticleEmitter>(explosionID);
 			m_World->RemoveEntity(e->ParticleTemplate);
