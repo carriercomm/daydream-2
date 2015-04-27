@@ -1,6 +1,11 @@
 #include "PrecompiledHeader.h"
 #include "Core/Util/FileWatcher.h"
 
+dd::FileWatcher::FileWatcher()
+{
+	m_Worker = new Worker;
+}
+
 dd::FileWatcher::FileWatcher(std::string rootPath)
 {
 	m_RootPath = rootPath;
@@ -25,17 +30,20 @@ void dd::FileWatcher::Start()
 {
 	m_Thread.interrupt();
 	m_Thread = boost::thread(boost::ref(*m_Worker));
+	m_IsRunning = true;
 }
 
 void dd::FileWatcher::Stop()
 {
 	m_Thread.interrupt();
+	m_IsRunning = false;
 }
 
 void dd::FileWatcher::Check()
 {
 	m_Worker->Check();
 }
+
 
 void dd::FileWatcher::Worker::operator()()
 {
@@ -46,7 +54,6 @@ void dd::FileWatcher::Worker::operator()()
 		boost::this_thread::sleep_for(boost::chrono::milliseconds(1000));
 	}
 }
-
 
 void dd::FileWatcher::Worker::AddWatch(std::string path, FileEventCallback_t callback)
 {
@@ -106,14 +113,14 @@ dd::FileWatcher::FileEventFlags dd::FileWatcher::Worker::UpdateFileInfo(boost::f
 				flags = flags | FileEventFlags::TimestampChanged;
 
 			}
-		} 
+		}
 		else
 		{
 			LOG_DEBUG("FileWatcher: \"%s\" was created!", path.string().c_str());
 			flags = flags | FileEventFlags::Created;
 		}
 		m_FileInfo[path] = GetFileInfo(path);
-	} 
+	}
 	else
 	{
 		auto fileInfoIt = m_FileInfo.find(path);

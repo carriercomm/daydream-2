@@ -35,80 +35,88 @@ namespace dd
 class Shader
 {
 public:
-	static GLuint CompileShader(GLenum shaderType, std::string fileName);
-
-	Shader(GLenum shaderType, std::string fileName);
-
+	Shader(GLenum shaderType, std::string resourceName);
 	virtual ~Shader();
-
-	GLuint Compile();
 
 	GLenum GetType() const;
 	std::string GetFileName() const;
 	GLuint GetHandle() const;
-	bool IsCompiled() const;
 
 protected:
 	GLenum m_ShaderType;
 	std::string m_FileName;
-	GLint m_ShaderHandle;
+	GLuint m_ShaderHandle;
+
+	void Compile();
 };
 
 template <int SHADERTYPE>
-class ShaderType : public Shader
+class ShaderType : public Shader, public Resource
 {
+	friend class ResourceManager;
+
 public:
-	ShaderType(std::string fileName)
-		: Shader(SHADERTYPE, fileName) { }
+	ShaderType(std::string resourceName)
+		: Shader(SHADERTYPE, resourceName)
+	{ }
+
+private:
+	virtual void Reload() override;
 };
+
+template <int SHADERTYPE>
+void ShaderType<SHADERTYPE>::Reload()
+{
+	Compile();
+
+	Resource::Reload();
+}
 
 class VertexShader : public ShaderType<GL_VERTEX_SHADER>
 {
 public:
-	VertexShader(std::string fileName)
-		: ShaderType(fileName) { }
+	VertexShader(std::string resourceName)
+		: ShaderType(resourceName)
+	{ }
 };
 
 class FragmentShader : public ShaderType<GL_FRAGMENT_SHADER>
 {
 public:
-	FragmentShader(std::string fileName)
-		: ShaderType(fileName) { }
+	FragmentShader(std::string resourceName)
+		: ShaderType(resourceName)
+	{ }
 };
 
 class GeometryShader : public ShaderType<GL_GEOMETRY_SHADER>
 {
 public:
-	GeometryShader(std::string fileName)
-		: ShaderType(fileName) { }
+	GeometryShader(std::string resourceName)
+		: ShaderType(resourceName)
+	{ }
 };
 
 class ShaderProgram : public Resource
 {
-public:
-	ShaderProgram()
-		: m_ShaderProgramHandle(0) 
-	{ }
-	ShaderProgram(std::string folderPath)
-		: m_ShaderProgramHandle(0)
-	{ }
+	friend class ResourceManager;
 
+protected:
+	ShaderProgram(std::string resourceName);
 	~ShaderProgram();
 
-	void AddShader(std::shared_ptr<Shader> shader);
+public:
 	void BindFragDataLocation(int colorNumber, std::string name);
-	void Compile();
 	GLuint Link();
 	GLuint GetHandle();
 	operator GLuint() const { return m_ShaderProgramHandle; }
 	void Bind();
 	void Unbind();
 
-private:
-	GLuint m_ShaderProgramHandle;
-	std::vector<std::shared_ptr<Shader>> m_Shaders;
+	virtual void OnChildReloaded(Resource *child) override;
 
-	void LoadFromFolder(std::string folderPath);
+private:
+	GLuint m_ShaderProgramHandle = 0;
+	std::vector<Shader*> m_Shaders;
 };
 
 }

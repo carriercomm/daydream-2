@@ -25,12 +25,14 @@ namespace dd
 		enum class FileEventFlags;
 		typedef std::function<void(std::string, FileEventFlags)> FileEventCallback_t;
 
+		FileWatcher();
 		FileWatcher(std::string rootPath);
 		~FileWatcher();
 
 		std::string RootPath() const { return m_RootPath.string(); }
 		void AddWatch(std::string path, FileEventCallback_t callback);
 		void Start();
+		bool IsRunning() const { return m_IsRunning; }
 		void Stop();
 		void Check();
 
@@ -40,6 +42,7 @@ namespace dd
 		boost::filesystem::path m_RootPath;
 		boost::thread m_Thread;
 		Worker* m_Worker = nullptr;
+		bool m_IsRunning = false;
 	};
 
 	enum class FileWatcher::FileEventFlags

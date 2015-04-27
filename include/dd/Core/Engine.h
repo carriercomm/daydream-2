@@ -61,6 +61,13 @@ public:
 		m_World->ComponentFactory.Register<Components::Template>();
 		m_World->Initialize();
 
+		auto ent = m_World->CreateEntity();
+		std::shared_ptr<Components::Transform> transform = m_World->AddComponent<Components::Transform>(ent);
+		transform->Position = glm::vec3(0.f, 0.f, -10.f);
+		std::shared_ptr<Components::Model> model = m_World->AddComponent<Components::Model>(ent);
+		model->ModelFile = "Models/Core/UnitSphere.obj";
+
+
 		m_LastTime = glfwGetTime();
 	}
 
@@ -72,13 +79,18 @@ public:
 		double dt = currentTime - m_LastTime;
 		m_LastTime = currentTime;
 
+		ResourceManager::Update();
+
 		// Update input
 		m_InputManager->Update(dt);
 
 		m_World->Update(dt);
 
-		//TODO Fill up the renderQueue with models (Temp fix)
+		if (glfwGetKey(m_Renderer->Window(), GLFW_KEY_R)) {
+			ResourceManager::Reload("Shaders/Deferred/3/Fragment.glsl");
+		}
 
+		//TODO Fill up the renderQueue with models (Temp fix)
 		TEMPAddToRenderQueue();
 
 		// Render scene
@@ -140,8 +152,8 @@ public:
 		for (auto texGroup : model->TextureGroups)
 		{
 			ModelJob job;
-			job.TextureID = texGroup.Texture->ResourceID;
-			job.DiffuseTexture = *texGroup.Texture;
+			job.TextureID = (texGroup.Texture) ? texGroup.Texture->ResourceID : 0;
+			job.DiffuseTexture = (texGroup.Texture) ? *texGroup.Texture : 0;
 			job.NormalTexture = (texGroup.NormalMap) ? *texGroup.NormalMap : 0;
 			job.SpecularTexture = (texGroup.SpecularMap) ? *texGroup.SpecularMap : 0;
 			job.VAO = model->VAO;

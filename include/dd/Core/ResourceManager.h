@@ -26,6 +26,7 @@
 
 #include "Util/UnorderedMapPair.h"
 #include "Util/Factory.h"
+#include "Util/FileWatcher.h"
 
 namespace dd
 {
@@ -37,18 +38,26 @@ namespace dd
 */
 class Resource
 {
+	friend class ResourceManager;
+
 protected:
 	Resource() { }
 
 public:
+
+
 	// Pretend that this is a pure virtual function that you have to implement
+	// FIXME: Why did we do this again instead of just using the constructor?
 	// static Resource* Create(std::string resourceName);
+
+	virtual void Reload() {	}
+	virtual void OnChildReloaded(Resource* child) { }
 
 	unsigned int TypeID;
 	unsigned int ResourceID;
 };
 
-/** Singleton resource manager to keep track of and cache any external engine assets */ 
+/** Singleton resource manager to keep track of and cache any external engine assets */
 class ResourceManager
 {
 private:
@@ -61,8 +70,8 @@ public:
 	return s;
 	}*/
 
-	/** Registers the factory function of a resource type 
-		
+	/** Registers the factory function of a resource type
+
 		@tparam T Resource type.
 		@param factoryFunction Lambda function that creates a new instance of the resource.
 	*/
@@ -86,12 +95,12 @@ public:
 	static bool IsResourceLoaded(std::string resourceType, std::string resourceName);
 
 	/** Hot-loads a resource and caches it for future use
-	
+
 		@tparam T Resource type.
 		@param resourceName Fully qualified name of the resource to load.
 	*/
 	template <typename T>
-	static T* Load(std::string resourceName);
+	static T* Load(std::string resourceName, Resource* parent = nullptr);
 
 	/** Fetches a loaded resource
 
@@ -101,9 +110,20 @@ public:
 	template <typename T>
 	static T* Fetch(std::string resourceName);
 
+	/** Reloads an already loaded resource, keeping its resource ID intact.
+
+	 	@tparam T Resource type.
+	 	@param resourceName Fully qualified name of the resource to reload.
+	*/
+    static void Reload(std::string resourceName);
+
+	static void Update();
+
 private:
-	static std::unordered_map<std::string, std::function<Resource*(std::string)>> m_FactoryFunctions; // type -> factory function
+    static std::unordered_map<std::string, std::function<Resource*(std::string)>> m_FactoryFunctions; // type -> factory function
 	static std::unordered_map<std::pair<std::string, std::string>, Resource*> m_ResourceCache; // (type, name) -> resource
+	static std::unordered_map<std::string, Resource*> m_ResourceFromName; // name -> resource
+	static std::unordered_map<Resource*, Resource*> m_ResourceParents; // resource -> parent resource
 
 	// TODO: Getters for IDs
 	static unsigned int m_CurrentResourceTypeID;
@@ -113,16 +133,19 @@ private:
 	// Flag to suppress hot-load warnings when a preloading resource chain loads another resource
 	static bool m_Preloading;
 
+	static FileWatcher m_FileWatcher;
+	static void fileWatcherCallback(std::string path, FileWatcher::FileEventFlags flags);
+
 	static unsigned int GetTypeID(std::string resourceType);
 	static unsigned int GetNewResourceID(unsigned int typeID);
 
 	// Internal: Create a resource and cache it
 	template <typename T>
-	static T* CreateResource(std::string resourceName);
+	static T* CreateResource(std::string resourceName, Resource* parent);
 };
 
 template <typename T>
-T* ResourceManager::Load(std::string resourceName)
+T* ResourceManager::Load(std::string resourceName, Resource* parent /* = nullptr */)
 {
 	auto resourceType = typeid(T).name();
 	auto it = m_ResourceCache.find(std::make_pair(resourceType, resourceName));
@@ -135,7 +158,7 @@ T* ResourceManager::Load(std::string resourceName)
 		LOG_WARNING("Hot-loading resource \"%s\"", resourceName.c_str());
 	}
 
-	return CreateResource<T>(resourceName);
+	return CreateResource<T>(resourceName, parent);
 }
 
 template <typename T>
@@ -176,7 +199,7 @@ void ResourceManager::Preload(std::string resourceName)
 }
 
 template <typename T>
-T* ResourceManager::CreateResource(std::string resourceName)
+T* ResourceManager::CreateResource(std::string resourceName, Resource* parent)
 {
 	const char* resourceType = typeid(T).name();
 	/*auto facIt = m_FactoryFunctions.find(resourceType);
@@ -187,13 +210,22 @@ T* ResourceManager::CreateResource(std::string resourceName)
 	}*/
 
 	// Call the factory function
-	T* resource = T::Create(resourceName);
+	T* resource = new T(resourceName);
 	// Store IDs
 	resource->TypeID = GetTypeID(resourceType);
 	resource->ResourceID = GetNewResourceID(resource->TypeID);
 	// Cache
 	m_ResourceCache[std::make_pair(resourceType, resourceName)] = resource;
-
+	m_ResourceFromName[resourceName] = resource;
+	if (parent != nullptr)
+	{
+		m_ResourceParents[resource] = parent;
+	}
+	if (!boost::filesystem::is_directory(resourceName))
+	{
+		LOG_DEBUG("Adding watch for %s", resourceName.c_str());
+		m_FileWatcher.AddWatch(resourceName, fileWatcherCallback);
+	}
 	return resource;
 }
 

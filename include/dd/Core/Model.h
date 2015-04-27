@@ -42,12 +42,13 @@ namespace dd
 
 class Model : public Resource
 {
+	friend class ResourceManager;
+
 private:
 	Model(std::string fileName);
 
 public:
 	~Model();
-	static Model* Create(std::string resourceName) { return new Model(resourceName); }
 
 	struct Vertex
 	{

@@ -31,11 +31,12 @@ namespace dd
 
 class Texture : public Resource
 {
+	friend class ResourceManager;
+
 private:
 	Texture(std::string path);
 
 public:
-	static Texture* Create(std::string resourceName) { return new Texture(resourceName); }
 	~Texture();
 
 	void Bind(GLenum textureUnit = GL_TEXTURE0);

@@ -67,11 +67,11 @@ private:
 	std::string m_GLVendor;
 	GLFWwindow* m_Window = nullptr;
 
-	ShaderProgram m_spDeferred1;
-	ShaderProgram m_spDeferred2;
-	ShaderProgram m_spDeferred3;
-	ShaderProgram m_spForward;
-	ShaderProgram m_spScreen;
+	ShaderProgram* m_spDeferred1;
+	ShaderProgram* m_spDeferred2;
+	ShaderProgram* m_spDeferred3;
+	ShaderProgram* m_spForward;
+	ShaderProgram* m_spScreen;
 
 	GLuint m_UnitQuad = 0;
 	Model* m_UnitSphere = nullptr;

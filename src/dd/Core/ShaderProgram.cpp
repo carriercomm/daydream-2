@@ -19,16 +19,16 @@
 #include "PrecompiledHeader.h"
 #include "Core/ShaderProgram.h"
 
-GLuint dd::Shader::CompileShader(GLenum shaderType, std::string fileName)
+void dd::Shader::Compile()
 {
-	LOG_INFO("Compiling shader \"%s\"", fileName.c_str());
+	LOG_INFO("Compiling shader \"%s\"", m_FileName.c_str());
 
 	std::string shaderFile;
-	std::ifstream in(fileName, std::ios::in);
+	std::ifstream in(m_FileName, std::ios::in);
 	if (!in)
 	{
-		LOG_ERROR("Error: Failed to open shader file \"%s\"", fileName.c_str());
-		return 0;
+		LOG_ERROR("Error: Failed to open shader file \"%s\"", m_FileName.c_str());
+		return;
 	}
 	in.seekg(0, std::ios::end);
 	shaderFile.resize((int)in.tellg());
@@ -36,40 +36,40 @@ GLuint dd::Shader::CompileShader(GLenum shaderType, std::string fileName)
 	in.read(&shaderFile[0], shaderFile.size());
 	in.close();
 
-	GLuint shader = glCreateShader(shaderType);
-	if(GLERROR("glCreateShader"))
-		return 0;
-
-	const GLchar* shaderFiles = shaderFile.c_str();
+	const GLchar* shaderFileC = shaderFile.c_str();
 	const GLint length = shaderFile.length();
-	glShaderSource(shader, 1, &shaderFiles, &length);
+	glShaderSource(m_ShaderHandle, 1, &shaderFileC, &length);
 	if(GLERROR("glShaderSource"))
-		return 0;
+		return;
 
-	glCompileShader(shader);
+	glCompileShader(m_ShaderHandle);
 
 	GLint compileStatus;
-	glGetShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
+	glGetShaderiv(m_ShaderHandle, GL_COMPILE_STATUS, &compileStatus);
 	if(compileStatus != GL_TRUE)
 	{
 		LOG_ERROR("Shader compilation failed");
 		GLsizei infoLogLength;
-		glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
+		glGetShaderiv(m_ShaderHandle, GL_INFO_LOG_LENGTH, &infoLogLength);
 		GLchar* infolog = new GLchar[infoLogLength];
-		glGetShaderInfoLog(shader, infoLogLength, &infoLogLength, infolog);
+		glGetShaderInfoLog(m_ShaderHandle, infoLogLength, &infoLogLength, infolog);
 		LOG_ERROR(infolog);
 		delete[] infolog;
 	}
 
 	if(GLERROR("glCompileShader"))
-		return 0;
-
-	return shader;
+		return;
 }
 
-dd::Shader::Shader(GLenum shaderType, std::string fileName) : m_ShaderType(shaderType), m_FileName(fileName)
+dd::Shader::Shader(GLenum shaderType, std::string resourceName)
+		: m_ShaderType(shaderType)
+		, m_FileName(resourceName)
 {
-	m_ShaderHandle = 0;
+	m_ShaderHandle = glCreateShader(shaderType);
+	if (GLERROR("glCreateShader"))
+		return;
+
+	Compile();
 }
 
 dd::Shader::~Shader()
@@ -78,12 +78,6 @@ dd::Shader::~Shader()
 	{
 		glDeleteShader(m_ShaderHandle);
 	}
-}
-
-GLuint dd::Shader::Compile()
-{
-	m_ShaderHandle = CompileShader(m_ShaderType, m_FileName);
-	return m_ShaderHandle;
 }
 
 GLenum dd::Shader::GetType() const
@@ -101,9 +95,33 @@ GLuint dd::Shader::GetHandle() const
 	return m_ShaderHandle;
 }
 
-bool dd::Shader::IsCompiled() const
+dd::ShaderProgram::ShaderProgram(std::string resourceName)
 {
-	return m_ShaderHandle != 0;
+	auto path = boost::filesystem::path(resourceName);
+
+	if (!boost::filesystem::is_directory(path))
+	{
+		LOG_ERROR("Failed to load shader program: \"%s\" is not a directory", resourceName.c_str());
+		return;
+	}
+
+	for (auto it = boost::filesystem::directory_iterator(path); it != boost::filesystem::directory_iterator(); it++)
+	{
+		std::string filename = it->path().filename().string();
+		std::string filepath = it->path().string();
+		if (filename == "Vertex.glsl")
+		{
+			m_Shaders.push_back(ResourceManager::Load<VertexShader>(filepath, this));
+		}
+		else if (filename == "Fragment.glsl")
+		{
+			m_Shaders.push_back(ResourceManager::Load<FragmentShader>(filepath, this));
+		}
+		else if (filename == "Geometry.glsl")
+		{
+			m_Shaders.push_back(ResourceManager::Load<GeometryShader>(filepath, this));
+		}
+	}
 }
 
 dd::ShaderProgram::~ShaderProgram()
@@ -111,27 +129,6 @@ dd::ShaderProgram::~ShaderProgram()
 	if (m_ShaderProgramHandle != 0)
 	{
 		glDeleteProgram(m_ShaderProgramHandle);
-	}
-}
-
-void dd::ShaderProgram::AddShader(std::shared_ptr<Shader> shader)
-{
-	m_Shaders.push_back(shader);
-}
-
-void dd::ShaderProgram::Compile()
-{
-	if (m_ShaderProgramHandle == 0)
-	{
-		m_ShaderProgramHandle = glCreateProgram();
-	}
-
-	for (auto &shader : m_Shaders)
-	{
-		if (!shader->IsCompiled())
-		{
-			shader->Compile();
-		}
 	}
 }
 
@@ -143,6 +140,11 @@ GLuint dd::ShaderProgram::Link()
 		return 0;
 	}
 
+	if (m_ShaderProgramHandle == 0)
+	{
+		m_ShaderProgramHandle = glCreateProgram();
+	}
+
 	LOG_INFO("Linking shader program");
 
 	for (auto &shader : m_Shaders)
@@ -152,7 +154,6 @@ GLuint dd::ShaderProgram::Link()
 	glLinkProgram(m_ShaderProgramHandle);
 	if (GLERROR("glLinkProgram"))
 		return 0;
-	m_Shaders.clear();
 
 	return m_ShaderProgramHandle;
 }
@@ -175,39 +176,17 @@ void dd::ShaderProgram::Unbind()
 	glActiveShaderProgram(0, 0);
 }
 
-void dd::ShaderProgram::LoadFromFolder(std::string folderPath)
-{
-	auto path = boost::filesystem::path(folderPath);
-
-	if (!boost::filesystem::is_directory(path))
-	{
-		LOG_ERROR("Failed to load shader program: \"%s\" is not a directory", folderPath.c_str());
-		return;
-	}
-
-	for (auto it = boost::filesystem::directory_iterator(path); it != boost::filesystem::directory_iterator(); it++)
-	{
-		std::string filename = it->path().filename().string();
-		if (filename == "Vertex.glsl")
-		{
-			AddShader(std::shared_ptr<Shader>(new VertexShader(filename)));
-		}
-		else if (filename == "Fragment.glsl")
-		{
-			AddShader(std::shared_ptr<Shader>(new FragmentShader(filename)));
-
-		}
-		else if (filename == "Geometry.glsl")
-		{
-			AddShader(std::shared_ptr<Shader>(new GeometryShader(filename)));
-		}
-	}
-}
-
 void dd::ShaderProgram::BindFragDataLocation(int colorNumber, std::string name)
 {
 	if (m_ShaderProgramHandle == 0)
 		return;
 
 	glBindFragDataLocation(m_ShaderProgramHandle, colorNumber, name.c_str());
+}
+
+void dd::ShaderProgram::OnChildReloaded(dd::Resource* child) {
+	LOG_INFO("Re-linking shader program");
+	glLinkProgram(m_ShaderProgramHandle);
+	if (GLERROR("glLinkProgram"))
+		return;
 }

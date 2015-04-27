@@ -33,7 +33,7 @@ void dd::Renderer::Initialize()
 		monitor = glfwGetPrimaryMonitor();
 	}
 	glfwWindowHint(GLFW_SAMPLES, 8);
-	m_Window = glfwCreateWindow(m_Resolution.Width, m_Resolution.Height, "OpenGL", monitor, nullptr);
+	m_Window = glfwCreateWindow(m_Resolution.Width, m_Resolution.Height, "daydream", monitor, nullptr);
 	if (!m_Window) {
 		LOG_ERROR("GLFW: Failed to create window");
 		exit(EXIT_FAILURE);
@@ -75,49 +75,39 @@ void dd::Renderer::Initialize()
 void dd::Renderer::LoadShaders()
 {
 	/*
-	Deferred rendering
+		Deferred rendering
 	*/
 
-	// Pass #1: Fill G-buffers 
-	m_spDeferred1.AddShader(std::make_shared<VertexShader>("Shaders/Deferred.1.vert.glsl"));
-	m_spDeferred1.AddShader(std::make_shared<FragmentShader>("Shaders/Deferred.1.frag.glsl"));
-	m_spDeferred1.Compile();
-	glBindFragDataLocation(m_spDeferred1, 0, "GDiffuse");
-	glBindFragDataLocation(m_spDeferred1, 1, "GPosition");
-	glBindFragDataLocation(m_spDeferred1, 2, "GNormal");
-	glBindFragDataLocation(m_spDeferred1, 3, "GSpecular");
-	m_spDeferred1.Link();
+	// Pass #1: Fill G-buffers
+	m_spDeferred1 = ResourceManager::Load<ShaderProgram>("Shaders/Deferred/1/");
+	m_spDeferred1->BindFragDataLocation(0, "GDiffuse");
+	m_spDeferred1->BindFragDataLocation(1, "GPosition");
+	m_spDeferred1->BindFragDataLocation(2, "GNormal");
+	m_spDeferred1->BindFragDataLocation(3, "GSpecular");
+	m_spDeferred1->Link();
 
 	// Pass #2: Lighting
-	m_spDeferred2.AddShader(std::make_shared<VertexShader>("Shaders/Deferred.2.vert.glsl"));
-	m_spDeferred2.AddShader(std::make_shared<FragmentShader>("Shaders/Deferred.2.frag.glsl"));
-	m_spDeferred2.Compile();
+	m_spDeferred2 = ResourceManager::Load<ShaderProgram>("Shaders/Deferred/2/");
 	//glBindFragDataLocation(m_SPDeferred2, 0, "FragmentLighting");
-	m_spDeferred2.Link();
+	m_spDeferred2->Link();
 
 	// Pass #3: Combining into final image
-	m_spDeferred3.AddShader(std::make_shared<VertexShader>("Shaders/Deferred.3.vert.glsl"));
-	m_spDeferred3.AddShader(std::make_shared<FragmentShader>("Shaders/Deferred.3.frag.glsl"));
-	m_spDeferred3.Compile();
-	m_spDeferred3.Link();
+	m_spDeferred3 = ResourceManager::Load<ShaderProgram>("Shaders/Deferred/3/");
+	m_spDeferred3->Link();
 
 	/*
-	Forward rendering
+		Forward rendering
 	*/
 
-	m_spForward.AddShader(std::make_shared<VertexShader>("Shaders/Forward.vert.glsl"));
-	m_spForward.AddShader(std::make_shared<FragmentShader>("Shaders/Forward.frag.glsl"));
-	m_spForward.Compile();
-	m_spForward.Link();
+	m_spForward = ResourceManager::Load<ShaderProgram>("Shaders/Forward/");
+	m_spForward->Link();
 
 	/*
-	Screen draw
+		Screen draw
 	*/
 
-	m_spScreen.AddShader(std::make_shared<VertexShader>("Shaders/Screen.vert.glsl"));
-	m_spScreen.AddShader(std::make_shared<FragmentShader>("Shaders/Screen.frag.glsl"));
-	m_spScreen.Compile();
-	m_spScreen.Link();
+	m_spScreen = ResourceManager::Load<ShaderProgram>("Shaders/Screen/");
+	m_spScreen->Link();
 }
 
 void dd::Renderer::CreateBuffers()
@@ -229,7 +219,7 @@ void dd::Renderer::Draw(RenderQueueCollection& rq)
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glClearColor(1, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	m_spScreen.Bind();
+	m_spScreen->Bind();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_CurrentScreenBuffer);
 	glBindVertexArray(m_UnitQuad);
@@ -252,8 +242,8 @@ void dd::Renderer::DrawDeferred(RenderQueue &objects, RenderQueue &lights)
 	glClearColor(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	m_spDeferred1.Bind();
-	DrawScene(objects, m_spDeferred1);
+	m_spDeferred1->Bind();
+	DrawScene(objects, *m_spDeferred1);
 
 	// Pass #2: Lighting
 	glEnable(GL_CULL_FACE);
@@ -266,7 +256,7 @@ void dd::Renderer::DrawDeferred(RenderQueue &objects, RenderQueue &lights)
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbDeferred2);
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	m_spDeferred2.Bind();
+	m_spDeferred2->Bind();
 	DrawLightSpheres(lights);
 
 	// Pass #3: Combine into final deferred image
@@ -275,8 +265,8 @@ void dd::Renderer::DrawDeferred(RenderQueue &objects, RenderQueue &lights)
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbDeferred3);
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT);
-	m_spDeferred3.Bind();
-	glUniform3fv(glGetUniformLocation(m_spDeferred3, "La"), 1, glm::value_ptr(glm::vec3(0.3f)));
+	m_spDeferred3->Bind();
+	glUniform3fv(glGetUniformLocation(*m_spDeferred3, "La"), 1, glm::value_ptr(glm::vec3(0.3f)));
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_GDiffuse);
 	glActiveTexture(GL_TEXTURE1);
@@ -295,8 +285,8 @@ void dd::Renderer::DrawForward(RenderQueue &objects, RenderQueue &lights)
 	glEnable(GL_BLEND);
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE);
 
-	m_spForward.Bind();
-	DrawScene(objects, m_spForward);
+	m_spForward->Bind();
+	DrawScene(objects, *m_spForward);
 }
 
 void dd::Renderer::DrawScene(RenderQueue &objects, ShaderProgram &program)
@@ -338,7 +328,7 @@ void dd::Renderer::DrawScene(RenderQueue &objects, ShaderProgram &program)
 
 void dd::Renderer::DrawLightSpheres(RenderQueue &lights)
 {
-	GLuint shaderProgramHandle = m_spDeferred2;
+	GLuint shaderProgramHandle = *m_spDeferred2;
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_GPosition);

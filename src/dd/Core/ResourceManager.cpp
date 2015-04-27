@@ -19,12 +19,15 @@
 #include "PrecompiledHeader.h"
 #include "Core/ResourceManager.h"
 
-std::unordered_map<std::string, std::function<dd::Resource*(std::string)>> dd::ResourceManager::m_FactoryFunctions; // type -> factory function
-std::unordered_map<std::pair<std::string, std::string>, dd::Resource*> dd::ResourceManager::m_ResourceCache; // (type, name) -> resource
+std::unordered_map<std::string, std::function<dd::Resource*(std::string)>> dd::ResourceManager::m_FactoryFunctions;
+std::unordered_map<std::pair<std::string, std::string>, dd::Resource*> dd::ResourceManager::m_ResourceCache;
+std::unordered_map<std::string, dd::Resource*> dd::ResourceManager::m_ResourceFromName;
+std::unordered_map<dd::Resource*, dd::Resource*> dd::ResourceManager::m_ResourceParents;
 unsigned int dd::ResourceManager::m_CurrentResourceTypeID = 0;
 std::unordered_map<std::string, unsigned int> dd::ResourceManager::m_ResourceTypeIDs;
 std::unordered_map<unsigned int, unsigned int> dd::ResourceManager::m_ResourceCount;
 bool dd::ResourceManager::m_Preloading = false;
+dd::FileWatcher dd::ResourceManager::m_FileWatcher;
 
 unsigned int dd::ResourceManager::GetTypeID(std::string resourceType)
 {
@@ -35,6 +38,24 @@ unsigned int dd::ResourceManager::GetTypeID(std::string resourceType)
 	return m_ResourceTypeIDs[resourceType];
 }
 
+
+void dd::ResourceManager::Reload(std::string resourceName)
+{
+	auto it = m_ResourceFromName.find(resourceName);
+	if (it != m_ResourceFromName.end()) {
+		LOG_INFO("Reloading resource \"%s\"", resourceName.c_str());
+		Resource* resource = it->second;
+		resource->Reload();
+
+		// Notify parent
+		auto it2 = m_ResourceParents.find(resource);
+		if (it2 != m_ResourceParents.end())
+		{
+			it2->second->OnChildReloaded(resource);
+		}
+	}
+}
+
 unsigned int dd::ResourceManager::GetNewResourceID(unsigned int typeID)
 {
 	return m_ResourceCount[typeID]++;
@@ -43,4 +64,22 @@ unsigned int dd::ResourceManager::GetNewResourceID(unsigned int typeID)
 bool dd::ResourceManager::IsResourceLoaded(std::string resourceType, std::string resourceName)
 {
 	return m_ResourceCache.find(std::make_pair(resourceType, resourceName)) != m_ResourceCache.end();
+}
+
+void dd::ResourceManager::fileWatcherCallback(std::string path, FileWatcher::FileEventFlags flags)
+{
+	if (flags & FileWatcher::FileEventFlags::SizeChanged
+		|| flags & FileWatcher::FileEventFlags::TimestampChanged)
+	{
+		auto it = m_ResourceFromName.find(path);
+		if (it != m_ResourceFromName.end())
+		{
+			Reload(path);
+		}
+	}
+}
+
+void dd::ResourceManager::Update()
+{
+	m_FileWatcher.Check();
 }
