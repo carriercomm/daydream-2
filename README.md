@@ -1,6 +1,8 @@
 ![daydream logo](http://imon.nu/daydream/daydream.gif)
 
-A general purpose engine written in C++, made by students at [Blekinge Insitute of Technology](http://www.bth.se/eng) for learning purposes.
+A general purpose engine written in C++, for learning purposes, by students at [Blekinge Insitute of Technology](http://www.bth.se/eng).
+
+[![Build Status](http://jenkins.daydreamengine.org/buildStatus/icon?job=daydream-linux-gcc)](http://jenkins.daydreamengine.org/job/daydream-linux-gcc/) [![Build Status](http://jenkins.daydreamengine.org/buildStatus/icon?job=daydream-windows-msvc)](http://jenkins.daydreamengine.org/job/daydream-windows-msvc/)
 
 ## Design Goals
 * **Purely component based** Provides a pure, component based entity system where a *Component* contains only data and all logic resides in *Systems*, and where *Systems* communicate through *Events*.
