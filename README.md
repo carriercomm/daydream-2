@@ -2,8 +2,7 @@
 
 A general purpose engine written in C++, for learning purposes, by students at [Blekinge Insitute of Technology](http://www.bth.se/eng).
 
-[![Build Status](http://jenkins.daydreamengine.org/buildStatus/icon?job=daydream-linux-gcc)](http://jenkins.daydreamengine.org/job/daydream-linux-gcc/) [![Build Status](http://jenkins.daydreamengine.org/buildStatus/icon?job=daydream-windows-msvc)](http://jenkins.daydreamengine.org/job/daydream-windows-msvc/)
-
+[![linux build status badge](http://jenkins.daydreamengine.org:2323/job/daydream-linux-gcc/lastBuild)](http://jenkins.daydreamengine.org/job/daydream-linux-gcc/lastBuild) [![windows build status badge](http://jenkins.daydreamengine.org:2323/job/daydream-windows-msvc/lastBuild)](http://jenkins.daydreamengine.org/job/daydream-windows-msvc/lastBuild) [![tests badge](http://jenkins.daydreamengine.org:2323/job/daydream-linux-gcc/lastBuild/testReport?text=tests)](http://jenkins.daydreamengine.org/job/daydream-linux-gcc/lastBuild/testReport)
 ## Design Goals
 * **Purely component based** Provides a pure, component based entity system where a *Component* contains only data and all logic resides in *Systems*, and where *Systems* communicate through *Events*.
 * **Modular and extensible** Every *System* is packaged with its relevant *Components* and *Events*. A non-critical *System* could easily be loaded dynamically. 
